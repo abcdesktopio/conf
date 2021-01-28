@@ -134,6 +134,29 @@ kubectl create secret generic abcdesktopjwtdesktoppayload --from-file=abcdesktop
 kubectl create secret generic abcdesktopjwtdesktopsigning --from-file=abcdesktop_jwt_desktop_signing_private_key.pem --from-file=abcdesktop_jwt_desktop_signing_public_key.pem --namespace=abcdesktop
 kubectl create secret generic abcdesktopjwtusersigning    --from-file=abcdesktop_jwt_user_signing_private_key.pem    --from-file=abcdesktop_jwt_user_signing_public_key.pem    --namespace=abcdesktop
 
+echo "\n\n"
+echo "####################################################################"
+echo "#"
+echo "# This script is pulling container applications form docker registry"
+echo "# It's a good time for a coffee break..."
+echo "#"
+echo "####################################################################"
+echo "\n\n"
+
+# docker pull image core images
+REGISTRY_DOCKERHUB="abcdesktopio"
+docker pull $REGISTRY_DOCKERHUB/oc.user.18.04
+docker pull $REGISTRY_DOCKERHUB/oc.cupsd.18.04
+docker pull $REGISTRY_DOCKERHUB/oc.pulseaudio.18.04
+
+# docker pull applications
+docker pull $REGISTRY_DOCKERHUB/writer.d
+docker pull $REGISTRY_DOCKERHUB/calc.d
+docker pull $REGISTRY_DOCKERHUB/impress.d
+docker pull $REGISTRY_DOCKERHUB/firefox-esr.d
+docker pull $REGISTRY_DOCKERHUB/gimp.d
+
+
 # create abcdesktop
 kubectl create -f https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/abcdesktop.yaml
 
@@ -145,23 +168,6 @@ else
         echo "'kubectl create -f https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/abcdesktop.yaml' failed"
         exit $?
 fi
-
-echo "This script is pulling container application"
-echo "It time for a coffee break"
-
-# docker pull image core images
-REGISTRY_DOCKERHUB="abcdesktopio"
-docker pull $REGISTRY_DOCKERHUB/oc.user.18.04
-docker pull $REGISTRY_DOCKERHUB/oc.cupsd.18.04
-docker pull $REGISTRY_DOCKERHUB/oc.pulseaudio.18.04
-
-# docker pull applications
-docker pull $REGISTRY_DOCKERHUB/writer.d 
-docker pull $REGISTRY_DOCKERHUB/calc.d 
-docker pull $REGISTRY_DOCKERHUB/impress.d 
-docker pull $REGISTRY_DOCKERHUB/firefox-esr.d 
-docker pull $REGISTRY_DOCKERHUB/gnome-terminal.d
-docker pull $REGISTRY_DOCKERHUB/gimp.d
 
 kubectl get pods --namespace=abcdesktop
 
