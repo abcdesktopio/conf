@@ -134,14 +134,14 @@ kubectl create secret generic abcdesktopjwtdesktoppayload --from-file=abcdesktop
 kubectl create secret generic abcdesktopjwtdesktopsigning --from-file=abcdesktop_jwt_desktop_signing_private_key.pem --from-file=abcdesktop_jwt_desktop_signing_public_key.pem --namespace=abcdesktop
 kubectl create secret generic abcdesktopjwtusersigning    --from-file=abcdesktop_jwt_user_signing_private_key.pem    --from-file=abcdesktop_jwt_user_signing_public_key.pem    --namespace=abcdesktop
 
-echo "\n\n"
+
 echo "####################################################################"
 echo "#"
 echo "# This script is pulling container applications form docker registry"
 echo "# It's a good time for a coffee break..."
 echo "#"
 echo "####################################################################"
-echo "\n\n"
+
 
 # docker pull image core images
 REGISTRY_DOCKERHUB="abcdesktopio"
