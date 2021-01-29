@@ -1,10 +1,8 @@
 #!/bin/sh
 
 #
-# This file is from Istio https://raw.githubusercontent.com/istio/istio/master/release/downloadIstioCandidate.sh
-# Copyright Istio Authors
 #
-# Change for abcdesktopio
+# Install kubernetes for abcdesktopio
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,14 +17,11 @@
 # limitations under the License.
 
 #
-# This file will be fetched as: curl -L https://git.io/getLatestIstio | sh -
-# so it should be pure bourne shell, not bash (and not reference other scripts)
+# This file will be fetched as: curl -L https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/install.sh | sh -
+# so it should be pure bourne shell
 #
-# The script fetches the latest Istio release candidate and untars it.
-# You can pass variables on the command line to download a specific version
-# or to override the processor architecture. For example, to download
-# Istio 1.6.8 for the x86_64 architecture,
-# run curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.6.8 TARGET_ARCH=x86_64 sh -.
+# run curl -L https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/install.sh | sh -
+#
 
 
 # Determines the operating system.
@@ -44,19 +39,19 @@ fi
 
 case "${LOCAL_ARCH}" in 
   x86_64)
-    OIO_ARCH=amd64
+    ABCDESKTOPIO_ARCH=amd64
     ;;
-  armv8*)
-    OIO_ARCH=arm64
-    ;;
-  aarch64*)
-    OIO_ARCH=arm64
-    ;;
-  armv*)
-    OIO_ARCH=armv7
-    ;;
+  # armv8*)
+  #  ABCDESKTOPIO_ARCH=arm64
+  #  ;;
+  # aarch64*)
+  #  ABCDESKTOPIO_ARCH=arm64
+  #  ;;
+  # armv*)
+  #  ABCDESKTOPIO_ARCH=armv7
+  #  ;;
   amd64|arm64)
-    OIO_ARCH=${LOCAL_ARCH}
+    ABCDESKTOPIO_ARCH=${LOCAL_ARCH}
     ;;
   *)
     echo "This system's architecture, ${LOCAL_ARCH}, isn't supported"
@@ -64,7 +59,8 @@ case "${LOCAL_ARCH}" in
     ;;
 esac
 
-echo "This system's architecture is ${OIO_ARCH}"
+echo "This system's architecture is ${ABCDESKTOPIO_ARCH}"
+
 
 # Check if kubectl command is supported
 # run command kubectl version
@@ -79,8 +75,6 @@ else
 	exit $?
 fi
 
-
-
 # Check if kubectl command is supported
 # run command kubectl version
 OPENSSL_VERSION=$(openssl version)
@@ -93,8 +87,6 @@ else
         echo "Please install openssl command first"
         exit $?
 fi
-
-
 
 # First create the abcdesktop namespace
 kubectl create namespace abcdesktop
