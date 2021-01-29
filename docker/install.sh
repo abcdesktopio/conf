@@ -109,7 +109,7 @@ docker pull $REGISTRY_DOCKERHUB/oc.user.18.04
 docker pull $REGISTRY_DOCKERHUB/writer.d
 docker pull $REGISTRY_DOCKERHUB/calc.d
 docker pull $REGISTRY_DOCKERHUB/impress.d
-docker pull $REGISTRY_DOCKERHUB/firefox-esr.d
+docker pull $REGISTRY_DOCKERHUB/firefox.d
 docker pull $REGISTRY_DOCKERHUB/gimp.d
 
 
