@@ -2,7 +2,7 @@
 
 #
 #
-# Install docker non-cluser for abcdesktopio
+# Install docker (non-cluster) for abcdesktopio
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -113,6 +113,6 @@ docker pull $REGISTRY_DOCKERHUB/firefox-esr.d
 docker pull $REGISTRY_DOCKERHUB/gimp.d
 
 
-curl https://raw.githubusercontent.com/abcdesktopio/conf/main/reference/docker-compose.yml --output docker-compose.yml 
+curl -o docker-compose.yml  https://raw.githubusercontent.com/abcdesktopio/conf/main/reference/docker-compose.yml
 docker-composer up
 
