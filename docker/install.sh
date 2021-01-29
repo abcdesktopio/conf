@@ -114,5 +114,5 @@ docker pull $REGISTRY_DOCKERHUB/gimp.d
 
 
 curl -o docker-compose.yml  https://raw.githubusercontent.com/abcdesktopio/conf/main/reference/docker-compose.yml
-docker-composer -p abcdesktop up
+docker-compose -p abcdesktop up
 
