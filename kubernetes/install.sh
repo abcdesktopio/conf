@@ -123,7 +123,7 @@ then
 fi
 
 # build rsa kay pairs for the user jwt signing 
-if [ ! -f abcdesktop/io_jwt_user_signing_private_key.pem ]
+if [ ! -f abcdesktop_jwt_user_signing_private_key.pem ]
 then
 	openssl genrsa -out abcdesktop_jwt_user_signing_private_key.pem 1024
 	openssl rsa    -in  abcdesktop_jwt_user_signing_private_key.pem -outform PEM -pubout -out abcdesktop_jwt_user_signing_public_key.pem
@@ -134,34 +134,44 @@ kubectl create secret generic abcdesktopjwtdesktoppayload --from-file=abcdesktop
 kubectl create secret generic abcdesktopjwtdesktopsigning --from-file=abcdesktop_jwt_desktop_signing_private_key.pem --from-file=abcdesktop_jwt_desktop_signing_public_key.pem --namespace=abcdesktop
 kubectl create secret generic abcdesktopjwtusersigning    --from-file=abcdesktop_jwt_user_signing_private_key.pem    --from-file=abcdesktop_jwt_user_signing_public_key.pem    --namespace=abcdesktop
 
+
+echo "####################################################################"
+echo "#"
+echo "# This script is pulling container applications form docker registry"
+echo "# It's a good time for a coffee break..."
+echo "#"
+echo "####################################################################"
+
+
+# docker pull image core images
+REGISTRY_DOCKERHUB="abcdesktopio"
+docker pull $REGISTRY_DOCKERHUB/oc.user.18.04
+docker pull $REGISTRY_DOCKERHUB/oc.cupsd.18.04
+docker pull $REGISTRY_DOCKERHUB/oc.pulseaudio.18.04
+
+# docker pull applications
+docker pull $REGISTRY_DOCKERHUB/writer.d
+docker pull $REGISTRY_DOCKERHUB/calc.d
+docker pull $REGISTRY_DOCKERHUB/impress.d
+docker pull $REGISTRY_DOCKERHUB/firefox-esr.d
+docker pull $REGISTRY_DOCKERHUB/gimp.d
+
+
 # create abcdesktop
-kubectl create -f http://abcdesktopio.github.io/setup/abcdesktop.yaml
+kubectl create -f https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/abcdesktop.yaml
 
 EXIT_CODE=$?
 if [ $EXIT_CODE -eq 0 ] 
 then
-        echo "'kubectl create -f http://abcdesktopio.github.io/setup/abcdesktop.yaml' command was successful"
+        echo "'kubectl create -f https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/abcdesktop.yaml' command was successful"
 else
-        echo "'kubectl create -f http://abcdesktopio.github.io/setup/abcdesktop.yaml' failed"
+        echo "'kubectl create -f https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/abcdesktop.yaml' failed"
         exit $?
 fi
-
-# docker pull image core images
-REGISTRY_DOCKERHUB="abcdesktopio"
-docker pull $REGISTRY_DOCKERHUB:oc.user.18.04
-docker pull $REGISTRY_DOCKERHUB:oc.cupsd.18.04
-docker pull $REGISTRY_DOCKERHUB:oc.pulseaudio.18.04
-
-# docker pull applications
-docker pull $REGISTRY_DOCKERHUB:writer.d 
-docker pull $REGISTRY_DOCKERHUB:calc.d 
-docker pull $REGISTRY_DOCKERHUB:impress.d 
-docker pull $REGISTRY_DOCKERHUB:firefox-esr.d 
-docker pull $REGISTRY_DOCKERHUB:gnome-terminal.d
-docker pull $REGISTRY_DOCKERHUB:gimp.d
 
 kubectl get pods --namespace=abcdesktop
 
 echo "Setup done"
 echo "Open your navigator to http://[your-ip-hostname]:30443/"
+echo "For example http://localhost:30443"
 

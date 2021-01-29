@@ -831,7 +831,7 @@ data:
     # front.menuconfig is a dictionary to show or hide menu entries 
     # at the to rignt corner 
     # in front js
-    front.menuconfig  : { 'settings': True, 'appstore': True, 'screenshot':True, 'download': True, 'logout': True }
+    front.menuconfig  : { 'settings': True, 'appstore': True, 'screenshot':True, 'download': True, 'logout': True, 'disconnect': True }
 
 
     # PRINTER SECTION
