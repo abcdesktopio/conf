@@ -647,7 +647,7 @@ data:
     # Read more about persistentVolumeClaim on the kubernetes.io website. 
     # If you set desktop.homedirectorytype to 'persistentVolumeClaim' 
     # Then you have to set the value of desktop.persistentvolumeclaim
-    desktop.homedirectorytype: 'persistentVolumeClaim'
+    # desktop.homedirectorytype: 'persistentVolumeClaim'
 
     # desktop.persistentvolumeclaim
     # value name of the persistentvolumeclaim
@@ -659,7 +659,7 @@ data:
     # NAME                                   STATUS   VOLUME                     CAPACITY   ACCESS MODES   STORAGECLASS                AGE
     # persistentvolumeclaim-home-directory   Bound    pv-volume-home-directory   10Gi       RWX            storage-local-abcdesktop   3h44m
     # desktop.persistentvolumeclaim: 'persistentvolumeclaim-home-directory'
-    desktop.persistentvolumeclaim: 'persistentvolumeclaim-home-directory'
+    # desktop.persistentvolumeclaim: 'persistentvolumeclaim-home-directory'
 
     #
     # desktop.remotehomedirectorytype: 
