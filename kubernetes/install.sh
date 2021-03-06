@@ -129,7 +129,7 @@ kubectl create secret generic abcdesktopjwtusersigning    --from-file=abcdesktop
 
 echo "####################################################################"
 echo "#"
-echo "# This script is pulling container applications form docker registry"
+echo "# This script is pulling container images from docker registry"
 echo "# It's a good time for a coffee break..."
 echo "#"
 echo "####################################################################"
