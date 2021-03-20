@@ -1178,8 +1178,6 @@ spec:
           - name: default-config
             configMap:
               name: nginx-config
-      imagePullSecrets:
-        - name: abcdesktopregistrysecret
       dnsPolicy: ClusterFirst
 ---
 apiVersion: apps/v1
@@ -1203,8 +1201,6 @@ spec:
         image: abcdesktopio/oc.speedtest
         ports:
           - containerPort: 80
-      imagePullSecrets:
-        - name: abcdesktopregistrysecret
 ---
 apiVersion: apps/v1
 kind: DaemonSet
@@ -1277,8 +1273,6 @@ spec:
               secretKeyRef:
                 name: mongodb-secret
                 key: mongodb_url
-      imagePullSecrets:
-        - name: abcdesktopregistrysecret
       volumes:
         - name: jwtusersigningkeys
           secret:
@@ -1296,8 +1290,6 @@ spec:
           hostPath:
             type: Socket
             path: /var/run/docker.sock
-      imagePullSecrets:
-        - name: abcdesktopregistrysecret
       dnsPolicy: ClusterFirst
 ---
 kind: Endpoints
