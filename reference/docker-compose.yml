@@ -25,11 +25,11 @@ services:
       - netuser
       - netback
   memcached:
-    image: 'abcdesktopio/memcached'
+    image: 'memcached'
     networks:
       - netback
   mongodb:
-    image: 'abcdesktopio/mongo'
+    image: 'mongo'
     networks:
       - netback
 networks:
