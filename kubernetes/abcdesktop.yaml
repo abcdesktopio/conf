@@ -1151,6 +1151,13 @@ spec:
             name: http
           - containerPort: 443
             name: https
+        resources:
+          limits:
+            cpu: 2
+            memory: 512Mi
+          requests:
+            cpu: 0.25
+            memory: 64Mi
         env:
           - name: JWT_DESKTOP_PAYLOAD_PRIVATE_KEY
             value: "/config.payload/abcdesktop_jwt_desktop_payload_private_key.pem"
