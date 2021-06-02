@@ -1109,6 +1109,10 @@ metadata:
   namespace: abcdesktop
   name: daemonset-nginx
 spec:
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
   selector:
     matchLabels:
       name: daemonset-nginxpods
@@ -1208,6 +1212,10 @@ metadata:
   namespace: abcdesktop
   name: daemonset-pyos
 spec:
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
   selector:
     matchLabels:
       name: daemonset-pyospods
