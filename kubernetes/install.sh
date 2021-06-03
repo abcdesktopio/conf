@@ -1,8 +1,7 @@
 #!/bin/sh
-
 #
 #
-# Install kubernetes for abcdesktopio
+# Install script kubernetes for abcdesktopio
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,6 +21,9 @@
 #
 # run curl -L https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/install.sh | sh -
 #
+
+# define ABCDESKTOP_YAML path
+ABCDESKTOP_YAML=https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/abcdesktop.yaml 
 
 
 # Determines the operating system.
@@ -150,20 +152,24 @@ docker pull $REGISTRY_DOCKERHUB/gimp.d
 
 
 # create abcdesktop
-kubectl create -f https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/abcdesktop.yaml
+if [ -f abcdesktop.yaml ]; then
+   echo "kubernetes use local directory abcdesktop.yaml file"
+   ABCDESKTOP_YAML=abcdesktop.yaml
+fi
+
+kubectl create -f $ABCDESKTOP_YAML
 
 EXIT_CODE=$?
 if [ $EXIT_CODE -eq 0 ] 
 then
-        echo "'kubectl create -f https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/abcdesktop.yaml' command was successful"
+        echo "kubectl create -f $ABCDESKTOP_YAML command was successful"
 else
-        echo "'kubectl create -f https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/abcdesktop.yaml' failed"
+        echo "kubectl create -f $ABCDESKTOP_YAML failed"
         exit $?
 fi
 
 kubectl get pods --namespace=abcdesktop
-
 echo "Setup done"
+echo "Please wait for running services, then"
 echo "Open your navigator to http://[your-ip-hostname]:30443/"
 echo "For example http://localhost:30443"
-
