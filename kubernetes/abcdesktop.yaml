@@ -710,7 +710,6 @@ data:
     desktop.envlocal :  {   'DISPLAY'               : ':0.0',
                             'USER'                  : 'balloon',
                             'LIBOVERLAY_SCROLLBAR'  : '0',
-                            'WINEARCH'              : 'win32',
                             'UBUNTU_MENUPROXY'      : '0',
                             'HOME'                  : '/home/balloon',
                             'LOGNAME'               : 'balloon' }
