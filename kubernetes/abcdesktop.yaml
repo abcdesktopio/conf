@@ -748,6 +748,7 @@ data:
     # The values are parsed by javascript front  
     # 
     dock : {        'filemanager':  {       'args': None,
+                                            'acl': { 'permit': [ 'all' ] },
                                             'showinview': u'dock',
                                             'name': u'FileManager',
                                             'keyword': u'files,file manager',
@@ -759,6 +760,7 @@ data:
                                             'icon': u'pantheon-files-icons.svg'},
 
                     'terminal':     {       'args': '',
+                                            'acl': { 'permit': [ 'all' ] },
                                             'name': u'TerminalBuiltin',
                                             'keyword': u'terminal,shell,bash,builtin,pantheon',
                                             'launch': u'qterminal.qterminal',
@@ -769,6 +771,7 @@ data:
                                             'hideindock': True,
                                             'icon': u'pantheon-terminal-builtin-icons.svg'},
                     'webshell':     {       'name': u'WebShell',
+                                            'acl': { 'permit': [ 'all' ] },
                                             'keyword': u'terminal,shell,webshell,bash',
                                             'launch': u'frontendjs.webshell',
                                             'displayname': u'Web Shell',
@@ -951,7 +954,7 @@ data:
         set $api_service_tcp_port               8000;
         set $filemanager_bridge_tcp_port        29780;
         set $xterm_tcp_port                     29781;
-        set $RESERVED_service_tcp_port          29782;
+        set $printerfile_service_tcp_port       29782;
         set $file_service_tcp_port              29783;
         set $broadcast_tcp_port                 29784;
         set $lync_service_tcp_port              29785;
