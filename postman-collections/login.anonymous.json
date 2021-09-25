@@ -1,0 +1,109 @@
+{
+	"info": {
+		"_postman_id": "37c6e7ec-f44d-4f03-a14e-d0fbd1738a0e",
+		"name": "abcdesktoplogin",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "auth_anonymous",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0f763690-4261-4643-8c43-2e3776ea22ee",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+							"postman.setEnvironmentVariable(\"jwt_user_token\", jsonData.result.jwt_user_token);",
+							"pm.test(\"jwt_user_token=\" + postman.getEnvironmentVariable(\"jwt_user_token\") );"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"manager\" : null,\n    \"provider\": \"anonymous\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/API/auth/auth",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"API",
+						"auth",
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "launchdesktop",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a8995c20-4520-4aa6-983e-1edf4710d819",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+							"postman.setEnvironmentVariable(\"jwt_desktop_token\", jsonData.result.authorization);",
+							"pm.test(\"jwt_desktop_token=\" + postman.getEnvironmentVariable(\"jwt_desktop_token\"));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"width\": 1440,\n  \"height\": 819,\n  \"timezone\": \"Europe/Paris\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/API/composer/launchdesktop",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"API",
+						"composer",
+						"launchdesktop"
+					]
+				},
+				"description": "launch abcdeskop"
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
