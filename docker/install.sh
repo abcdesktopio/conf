@@ -101,22 +101,37 @@ else
         exit $?
 fi
 
-# docker pull image core images
+# check if TAG env is set
+if [ -z ${TAG} ]; then
+        echo "pulling tagged image not set, use default latest"
+        TAG=latest
+else
+        echo "pulling tagged image ${TAG}"
+fi
+
+
+# docker pull user images
 REGISTRY_DOCKERHUB="abcdesktopio"
-docker pull $REGISTRY_DOCKERHUB/oc.user.18.04
+docker pull $REGISTRY_DOCKERHUB/oc.user.18.04:${TAG}
 
-# docker pull applications
-docker pull $REGISTRY_DOCKERHUB/writer.d
-docker pull $REGISTRY_DOCKERHUB/calc.d
-docker pull $REGISTRY_DOCKERHUB/impress.d
-docker pull $REGISTRY_DOCKERHUB/firefox.d
-docker pull $REGISTRY_DOCKERHUB/gimp.d
+# docker pull sample applications images
+docker pull $REGISTRY_DOCKERHUB/writer.d:${TAG}
+docker pull $REGISTRY_DOCKERHUB/calc.d:${TAG}
+docker pull $REGISTRY_DOCKERHUB/impress.d:${TAG}
+docker pull $REGISTRY_DOCKERHUB/firefox.d:${TAG}
+docker pull $REGISTRY_DOCKERHUB/gimp.d:${TAG}
 
-
-curl -o docker-compose.yml  https://raw.githubusercontent.com/abcdesktopio/conf/main/reference/docker-compose.yml
+if [ -f docker-compose.yml ]; then
+        echo '-------------------------------------'
+        echo ' local file docker-compose.yml exists' 
+        echo ' do not overwrite, use local file'
+        echo '-------------------------------------'
+else 
+        curl -o docker-compose.yml  https://raw.githubusercontent.com/abcdesktopio/conf/main/reference/docker-compose.yml
+fi
 
 echo "Starting abcdesktop services"
+echo "running 'docker-compose -p abcdesktop config'"
+TAG=${TAG} docker-compose -p abcdesktop config
 echo "running 'docker-compose -p abcdesktop up'"
-docker-compose -p abcdesktop up
-
-
+TAG=${TAG} docker-compose -p abcdesktop up
