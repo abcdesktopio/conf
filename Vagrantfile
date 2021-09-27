@@ -31,8 +31,10 @@ Vagrant.configure("2") do |config|
      git clone https://github.com/abcdesktopio/conf.git
      #
      # install and start abcdesktop
-     sudo conf/docker/install.sh
+     # option nopullapps -> do not pull sample applications 
+     sudo conf/docker/install.sh nopullapps
      # 
+     echo 'sleeping for 30 s'
      sleep 30
      #
      newman run conf/postman-collections/login.anonymous.json 
