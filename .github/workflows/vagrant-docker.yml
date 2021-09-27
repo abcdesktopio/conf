@@ -25,7 +25,7 @@ jobs:
       shell: bash
 
     - name: Run vagrant up
-      run: vagrant up
+      run: cd vagrant && VAGRANT_VAGRANTFILE=Vagrantfile.docker vagrant up
       
-    - name: Clear vagrant 
-      run: vagrant destroy -f
+    - name: Destroy vagrant 
+      run: cd vagrant && VAGRANT_VAGRANTFILE=Vagrantfile.docker vagrant destroy -f
