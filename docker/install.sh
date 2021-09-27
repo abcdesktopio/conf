@@ -115,7 +115,7 @@ docker pull $REGISTRY_DOCKERHUB/oc.user.18.04:${TAG}
 EXIT_CODE=$?
 if [ $EXIT_CODE -eq 0 ] 
 then 
-		echo "docker pull $REGISTRY_DOCKERHUB/oc.user.18.04:${TAG} command success"
+		echo "docker pull $REGISTRY_DOCKERHUB/oc.user.18.04:${TAG} command succeeded"
 else
 		echo "Failed to run 'docker pull $REGISTRY_DOCKERHUB/oc.user.18.04:${TAG}'"
 		exit $EXIT_CODE
@@ -161,7 +161,7 @@ TAG=${TAG} docker-compose -p abcdesktop config
 EXIT_CODE=$?
 if [ $EXIT_CODE -eq 0 ] 
 then 
-		echo "command success"
+		echo "command succeeded"
 else
 		echo "Failed to run 'docker-compose -p abcdesktop config'"
 		exit $EXIT_CODE
@@ -174,7 +174,7 @@ TAG=${TAG} docker-compose -p abcdesktop pull
 EXIT_CODE=$?
 if [ $EXIT_CODE -eq 0 ] 
 then 
-		echo "command success"
+		echo "command succeeded"
 else
 		echo "Failed to run 'docker-compose -p abcdesktop pull'"
 		exit $EXIT_CODE
@@ -186,7 +186,7 @@ TAG=${TAG} docker-compose -p abcdesktop up --no-start
 EXIT_CODE=$?
 if [ $EXIT_CODE -eq 0 ] 
 then 
-		echo "command success"
+		echo "command succeeded"
 else
 		echo "Failed to run 'docker-compose -p abcdesktop up --no-start'"
 		exit $EXIT_CODE
@@ -198,7 +198,7 @@ TAG=${TAG} docker-compose -p abcdesktop up -d
 EXIT_CODE=$?
 if [ $EXIT_CODE -eq 0 ] 
 then 
-		echo "command success"
+		echo "command succeeded"
 else
 		echo "Failed to run 'docker-compose -p abcdesktop up -d'"
 		exit $EXIT_CODE
