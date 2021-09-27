@@ -113,12 +113,21 @@ fi
 REGISTRY_DOCKERHUB="abcdesktopio"
 docker pull $REGISTRY_DOCKERHUB/oc.user.18.04:${TAG}
 
-# docker pull sample applications images
-docker pull $REGISTRY_DOCKERHUB/writer.d:${TAG}
-docker pull $REGISTRY_DOCKERHUB/calc.d:${TAG}
-docker pull $REGISTRY_DOCKERHUB/impress.d:${TAG}
-docker pull $REGISTRY_DOCKERHUB/firefox.d:${TAG}
-docker pull $REGISTRY_DOCKERHUB/gimp.d:${TAG}
+if [ "$1" -eq "nopullapps" ]; then
+	echo "do not pull images option detected"
+	echo "skipping image $REGISTRY_DOCKERHUB/writer.d:${TAG}"
+	echo "skipping image $REGISTRY_DOCKERHUB/calc.d:${TAG}"
+	echo "skipping image $REGISTRY_DOCKERHUB/impress.d:${TAG}"
+	echo "skipping image $REGISTRY_DOCKERHUB/firefox.d:${TAG}"
+	echo "skipping image $REGISTRY_DOCKERHUB/gimp.d:${TAG}"
+else
+	# docker pull sample applications images
+	docker pull $REGISTRY_DOCKERHUB/writer.d:${TAG}
+	docker pull $REGISTRY_DOCKERHUB/calc.d:${TAG}
+	docker pull $REGISTRY_DOCKERHUB/impress.d:${TAG}
+	docker pull $REGISTRY_DOCKERHUB/firefox.d:${TAG}
+	docker pull $REGISTRY_DOCKERHUB/gimp.d:${TAG}
+fi
 
 if [ -f docker-compose.yml ]; then
         echo '-------------------------------------'
