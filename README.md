@@ -8,7 +8,7 @@ Please, read the public documentation web site:
 
 ## conf
 
-![Test vagrant all images tageed latest](https://github.com/abcdesktopio/conf/workflows/vagrant-up/badge.svg)
+![Test vagrant all images tageed latest](https://github.com/abcdesktopio/conf/workflows/vagrant-docker/badge.svg)
 
 This repository contains sample configuration files and install scripts
 
