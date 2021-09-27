@@ -112,8 +112,16 @@ fi
 # docker pull user images
 REGISTRY_DOCKERHUB="abcdesktopio"
 docker pull $REGISTRY_DOCKERHUB/oc.user.18.04:${TAG}
+EXIT_CODE=$?
+if [ $EXIT_CODE -eq 0 ] 
+then 
+		echo "docker pull $REGISTRY_DOCKERHUB/oc.user.18.04:${TAG} command success"
+else
+		echo "Failed to run 'docker pull $REGISTRY_DOCKERHUB/oc.user.18.04:${TAG}'"
+		exit $EXIT_CODE
+fi
 
-if [ "$1" -eq "nopullapps" ]; then
+if [ "$1" = "nopullapps" ]; then
 	echo "do not pull images option detected"
 	echo "skipping image $REGISTRY_DOCKERHUB/writer.d:${TAG}"
 	echo "skipping image $REGISTRY_DOCKERHUB/calc.d:${TAG}"
@@ -130,20 +138,68 @@ else
 fi
 
 if [ -f docker-compose.yml ]; then
-        echo '-------------------------------------'
-        echo ' local file docker-compose.yml exists' 
-        echo ' do not overwrite, use local file'
-        echo '-------------------------------------'
+        echo '------------------------------------------------------------------------'
+        echo ' local file docker-compose.yml exists, do not overwrite, use local file '
+        echo '------------------------------------------------------------------------'
 else 
         curl -o docker-compose.yml  https://raw.githubusercontent.com/abcdesktopio/conf/main/reference/docker-compose.yml
+	if [ $EXIT_CODE -eq 0 ] 
+	then 
+		echo "https://raw.githubusercontent.com/abcdesktopio/conf/main/reference/docker-compose.yml downloaded"
+	else
+		echo "Failed to download https://raw.githubusercontent.com/abcdesktopio/conf/main/reference/docker-compose.yml"
+		exit $EXIT_CODE
+	fi
 fi
 
+## Starting abcdesktop
 echo "Starting abcdesktop services"
+
+## Show config
 echo "running 'docker-compose -p abcdesktop config'"
 TAG=${TAG} docker-compose -p abcdesktop config
+EXIT_CODE=$?
+if [ $EXIT_CODE -eq 0 ] 
+then 
+		echo "command success"
+else
+		echo "Failed to run 'docker-compose -p abcdesktop config'"
+		exit $EXIT_CODE
+fi
+	
+	
+## Pull images
 echo "running 'docker-compose -p abcdesktop pull'"
 TAG=${TAG} docker-compose -p abcdesktop pull
+EXIT_CODE=$?
+if [ $EXIT_CODE -eq 0 ] 
+then 
+		echo "command success"
+else
+		echo "Failed to run 'docker-compose -p abcdesktop pull'"
+		exit $EXIT_CODE
+fi
+
+## Create containers
 echo "running 'docker-compose -p abcdesktop up --no-start'"
 TAG=${TAG} docker-compose -p abcdesktop up --no-start
+EXIT_CODE=$?
+if [ $EXIT_CODE -eq 0 ] 
+then 
+		echo "command success"
+else
+		echo "Failed to run 'docker-compose -p abcdesktop up --no-start'"
+		exit $EXIT_CODE
+fi
+
+## Start containers
 echo "running 'docker-compose -p abcdesktop up -d' -> containers in the background'"
 TAG=${TAG} docker-compose -p abcdesktop up -d
+EXIT_CODE=$?
+if [ $EXIT_CODE -eq 0 ] 
+then 
+		echo "command success"
+else
+		echo "Failed to run 'docker-compose -p abcdesktop up -d'"
+		exit $EXIT_CODE
+fi
