@@ -109,7 +109,6 @@ else
         echo "pulling tagged image ${TAG}"
 fi
 
-
 # docker pull user images
 REGISTRY_DOCKERHUB="abcdesktopio"
 docker pull $REGISTRY_DOCKERHUB/oc.user.18.04:${TAG}
@@ -133,5 +132,9 @@ fi
 echo "Starting abcdesktop services"
 echo "running 'docker-compose -p abcdesktop config'"
 TAG=${TAG} docker-compose -p abcdesktop config
-echo "running 'docker-compose -p abcdesktop up'"
-TAG=${TAG} docker-compose -p abcdesktop up
+echo "running 'docker-compose -p abcdesktop pull'"
+TAG=${TAG} docker-compose -p abcdesktop pull
+echo "running 'docker-compose -p abcdesktop up --no-start'"
+TAG=${TAG} docker-compose -p abcdesktop up --no-start
+echo "running 'docker-compose -p abcdesktop up -d'"
+TAG=${TAG} docker-compose -p abcdesktop up -d
