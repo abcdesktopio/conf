@@ -33,6 +33,8 @@ Vagrant.configure("2") do |config|
      # install and start abcdesktop
      sudo conf/docker/install.sh
      # 
+     sleep 30
+     #
      newman run conf/postman-collections/login.anonymous.json 
   SHELL
 
