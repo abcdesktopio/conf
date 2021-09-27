@@ -136,5 +136,5 @@ echo "running 'docker-compose -p abcdesktop pull'"
 TAG=${TAG} docker-compose -p abcdesktop pull
 echo "running 'docker-compose -p abcdesktop up --no-start'"
 TAG=${TAG} docker-compose -p abcdesktop up --no-start
-echo "running 'docker-compose -p abcdesktop up -d'"
+echo "running 'docker-compose -p abcdesktop up -d' -> containers in the background'"
 TAG=${TAG} docker-compose -p abcdesktop up -d
