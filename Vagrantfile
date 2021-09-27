@@ -31,7 +31,7 @@ Vagrant.configure("2") do |config|
      git clone https://github.com/abcdesktopio/conf.git
      #
      # install abcdesktop
-     sudo conf/main/docker/install.sh
+     sudo conf/docker/install.sh
      # 
   SHELL
 
