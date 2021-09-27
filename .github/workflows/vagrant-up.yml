@@ -26,3 +26,6 @@ jobs:
 
     - name: Run vagrant up
       run: vagrant up
+      
+    - name: Clear vagrant 
+      run: vagrant destroy -f
