@@ -17,6 +17,9 @@ Vagrant.configure("2") do |config|
      # install docker-compose
      sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
      sudo chmod +x /usr/local/bin/docker-compose
+     #
+     # add account to the docker group
+     usermod -aG docker vagrant
      # 
      # install npm
      curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
