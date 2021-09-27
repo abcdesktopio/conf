@@ -30,9 +30,10 @@ Vagrant.configure("2") do |config|
      # clone git conf to run install and newman collections
      git clone https://github.com/abcdesktopio/conf.git
      #
-     # install abcdesktop
+     # install and start abcdesktop
      sudo conf/docker/install.sh
      # 
+     newman run conf/postman-collections/login.anonymous.json 
   SHELL
 
 end
