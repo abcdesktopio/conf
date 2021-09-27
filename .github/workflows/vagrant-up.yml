@@ -22,4 +22,4 @@ jobs:
       run: vagrant up
 
     - name: ssh into box after boot
-      run: vagrant ssh -c "echo 'hello world!'
+      run: vagrant ssh -c "echo 'hello world!'"
