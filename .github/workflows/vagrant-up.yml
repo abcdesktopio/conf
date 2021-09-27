@@ -4,8 +4,8 @@ on: [push]
 
 jobs:
   vagrant-up:
-    runs-on: self-hosted
-    # runs-on: macos-10.15
+    # runs-on: self-hosted
+    runs-on: macos-10.15
 
     steps:
     - uses: actions/checkout@v2
