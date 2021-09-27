@@ -9,3 +9,4 @@ Please, read the public documentation web site:
 ## conf
 
 This repository contains sample configuration files and install scripts
+![Test vagrant all images tageed latest](https://github.com/abcdesktopio/conf/workflows/vagrant-up/badge.svg)
