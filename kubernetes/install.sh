@@ -189,6 +189,13 @@ else
         exit $?
 fi
 
+deployments=$(kubectl -n abcdesktop get deployment --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+for d in $deployments;  
+do 
+	echo "waiting for deployment/$d available"; 
+	kubectl -n abcdesktop wait deployment/$d --for=condition=available --timeout=-1s; 
+done
+
 pods=$(kubectl -n abcdesktop get pods --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 for p in $pods; 
 do
@@ -196,8 +203,9 @@ do
 	kubectl -n abcdesktop wait pod/$p --for=condition=Ready --timeout=-1s
 done
 
-
+# list all pods 
 kubectl get pods --namespace=abcdesktop
+
 echo "Setup done"
 echo "Open your navigator to http://[your-ip-hostname]:30443/"
 echo "For example http://localhost:30443"
