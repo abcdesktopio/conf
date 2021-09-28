@@ -189,8 +189,15 @@ else
         exit $?
 fi
 
+pods=$(kubectl -n abcdesktop get pods --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+for p in $pods; 
+do
+	echo "waiting for pod/$p Ready"
+	kubectl -n abcdesktop wait pod/$p --for=condition=Ready --timeout=-1s
+done
+
+
 kubectl get pods --namespace=abcdesktop
 echo "Setup done"
-echo "Please wait for running services, then"
 echo "Open your navigator to http://[your-ip-hostname]:30443/"
 echo "For example http://localhost:30443"
