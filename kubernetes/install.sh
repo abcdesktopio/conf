@@ -137,19 +137,40 @@ echo "#"
 echo "####################################################################"
 
 
+
+# check if TAG env is set
+if [ -z ${TAG} ]; then
+        echo "pulling tagged image not set, use default latest"
+        TAG=latest
+else
+        echo "pulling tagged image ${TAG}"
+fi
+
 # docker pull image core images
 REGISTRY_DOCKERHUB="abcdesktopio"
-docker pull $REGISTRY_DOCKERHUB/oc.user.18.04
-docker pull $REGISTRY_DOCKERHUB/oc.cupsd.18.04
-docker pull $REGISTRY_DOCKERHUB/oc.pulseaudio.18.04
+docker pull $REGISTRY_DOCKERHUB/oc.user.18.04:${TAG}
+docker pull $REGISTRY_DOCKERHUB/oc.cupsd.18.04:${TAG}
+docker pull $REGISTRY_DOCKERHUB/oc.pulseaudio.18.04:${TAG}
 
-# docker pull applications
-docker pull $REGISTRY_DOCKERHUB/writer.d
-docker pull $REGISTRY_DOCKERHUB/calc.d
-docker pull $REGISTRY_DOCKERHUB/impress.d
-docker pull $REGISTRY_DOCKERHUB/firefox.d
-docker pull $REGISTRY_DOCKERHUB/gimp.d
+if [ -z ${NOPULLAPPS} ]; then
+        echo "do not pull images option detected"
+	echo "skipping image $REGISTRY_DOCKERHUB/writer.d:${TAG}"
+	echo "skipping image $REGISTRY_DOCKERHUB/calc.d:${TAG}"
+	echo "skipping image $REGISTRY_DOCKERHUB/impress.d:${TAG}"
+	echo "skipping image $REGISTRY_DOCKERHUB/firefox.d:${TAG}"
+	echo "skipping image $REGISTRY_DOCKERHUB/gimp.d:${TAG}"
+else
+	# docker pull sample applications images
+	docker pull $REGISTRY_DOCKERHUB/writer.d:${TAG}
+	docker pull $REGISTRY_DOCKERHUB/calc.d:${TAG}
+	docker pull $REGISTRY_DOCKERHUB/impress.d:${TAG}
+	docker pull $REGISTRY_DOCKERHUB/firefox.d:${TAG}
+	docker pull $REGISTRY_DOCKERHUB/gimp.d:${TAG}
+fi
 
+if [ "$TAG" = "dev" ]; then
+	ABCDESKTOP_YAML=https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/abcdesktop-dev.yaml 
+fi
 
 # create abcdesktop
 if [ -f abcdesktop.yaml ]; then
