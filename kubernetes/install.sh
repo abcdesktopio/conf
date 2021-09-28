@@ -153,19 +153,19 @@ docker pull $REGISTRY_DOCKERHUB/oc.cupsd.18.04:${TAG}
 docker pull $REGISTRY_DOCKERHUB/oc.pulseaudio.18.04:${TAG}
 
 if [ -z ${NOPULLAPPS} ]; then
-        echo "do not pull images option detected"
-	echo "skipping image $REGISTRY_DOCKERHUB/writer.d:${TAG}"
-	echo "skipping image $REGISTRY_DOCKERHUB/calc.d:${TAG}"
-	echo "skipping image $REGISTRY_DOCKERHUB/impress.d:${TAG}"
-	echo "skipping image $REGISTRY_DOCKERHUB/firefox.d:${TAG}"
-	echo "skipping image $REGISTRY_DOCKERHUB/gimp.d:${TAG}"
-else
 	# docker pull sample applications images
 	docker pull $REGISTRY_DOCKERHUB/writer.d:${TAG}
 	docker pull $REGISTRY_DOCKERHUB/calc.d:${TAG}
 	docker pull $REGISTRY_DOCKERHUB/impress.d:${TAG}
 	docker pull $REGISTRY_DOCKERHUB/firefox.d:${TAG}
 	docker pull $REGISTRY_DOCKERHUB/gimp.d:${TAG}
+else
+	echo "do not pull images option detected"
+	echo "skipping image $REGISTRY_DOCKERHUB/writer.d:${TAG}"
+	echo "skipping image $REGISTRY_DOCKERHUB/calc.d:${TAG}"
+	echo "skipping image $REGISTRY_DOCKERHUB/impress.d:${TAG}"
+	echo "skipping image $REGISTRY_DOCKERHUB/firefox.d:${TAG}"
+	echo "skipping image $REGISTRY_DOCKERHUB/gimp.d:${TAG}"
 fi
 
 if [ "$TAG" = "dev" ]; then
