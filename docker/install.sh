@@ -121,7 +121,7 @@ else
 		exit $EXIT_CODE
 fi
 
-if [ "$1" = "nopullapps" ]; then
+if [ -z ${NOPULLAPPS} ]; then
 	echo "do not pull images option detected"
 	echo "skipping image $REGISTRY_DOCKERHUB/writer.d:${TAG}"
 	echo "skipping image $REGISTRY_DOCKERHUB/calc.d:${TAG}"
