@@ -33,7 +33,7 @@ services:
       - netback
   
   mongodb:
-    image: mongo
+    image: mongo:4.4
     networks:
       - netback
 
