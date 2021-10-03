@@ -104,10 +104,12 @@ fi
 # check if TAG env is set
 if [ -z ${TAG} ]; then
         echo "pulling tagged image not set, use default latest"
-        TAG=latest
+        TAG=1.0
 else
         echo "pulling tagged image ${TAG}"
 fi
+
+echo "Start pulling images with tag:$TAG"
 
 # docker pull user images
 REGISTRY_DOCKERHUB="abcdesktopio"
@@ -116,10 +118,13 @@ EXIT_CODE=$?
 if [ $EXIT_CODE -eq 0 ] 
 then 
 		echo "docker pull $REGISTRY_DOCKERHUB/oc.user.18.04:${TAG} command succeeded"
+		docker tag $REGISTRY_DOCKERHUB/oc.user.18.04:${TAG} $REGISTRY_DOCKERHUB/oc.user.18.04
 else
 		echo "Failed to run 'docker pull $REGISTRY_DOCKERHUB/oc.user.18.04:${TAG}'"
 		exit $EXIT_CODE
 fi
+
+
 
 if [ -z ${NOPULLAPPS} ]; then
 	# docker pull sample applications images
