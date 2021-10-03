@@ -1030,7 +1030,6 @@ spec:
     spec:
       containers:
       - name: mongodb
-        imagePullPolicy: IfNotPresent
         image: abcdesktopio/oc.mongo
         ports:
          - containerPort: 27017   
@@ -1086,7 +1085,7 @@ spec:
       containers:
       - name: nginx
         imagePullPolicy: Always
-        image: abcdesktopio/oc.nginx
+        image: abcdesktopio/oc.nginx:1.0
         command:
             - "/usr/sbin/nginx"
         volumeMounts:
@@ -1175,7 +1174,7 @@ spec:
     spec:
       containers:
       - name: speedtest
-        image: abcdesktopio/oc.speedtest
+        image: abcdesktopio/oc.speedtest:1.0
         ports:
           - containerPort: 80
 ---
@@ -1211,7 +1210,7 @@ spec:
       containers:
       - name : pyos
         imagePullPolicy: IfNotPresent 
-        image: abcdesktopio/oc.pyos
+        image: abcdesktopio/oc.pyos:1.0
         command:
             - "/var/pyos/od.py"
         volumeMounts:
