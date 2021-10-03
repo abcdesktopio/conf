@@ -141,16 +141,27 @@ echo "####################################################################"
 # check if TAG env is set
 if [ -z ${TAG} ]; then
         echo "pulling tagged image not set, use default latest"
-        TAG=latest
+        TAG=1.0
 else
         echo "pulling tagged image ${TAG}"
 fi
 
+echo "Start pulling images with tag:$TAG"
+
 # docker pull image core images
 REGISTRY_DOCKERHUB="abcdesktopio"
+# graphical container
+echo "pulling graphical container image"
 docker pull $REGISTRY_DOCKERHUB/oc.user.18.04:${TAG}
+docker tag  $REGISTRY_DOCKERHUB/oc.user.18.04:${TAG} 	$REGISTRY_DOCKERHUB/oc.user.18.04
+# printer container
+echo "pulling printer container image"
 docker pull $REGISTRY_DOCKERHUB/oc.cupsd.18.04:${TAG}
+docker tag  $REGISTRY_DOCKERHUB/oc.cupsd.18.04:${TAG} 	$REGISTRY_DOCKERHUB/oc.cupsd.18.04
+# sound container
+echo "pulling sound container image"
 docker pull $REGISTRY_DOCKERHUB/oc.pulseaudio.18.04:${TAG}
+docker tag  $REGISTRY_DOCKERHUB/oc.pulseaudio.18.04:${TAG} $REGISTRY_DOCKERHUB/oc.pulseaudio.18.04
 
 if [ -z ${NOPULLAPPS} ]; then
 	# docker pull sample applications images
