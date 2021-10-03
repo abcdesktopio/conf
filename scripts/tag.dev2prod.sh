@@ -17,5 +17,5 @@ while read i; do
   	docker pull abcdesktopio/$i:dev
         docker tag abcdesktopio/$i:dev abcdesktopio/$i
         docker push abcdesktopio/$i
-done < ../images-list.txt
+done < images-list.txt
 
