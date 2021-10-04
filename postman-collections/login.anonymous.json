@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "37c6e7ec-f44d-4f03-a14e-d0fbd1738a0e",
+		"_postman_id": "ff140343-5dc7-445d-8906-22ed21fd396e",
 		"name": "abcdesktoplogin",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -11,7 +11,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "0f763690-4261-4643-8c43-2e3776ea22ee",
 						"exec": [
 							"var jsonData = JSON.parse(responseBody);",
 							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
@@ -35,10 +34,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost/API/auth/auth",
-					"protocol": "http",
+					"raw": "{{protocol}}://{{abcdesktop_host}}/API/auth/auth",
+					"protocol": "{{protocol}}",
 					"host": [
-						"localhost"
+						"{{abcdesktop_host}}"
 					],
 					"path": [
 						"API",
@@ -55,7 +54,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "a8995c20-4520-4aa6-983e-1edf4710d819",
 						"exec": [
 							"// test http status ",
 							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
@@ -116,10 +114,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost/API/composer/launchdesktop",
-					"protocol": "http",
+					"raw": "{{protocol}}://{{abcdesktop_host}}/API/composer/launchdesktop",
+					"protocol": "{{protocol}}",
 					"host": [
-						"localhost"
+						"{{abcdesktop_host}}"
 					],
 					"path": [
 						"API",
@@ -137,7 +135,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "9b534bc1-7c63-43c2-8f98-943c55c98424",
 						"exec": [
 							"",
 							"// test http status ",
@@ -179,10 +176,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost/spawner/getwindowslist",
-					"protocol": "http",
+					"raw": "{{protocol}}://{{abcdesktop_host}}/spawner/getwindowslist",
+					"protocol": "{{protocol}}",
 					"host": [
-						"localhost"
+						"{{abcdesktop_host}}"
 					],
 					"path": [
 						"spawner",
@@ -199,7 +196,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "c41d402e-e1b8-4855-845a-71103807beec",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
 							"",
@@ -233,10 +229,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost/API/auth/logout",
-					"protocol": "http",
+					"raw": "{{protocol}}://{{abcdesktop_host}}/API/auth/logout",
+					"protocol": "{{protocol}}",
 					"host": [
-						"localhost"
+						"{{abcdesktop_host}}"
 					],
 					"path": [
 						"API",
@@ -249,5 +245,24 @@
 			"response": []
 		}
 	],
-	"protocolProfileBehavior": {}
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
 }
