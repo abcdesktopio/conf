@@ -1,6 +1,6 @@
 #!/bin/bash
 
-corefiles=( "oc.pyos" "oc.nginx" "oc.mongo" "oc.user.18.04" "oc.pulseaudio.18.04" "oc.cupsd.18.04" )
+corefiles=( "oc.pyos" "oc.nginx" "oc.user.18.04" "oc.pulseaudio.18.04" "oc.cupsd.18.04" )
 
 for i in "${corefiles[@]}"
 do
