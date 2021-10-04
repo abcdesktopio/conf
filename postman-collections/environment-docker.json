@@ -1,0 +1,19 @@
+{
+	"id": "146e52f0-fd32-4814-8e58-8a3c0f4d5eb7",
+	"values": [
+		{
+			"key": "abcdesktop_host",
+			"value": "localhost",
+			"enabled": true
+		},
+		{
+			"key": "protocol",
+			"value": "http",
+			"enabled": true
+		}
+	],
+	"name": "My Workspace Globals",
+	"_postman_variable_scope": "globals",
+	"_postman_exported_at": "2021-10-04T10:08:11.339Z",
+	"_postman_exported_using": "Postman/8.12.4"
+}
