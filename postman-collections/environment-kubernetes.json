@@ -2,13 +2,8 @@
 	"id": "146e52f0-fd32-4814-8e58-8a3c0f4d5eb7",
 	"values": [
 		{
-			"key": "abcdesktop_host",
-			"value": "localhost:30443",
-			"enabled": true
-		},
-		{
-			"key": "protocol",
-			"value": "http",
+			"key": "url",
+			"value": "http://localhost:30443",
 			"enabled": true
 		}
 	],

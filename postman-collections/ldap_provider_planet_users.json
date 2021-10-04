@@ -1,0 +1,30 @@
+
+
+[
+{ 	"id": "1",
+	"manager": null, 
+	"provider": "planet", 
+	"userid": "Hubert J. Farnsworth", 
+	"password": "professor" },
+{       "id": "2",
+        "manager": null,
+        "provider": "planet", 
+        "userid": "Philip J. Fry", 
+        "password": "fry" },
+{       "id": "3",
+        "manager": null,
+        "provider": "planet",
+        "userid": "Hermes Conrad",
+        "password": "hermes" },
+{       "id": "4",
+        "manager": null,
+        "provider": "planet", 
+        "userid": "Turanga Leela", 
+        "password": "leela" },
+{       "id": "5",
+        "manager": null,
+        "provider": "planet",
+        "userid": "Bender Bending Rodríguez",
+        "password": "bender" }
+
+]
