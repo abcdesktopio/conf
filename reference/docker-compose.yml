@@ -4,14 +4,14 @@ services:
     depends_on:
       - memcached
       - mongodb
-    image: abcdesktopio/oc.pyos:${TAG:-latest}
+    image: abcdesktopio/oc.pyos:${TAG:-1.0}
     networks:
       - netback
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
   
   speedtest:
-    image: abcdesktopio/oc.speedtest:${TAG:-latest}
+    image: abcdesktopio/oc.speedtest:${TAG:-1.0}
     networks:
       - netuser
   
@@ -19,7 +19,7 @@ services:
     depends_on:
       - memcached
       - pyos
-    image: abcdesktopio/oc.nginx:${TAG:-latest}
+    image: abcdesktopio/oc.nginx:${TAG:-1.0}
     ports:
       - 80:80
       - 443:443
@@ -33,7 +33,7 @@ services:
       - netback
   
   mongodb:
-    image: mongo
+    image: mongo:4.4.9
     networks:
       - netback
 
