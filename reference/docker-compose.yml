@@ -33,7 +33,7 @@ services:
       - netback
   
   mongodb:
-    image: mongo:4.4.9
+    image: abcdesktopio/oc.mongo:${TAG:-1.0}
     networks:
       - netback
 
