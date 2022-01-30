@@ -492,7 +492,7 @@ data:
     # this image MUST exists on each abcdesktop node 
     # Please download this image BEFORE starting od.py
     # desktop.image is used in both standalone and kubernetes mode 
-    desktop.image: 'abcdesktopio/oc.user.18.04:dev'
+    desktop.image: 'abcdesktopio/oc.user.ssh.18.04:dev'
 
     # desktop.printerimage is only used in Kubernetes mode 
     # desktop.printerimage is the docker image name to start the printer servive container 
@@ -627,7 +627,7 @@ data:
     # The default value is False 
     # You should only set desktop.allowPrivilegeEscalation to run sudo command.
     # In production this value MUST be set to False
-    desktop.allowPrivilegeEscalation: False 
+    desktop.allowPrivilegeEscalation: True 
 
     # desktop.privilege
     # value True or False 
@@ -682,12 +682,15 @@ data:
     # Dynamics values are set by python code 
     desktop.envlocal :  {   'DISPLAY'               : ':0.0',
                             'USER'                  : 'balloon',
+                            'LOGNAME'               : 'balloon'
                             'LIBOVERLAY_SCROLLBAR'  : '0',
                             'UBUNTU_MENUPROXY'      : '0',
                             'HOME'                  : '/home/balloon',
-                            'LOGNAME'               : 'balloon' }
-
-
+                            'SET_DEFAULT_WALLPAPER' : 'welcometoabcdesktop.png',
+                            'X11LISTEN'             : 'tcp',
+                            'PULSE_SERVER'          : '/tmp/.pulse.sock',
+                            'CUPS_SERVER'           : '/tmp/.cups.sock',
+                            'SSHD_ENABLE'           : 'ENABLE' }
     #
     # desktop default generic user
     # balloon is the default generic user name.
@@ -719,19 +722,7 @@ data:
     # 'webshell'    :  HTML 5, terminal application based on xterm.js
     # The values are parsed by javascript front  
     # 
-    dock : {        'filemanager':  {       'args': None,
-                                            'acl': { 'permit': [ 'all' ] },
-                                            'showinview': u'dock',
-                                            'name': u'FileManager',
-                                            'keyword': u'files,file manager',
-                                            'launch': u'nautilus.Nautilus',
-                                            'displayname': u'FileManager',
-                                            'execmode': u'builtin',
-                                            'cat': u'utilities,office',
-                                            'id': u'filemanager.d',
-                                            'icon': u'pantheon-files-icons.svg'},
-
-                    'terminal':     {       'args': '',
+    dock : {         'terminal':     {       'args': '',
                                             'acl': { 'permit': [ 'all' ] },
                                             'name': u'TerminalBuiltin',
                                             'keyword': u'terminal,shell,bash,builtin,pantheon',
@@ -931,7 +922,7 @@ data:
         set $broadcast_tcp_port                 29784;
         set $lync_service_tcp_port              29785;
         set $spawner_service_tcp_port           29786;
-        set $janus_service_tcp_port		29787; 
+        set $janus_service_tcp_port		          29787; 
         # uncomment to use env var
         # set_by_lua  $filemanager_bridge_tcp_port 'return os.getenv("FILEMANAGER_BRIDGE_TCP_PORT")';
         # set_by_lua  $broadcast_tcp_port 'return os.getenv("BROADCAST_SERVICE_TCP_PORT")';
