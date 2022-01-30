@@ -183,7 +183,7 @@ fi
 
 if [ "$TAG" = "dev" ]; then
 	echo 'Use TAG=dev for abcdesktop'
-	ABCDESKTOP_YAML=https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/abcdesktop-dev.yaml 
+	ABCDESKTOP_YAML=${ABCDESKTOP_YAML:-https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/abcdesktop-dev.yaml} 
 fi
 
 # create abcdesktop
