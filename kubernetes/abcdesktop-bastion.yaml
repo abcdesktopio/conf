@@ -682,7 +682,7 @@ data:
     # Dynamics values are set by python code 
     desktop.envlocal :  {   'DISPLAY'               : ':0.0',
                             'USER'                  : 'balloon',
-                            'LOGNAME'               : 'balloon'
+                            'LOGNAME'               : 'balloon',
                             'LIBOVERLAY_SCROLLBAR'  : '0',
                             'UBUNTU_MENUPROXY'      : '0',
                             'HOME'                  : '/home/balloon',
