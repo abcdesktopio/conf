@@ -420,14 +420,25 @@ data:
             'userid': 'anonymous',
             'username': 'Anonymous'
           }    } } }
+          
     # Note serviceaccount is optional
-    ldapconfig : { 'planet': {    'default'       : True, 
-                            'ldap_timeout'  : 15,
-                            'ldap_protocol' : 'ldap',
-                            'ldap_basedn'   : 'ou=people,dc=planetexpress,dc=com',
-                            'servers'       : [ 'openldap.abcdesktop.svc.cluster.local' ],
-                            'secure'        : False,
-                            'serviceaccount': { 'login': 'cn=admin,dc=planetexpress,dc=com', 'password': 'GoodNewsEveryone' }}}
+    ldapconfig : { 'planet': {  'default'       : True,
+                                'ldap_timeout'  : 15,
+                                'ldap_protocol' : 'ldap',
+                                'ldap_basedn'   : 'ou=people,dc=planetexpress,dc=com',
+                                'servers'       : [ 'openldap.abcdesktop.svc.cluster.local' ],
+                                'secure'        : False,
+                                'serviceaccount': { 'login': 'cn=admin,dc=planetexpress,dc=com', 'password': 'GoodNewsEveryone' },
+                                'policies': { 
+                                    'acls': None, 
+                                    'rules' : { 
+                                        'rule-ship': { 'conditions' : [ { 'memberOf': 'cn=ship_crew,ou=people,dc=planetexpress,dc=com',   'expected' : True  } ], 'expected' : True, 'label': 'ship_crew'   },                      
+                                        'rule-test': { 'conditions' : [ { 'memberOf': 'cn=admin_staff,ou=people,dc=planetexpress,dc=com', 'expected' : True  } ], 'expected' : True, 'label': 'admin_staff' } 
+                                    } 
+                                } 
+                            } 
+    }
+
     # Note serviceaccount and wins_servers are optional 
     adconfig : { 'AD': {   'default'       : True, 
                            'ldap_timeout'  : 15,
