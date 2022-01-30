@@ -682,15 +682,14 @@ data:
     # Dynamics values are set by python code 
     desktop.envlocal :  {   'DISPLAY'               : ':0.0',
                             'USER'                  : 'balloon',
-                            'LOGNAME'               : 'balloon'
+                            'LOGNAME'               : 'balloon',
                             'LIBOVERLAY_SCROLLBAR'  : '0',
                             'UBUNTU_MENUPROXY'      : '0',
                             'HOME'                  : '/home/balloon',
                             'SET_DEFAULT_WALLPAPER' : 'welcometoabcdesktop.png',
                             'X11LISTEN'             : 'tcp',
                             'PULSE_SERVER'          : '/tmp/.pulse.sock',
-                            'CUPS_SERVER'           : '/tmp/.cups.sock',
-                            'SSHD_ENABLE'           : 'ENABLE' }
+                            'CUPS_SERVER'           : '/tmp/.cups.sock' }
     #
     # desktop default generic user
     # balloon is the default generic user name.
