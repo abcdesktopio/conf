@@ -180,6 +180,7 @@ else
 fi
 
 if [ "$TAG" = "dev" ]; then
+	echo 'Use TAG=dev for abcdesktop'
 	ABCDESKTOP_YAML=https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/abcdesktop-dev.yaml 
 fi
 
@@ -189,6 +190,7 @@ if [ -f abcdesktop.yaml ]; then
    ABCDESKTOP_YAML=abcdesktop.yaml
 fi
 
+echo "kubectl create -f $ABCDESKTOP_YAML"
 kubectl create -f $ABCDESKTOP_YAML
 
 EXIT_CODE=$?
