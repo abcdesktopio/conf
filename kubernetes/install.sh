@@ -152,8 +152,10 @@ echo "Start pulling images with tag:$TAG"
 REGISTRY_DOCKERHUB="abcdesktopio"
 # graphical container
 echo "pulling graphical container image"
-docker pull $REGISTRY_DOCKERHUB/oc.user.18.04:${TAG}
-docker tag  $REGISTRY_DOCKERHUB/oc.user.18.04:${TAG} 	$REGISTRY_DOCKERHUB/oc.user.18.04
+abcdesktopocuser=${OCUSERIMAGE:-oc.user.18.04:${TAG}}
+docker pull $REGISTRY_DOCKERHUB/$abcdesktopocuser
+docker tag  $REGISTRY_DOCKERHUB/$abcdesktopocuser $REGISTRY_DOCKERHUB/oc.user.18.04
+
 # printer container
 echo "pulling printer container image"
 docker pull $REGISTRY_DOCKERHUB/oc.cupsd.18.04:${TAG}
@@ -180,6 +182,7 @@ else
 fi
 
 if [ "$TAG" = "dev" ]; then
+	echo 'Use TAG=dev for abcdesktop'
 	ABCDESKTOP_YAML=https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/abcdesktop-dev.yaml 
 fi
 
@@ -189,6 +192,7 @@ if [ -f abcdesktop.yaml ]; then
    ABCDESKTOP_YAML=abcdesktop.yaml
 fi
 
+echo "kubectl create -f $ABCDESKTOP_YAML"
 kubectl create -f $ABCDESKTOP_YAML
 
 EXIT_CODE=$?

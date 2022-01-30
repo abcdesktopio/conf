@@ -22,6 +22,9 @@ rules:
   resources: ['pods']
   verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
 - apiGroups: ['']
+  resources: ['events']
+  verbs: [ "get", "list", "watch" ]
+- apiGroups: ['']
   resources: ['pods/exec']
   verbs: ["create", "get", "list", "watch", "update", "patch", "delete"]
 - apiGroups: ['']
@@ -1030,7 +1033,7 @@ spec:
     spec:
       containers:
       - name: mongodb
-        image: mongo:4.4.9 
+        image: abcdesktopio/oc.mongo:1.0
         ports:
          - containerPort: 27017   
         env:
