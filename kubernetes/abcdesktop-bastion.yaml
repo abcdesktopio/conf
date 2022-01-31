@@ -433,12 +433,8 @@ data:
                                     'acls': None, 
                                     'rules' : { 
                                         'rule-ship': { 'conditions' : [ { 'memberOf': 'cn=ship_crew,ou=people,dc=planetexpress,dc=com',   'expected' : True  } ], 'expected' : True, 'label': 'ship_crew'   },                      
-                                        'rule-test': { 'conditions' : [ { 'memberOf': 'cn=admin_staff,ou=people,dc=planetexpress,dc=com', 'expected' : True  } ], 'expected' : True, 'label': 'admin_staff' } 
-                                    } 
-                                } 
-                            } 
-    }
-
+                                        'rule-test': { 'conditions' : [ { 'memberOf': 'cn=admin_staff,ou=people,dc=planetexpress,dc=com', 'expected' : True  } ], 'expected' : True, 'label': 'admin_staff' } } } } }
+    
     # Note serviceaccount and wins_servers are optional 
     adconfig : { 'AD': {   'default'       : True, 
                            'ldap_timeout'  : 15,
