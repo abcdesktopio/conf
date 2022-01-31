@@ -8,7 +8,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      shipcrew: true 
+      shipcrew: 'true' 
   policyTypes:
   - Egress
   egress:
