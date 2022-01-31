@@ -1,0 +1,23 @@
+apiVersion: k8s.cni.cncf.io/v1beta1
+kind: MultiNetworkPolicy
+metadata:
+  name: mnp-permit-shipcrew
+  namespace: abcdesktop 
+  annotations:
+    k8s.v1.cni.cncf.io/policy-for: macvlan-conf-eth3
+spec:
+  podSelector:
+    matchLabels:
+      shipcrew: true 
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - ipBlock: 
+        cidr: 192.168.55.21/32
+    - ipBlock:
+        cidr: 192.168.55.22/32
+    ports:
+      - protocol: TCP
+        port: 22
+
