@@ -434,6 +434,21 @@ data:
                                     'rules' : { 
                                         'rule-ship': { 'conditions' : [ { 'memberOf': 'cn=ship_crew,ou=people,dc=planetexpress,dc=com',   'expected' : True  } ], 'expected' : True, 'label': 'shipcrew'   },                      
                                         'rule-test': { 'conditions' : [ { 'memberOf': 'cn=admin_staff,ou=people,dc=planetexpress,dc=com', 'expected' : True  } ], 'expected' : True, 'label': 'adminstaff' } } } } }
+    # 'webhook': { 'create':  '/usr/bin/curl "http://{{ livedns_fqdn }}:8080/update?secret={{ livedns_secret }}&domain={{ name }}&addr={{ net2 }}"' },
+    #                                                      'external_dns' : { 'domain':'desktop.example.com', 'hostname': '{{ name }}' },
+    #                                                     'internal_dns' : { 'domain':'desktop.example.local', 'nameservers': [ '1.2.3.4' ], 'searches': [ 'desktop.example.local'] },
+    desktop.policies: { 
+        'rules': { 
+            'network': { 
+                'shipcrew': {  
+                    'annotations' : {  
+                        'k8s.v1.cni.cncf.io/networks': '[ {"name":"macvlan-conf-eth3"}, { "name":"macvlan-conf-eth2", "default-route": ["10.9.1.100"] } ]' 
+                    }
+                } 
+            }  
+        },
+        'acls' : {} }
+    
     
     # Note serviceaccount and wins_servers are optional 
     adconfig : { 'AD': {   'default'       : True, 
