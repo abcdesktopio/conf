@@ -1087,7 +1087,6 @@ spec:
     spec:
       containers:
       - name: nginx
-        imagePullPolicy: Always
         image: abcdesktopio/oc.nginx:1.0
         command:
             - "/usr/sbin/nginx"
@@ -1212,7 +1211,6 @@ spec:
       serviceAccountName: pyos-serviceaccount
       containers:
       - name : pyos
-        imagePullPolicy: IfNotPresent 
         image: abcdesktopio/oc.pyos:1.0
         command:
             - "/var/pyos/od.py"
