@@ -31,6 +31,9 @@ rules:
   resources: ['secrets']
   verbs:  ["get", "list", "watch", "create", "update", "patch", "delete"]
 - apiGroups: ['']
+  resources: ['configmaps']
+  verbs:  ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ['']
   resources: ['pods/log']
   verbs: ['get', 'list', 'watch' ]
 ---
@@ -483,35 +486,55 @@ data:
     # else the default fallback language is en_US 
     language : [  'af_ZA', 'am_ET', 'an_ES', 'ar_AE', 'ar_BH', 'ar_DZ', 'ar_EG', 'ar_IN', 'ar_IQ', 'ar_JO', 'ar_KW','ar_LB', 'ar_LY', 'ar_MA', 'ar_OM', 'ar_QA', 'ar_SA', 'ar_SD', 'ar_SY', 'ar_TN', 'ar_YE', 'as_IN', 'ast_ES', 'az_AZ', 'be_BY', 'bg_BG', 'bn_BD', 'bn_IN', 'bo_CN', 'bo_IN', 'br_FR', 'bs_BA', 'ca_AD', 'ca_ES', 'ca_FR', 'ca_IT', 'crh_UA', 'cs_CZ', 'cy_GB', 'da_DK', 'de_AT', 'de_BE', 'de_CH', 'de_DE', 'de_LI', 'de_LU', 'dz_BT', 'el_CY', 'el_GR', 'en_AG', 'en_AU', 'en_BW', 'en_CA', 'en_DK', 'en_GB', 'en_HK', 'en_IE', 'en_IN', 'en_NG', 'en_NZ', 'en_PH', 'en_SG', 'en_US', 'en_ZA', 'en_ZM', 'en_ZW', 'eo', 'eo_US', 'es_AR', 'es_BO', 'es_CL', 'es_CO', 'es_CR', 'es_CU', 'es_DO', 'es_EC', 'es_ES', 'es_GT', 'es_HN', 'es_MX', 'es_NI', 'es_PA', 'es_PE', 'es_PR', 'es_PY', 'es_SV', 'es_US', 'es_UY', 'es_VE', 'et_EE', 'eu_ES', 'eu_FR', 'fa_IR', 'fi_FI', 'fr_BE', 'fr_CA', 'fr_CH', 'fr_FR', 'fr_LU', 'ga_IE', 'gd_GB', 'gl_ES', 'gu_IN', 'he_IL', 'hi_IN', 'hr_HR', 'hu_HU', 'id_ID', 'is_IS', 'it_CH', 'it_IT', 'ja_JP', 'ka_GE', 'kk_KZ', 'km_KH', 'kn_IN', 'ko_KR', 'ku_TR', 'lt_LT', 'lv_LV', 'mai_IN', 'mk_MK', 'ml_IN', 'mn_MN', 'mr_IN', 'ms_MY', 'my_MM', 'nb_NO', 'nds_DE', 'nds_NL', 'ne_NP', 'nl_AW', 'nl_BE', 'nl_NL', 'nn_NO', 'oc_FR', 'or_IN', 'pa_IN', 'pa_PK', 'pl_PL', 'pt_BR', 'pt_PT', 'ro_RO', 'ru_RU', 'ru_UA', 'si_LK', 'sk_SK', 'sl_SI', 'sq_AL', 'sq_MK', 'sr_ME', 'sr_RS', 'sv_FI', 'sv_SE', 'ta_IN', 'ta_LK', 'te_IN', 'tg_TJ', 'th_TH', 'tr_CY', 'tr_TR', 'ug_CN', 'uk_UA', 'uz_UZ', 'vi_VN', 'xh_ZA', 'zh_CN', 'zh_HK', 'zh_SG', 'zh_TW' ]
     # END OF LANGUAGE SECTION
+    
+    
     # DESKTOP OPTIONS
     # describe how the user container is created
     # desktop options
  
-    # docker images to start 
-    # desktop.image is the docker image name to start the desktop user container 
-    # this image MUST exists on each abcdesktop node 
-    # Please download this image BEFORE starting od.py
-    # desktop.image is used in both standalone and kubernetes mode 
-    desktop.image: 'abcdesktopio/oc.user.ssh.18.04:dev'
-
-    # desktop.printerimage is only used in Kubernetes mode 
-    # desktop.printerimage is the docker image name to start the printer servive container 
-    # Please download this image BEFORE starting od.py if you have to run cupds service in a dedicated container in your user pod
-    desktop.printerimage: 'abcdesktopio/oc.cupsd.18.04:dev'
-    # desktop.useprintercontainer is a BOOLEAN
-    # add or not the desktop.printerimage into the user pod 
-    # desktop.useprintercontainer: False
-    desktop.useprintercontainer: True
-
-    # desktop.soundimage is only used in Kubernetes mode 
-    # desktop.soundimage is the docker image name to start the sound servive container 
-    # Please download this image BEFORE starting od.py if you have to run pulseaudio service in a dedicated container un your user pod
-    desktop.soundimage: 'abcdesktopio/oc.pulseaudio.18.04:dev'
-    # desktop.usesoundcontainer is a BOOLEAN
-    # add or not the desktop.soundimage into the user pod 
-    # desktop.usesoundcontainer: False
-    desktop.usesoundcontainer: True
-
+    # DESKTOP OPTIONS
+    # describe how the user container is created
+    # desktop options
+    desktop.pod : { 'graphical' : {     'image': 'abcdesktopio/oc.user.kubernetes.18.04:dev',
+                                        'pullpolicy':  'IfNotPresent',
+                                        'enable': True,
+                                        'acl':  { 'permit': [ 'all' ] },
+                                        'secrets_requirement' : [ 'abcdesktop/vnc', 'abcdesktop/kerberos' ],
+                                        'waitportbin' : '/composer/node/wait-port/node_modules/.bin/wait-port',
+                                        'resources': { 'requests': { 'memory': "320Mi",   'cpu': "250m" },  'limits'  : { 'memory': "1Gi",    'cpu': "1000m" } },
+                                        'securityContext': { 'allowPrivilegeEscalation': False, 'runAsUser': 4096 },
+                                        'shareProcessNamespace': True,
+                                        'secrets_requirement' : [ 'abcdesktop/vnc', 'abcdesktop/kerberos'] },
+                    'printer' :   {     'image': 'abcdesktopio/oc.cupsd.18.04:dev',
+                                        'pullpolicy': 'IfNotPresent',
+                                        'enable': True,
+                                        'securityContext': { 'runAsUser': 0 },
+                                        'resources': { 'requests': { 'memory': "64Mi", 'cpu': "125m" },  'limits'  : { 'memory': "512Mi",  'cpu': "500m"  } },
+                                        'acl':  { 'permit': [ 'all' ] } },
+                    'filer' :     {     'image': 'abcdesktopio/oc.filer:dev',
+                                        'pullpolicy':  'IfNotPresent',
+                                        'enable': True,
+                                        'securityContext': { 'runAsUser': 4096 },
+                                        'acl':  { 'permit': [ 'all' ] } },
+                    'storage' :   {     'image': 'k8s.gcr.io/pause:3.2',
+                                        'pullpolicy':  'IfNotPresent',
+                                        'enable': True,
+                                        'securityContext': {  'runAsUser': 4096 },
+                                        'acl':   { 'permit': [ 'all' ] },
+                                        'resources': { 'requests': { 'memory': "32Mi", 'cpu': "100m" },  'limits'  : { 'memory': "128Mi",  'cpu': "250m"  } } },
+                    'sound':      {     'image': 'abcdesktopio/oc.pulseaudio.18.04:dev',
+                                        'pullpolicy': 'IfNotPresent',
+                                        'enable': True,
+                                        'securityContext': {  'runAsUser': 4096 },
+                                        'acl':  { 'permit': [ 'all' ] },
+                                        'resources': { 'requests': { 'memory': "8Mi", 'cpu': "50m"  },  'limits'  : { 'memory': "64Mi",   'cpu': "250m"  } } },
+                    'init':       {     'image': 'busybox',
+                                        'enable': True,
+                                        'pullpolicy':  'IfNotPresent',
+                                        'acl':  { 'permit': [ 'all' ] },
+                                        'securityContext': {  'runAsUser': 0 },
+                                        'command':  [ 'sh', '-c',  'chown 4096:4096 /home/balloon' ] } }
+    
 
     desktop.application_config : {
                              'auto_remove'   : True,
@@ -601,49 +624,6 @@ data:
     desktop.remotehomedirectorytype: []
 
     #
-    # desktop.capabilities: {}
-    # This option set the runtime privilege and Linux capabilities
-    # This value is avalaible in kubernetes and docker mode, and only to troubleshoot an application.
-    # in docker mode you should also set desktop.privilege : True
-    # desktop.capabilities: { 'add': [ "SYS_ADMIN", "SYS_PTRACE" ]}
-    # Permit the oc.user to call ptrace:
-    #   "SYS_PTRACE": Trace arbitrary processes using ptrace
-    #   "SYS_ADMIN": Perform a range of system administration operations.
-    # Read the docker run command informations
-    # https://docs.docker.com/engine/reference/run/
-    # Chapter Runtime privilege and Linux capabilities
-    # in kubernetes mode dictionnay value are set to pods directly
-    # in docker mode  'add' entry are set to cap_add (list of str) and 
-    #                 'drop' entry are set to cap_drop (list of str).
-    desktop.capabilities: {}
-
-    # desktop.allowPrivilegeEscalation
-    # value True or False 
-    # This value is only avalaible in kubernetes mode,
-    # The desktop.allowPrivilegeEscalation allow a user to run a sudo command. 
-    # This option set the runtime privilege and Linux capabilities
-    # The execve system call can grant a newly-started program privileges that its parent did not have, 
-    # such as the setuid or setgid Linux flags.
-    # The default value is False 
-    # You should only set desktop.allowPrivilegeEscalation to run sudo command.
-    # In production this value MUST be set to False
-    desktop.allowPrivilegeEscalation: True 
-
-    # desktop.privilege
-    # value True or False 
-    # This value is only avalaible in docker mode
-    # The desktop.privilege run a user container in privilege mode 
-    # When the operator executes docker run privileged, 
-    # Docker will enable access to all devices on the host as well as set some configuration 
-    # in AppArmor or SELinux to allow the container nearly all the same access to the host as 
-    # processes running outside containers on the host.allow a user to run a sudo command. 
-    # The default value is False 
-    # You should only' set desktop.privilege to troobleshooting.
-    # In production this value MUST be set to False
-    desktop.privilege: False 
-
-
-    #
     # desktop.defaultbackgroundcolors
     # list of string color 
     # example [ '#6EC6F0', '#333333' ]
@@ -680,10 +660,7 @@ data:
     # desktop.envlocal contains a (key,value) added by default as environment variables to oc.user.
     # Only static variables are defined here.
     # Dynamics values are set by python code 
-    desktop.envlocal :  {   'DISPLAY'               : ':0.0',
-                            'USER'                  : 'balloon',
-                            'LOGNAME'               : 'balloon',
-                            'LIBOVERLAY_SCROLLBAR'  : '0',
+    desktop.envlocal :  {   'LIBOVERLAY_SCROLLBAR'  : '0',
                             'UBUNTU_MENUPROXY'      : '0',
                             'HOME'                  : '/home/balloon',
                             'SET_DEFAULT_WALLPAPER' : 'welcometoabcdesktop.png',
@@ -741,8 +718,6 @@ data:
                                             'cat': u'utilities,development',
                                             'id': u'webshell.d',
                                             'icon': u'webshell.svg'} }
-
-
 
     # FRONT END OPTIONS 
     # front.menuconfig is a dictionary to show or hide menu entries 
