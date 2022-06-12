@@ -1,0 +1,42 @@
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: storage-local-abcdesktop
+provisioner: kubernetes.io/no-provisioner
+parameters:
+  type: local
+reclaimPolicy: Retain
+allowVolumeExpansion: true
+volumeBindingMode: Immediate
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-volume-home-directory
+  namespace: abcdesktop
+  labels:
+     type: local
+spec:
+  storageClassName: storage-local-abcdesktop
+  capacity:
+     storage: 10Gi
+  volumeMode: Filesystem
+  accessModes:
+  - ReadWriteMany
+  hostPath:
+    path: '/mnt/abcdesktop'
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: persistentvolumeclaim-home-directory
+  namespace: abcdesktop
+spec:
+  storageClassName: storage-local-abcdesktop
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 3Gi
+---
