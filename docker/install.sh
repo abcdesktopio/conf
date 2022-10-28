@@ -147,7 +147,7 @@ if [ -f docker-compose.yml ]; then
         echo ' local file docker-compose.yml exists, do not overwrite, use local file '
         echo '------------------------------------------------------------------------'
 else 
-        curl -o docker-compose.yml  https://raw.githubusercontent.com/abcdesktopio/conf/main/reference/docker-compose.yml
+        curl -o docker-compose.yml  https://raw.githubusercontent.com/abcdesktopio/conf/main/reference/docker-compose-latest.yml
 	if [ $EXIT_CODE -eq 0 ] 
 	then 
 		echo "https://raw.githubusercontent.com/abcdesktopio/conf/main/reference/docker-compose.yml downloaded"
