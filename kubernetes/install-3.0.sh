@@ -23,7 +23,7 @@
 #
 
 # define ABCDESKTOP_YAML path
-ABCDESKTOP_YAML=https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/abcdesktop.yaml 
+ABCDESKTOP_YAML=abcdesktop.yaml 
 
 
 # Determines the operating system.
