@@ -147,7 +147,7 @@ echo "Downloading file od.config if need"
 if [ -f od.config ]; then
    echo "abcdesktop use local directory od.config file"
 else
-   curl https://raw.githubusercontent.com/abcdesktopio/conf/main/reference/od.config-3.0 --output od.config
+   curl https://raw.githubusercontent.com/abcdesktopio/conf/main/reference/od.config.3.0 --output od.config
 fi
 
 echo "kubectl create configmap abcdesktop-config --from-file=od.config -n abcdesktop"
