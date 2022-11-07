@@ -150,19 +150,6 @@ else
    curl https://raw.githubusercontent.com/abcdesktopio/conf/main/reference/od.config-3.0 --output od.config
 fi
 
-
-echo "kubectl create -f $ABCDESKTOP_YAML"
-kubectl create -f $ABCDESKTOP_YAML
-
-EXIT_CODE=$?
-if [ $EXIT_CODE -eq 0 ] 
-then
-        echo "kubectl create -f $ABCDESKTOP_YAML command was successful"
-else
-        echo "kubectl create -f $ABCDESKTOP_YAML failed"
-        exit $?
-fi
-
 echo "kubectl create configmap abcdesktop-config --from-file=od.config -n abcdesktop"
 kubectl create configmap abcdesktop-config --from-file=od.config -n abcdesktop
 
@@ -175,6 +162,17 @@ else
         exit $?
 fi
 
+echo "kubectl create -f $ABCDESKTOP_YAML"
+kubectl create -f $ABCDESKTOP_YAML
+
+EXIT_CODE=$?
+if [ $EXIT_CODE -eq 0 ] 
+then
+        echo "kubectl create -f $ABCDESKTOP_YAML command was successful"
+else
+        echo "kubectl create -f $ABCDESKTOP_YAML failed"
+        exit $?
+fi
 
 deployments=$(kubectl -n abcdesktop get deployment --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 for d in $deployments;  
