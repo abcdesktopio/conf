@@ -1,0 +1,693 @@
+# od.config
+# abcdesktop Configuration File
+#
+# This file is a cherrypy config file
+# Global config is stored in the cherrypy.config dict
+# Syntax must be Python builtin ConfigParser 
+#
+# To create your own config file :
+# update this file, then
+# run the kubectl create configmap command :
+# kubectl create configmap abcdesktop-config --from-file=od.config
+#
+#######
+
+# data 
+[global]
+
+# DEFAULT HOST URL 
+# public host url of the service
+# change this with your URL or
+# set the external URL service if you use a reverse proxy
+# default_host_url : 'https://external.domain.org'
+default_host_url : 'http://localhost'
+# END OF DEFAULT HOST URL
+
+
+# WEBSOCKETROUTING
+# describe which url is returned by od.py to reach the WebSocket server 
+# the more secured value is default_host_url
+# websocketrouting: permit value are ['bridge', 'default_host_url', 'host','http_origin']
+# websocketrouting describe how the web browser can establish web socket to the user container
+#
+# the default websocketrouting value is http_origin
+# default_host_url :    the default_host_url value is used as the wss or ws connect
+# host :                use the hostname in the requested url
+# http_origin :         use the hostname set in the recievied http Header request
+#                       this is less secure than default_host_url
+#                       but it always works
+# bridge :              use if the user's container need to bridge the host's ethernet interface
+#                       bridge is only used if user container can bind a local network (level 2)
+#                       this value is experimental and is not yet avalaible
+websocketrouting: 'http_origin'
+# END OF WEBSOCKETROUTING
+
+
+# BIND_SECTION
+#
+# od.py need an ip address and tcp port to listen 
+# ip addr to listen is set by default to 0.0.0.0  
+# this option is only used if you run od.py without a docker container
+# this option is only used for developers
+# if you run abcdesktop.io in a container, 
+# the common usage, keep the default value to 0.0.0.0
+server.socket_host: '0.0.0.0' 
+# TCP PORT 
+# the default tcp port to listen is 8000
+# this tcp port is used by nginx to forward HTTP request to od.py
+# if you change the default TCP port value, you have to change it to the nginx config file
+server.socket_port: 8000
+#
+# END OF BIND_SECTION
+
+#
+# EXTERNAL IP ADDRESS SECTION
+# THIS IS NOT THE BINDING IP ADDR
+# server.default.ipaddr is only used to locate the external ip of the service
+# the server.default.ipaddr is used by geoip and Active Directory site subnet queries
+# the default value is a dummy value '127.0.0.1'
+# change this value to help geoip to locate your service or for Active Directory site and subnet query 
+server.default.ipaddr: '127.0.0.1'
+# END OF EXTERNAL IP ADDRESS SECTION
+
+
+# fakedns : { 'interfacename': 'eth0' } 
+
+# jira : { 'url': 'https://project.atlassian.net/',
+#         'project_id': 'projectid',
+#         'username': 'username@domain.com',
+#         'apikey' : 'apikey' } 
+
+# JWT SECTION #
+#
+# JWT Token for /API URL
+# exp : time in seconds, None for unlimited
+jwt_token_user : {
+      'exp': 360,
+      'jwtuserprivatekeyfile': '/config.usersigning/abcdesktop_jwt_user_signing_private_key.pem',
+      'jwtuserpublickeyfile' : '/config.usersigning/abcdesktop_jwt_user_signing_public_key.pem' }
+
+
+#
+# JWT RSA SIGNING ANS PAYLOAD KEYS
+# od.py use two RSA keys to sign jwt and encrypt payload's jwt  
+# Use OpenSSL to generate the RSA Keys
+#
+# command to build rsa kay pairs for jwt payload 
+# 512 bits is a small value, change here if need
+# >openssl genrsa  -out abcdesktop_jwt_desktop_payload_private_key.pem 512
+# >openssl rsa     -in  abcdesktop_jwt_desktop_payload_private_key.pem -outform PEM -pubout -out  _abcdesktop_jwt_desktop_payload_public_key.pem
+# >openssl rsa -pubin -in _abcdesktop_jwt_desktop_payload_public_key.pem -RSAPublicKey_out -out abcdesktop_jwt_desktop_payload_public_key.pem
+#
+# command build rsa kay pairs for jwt signing 
+# >openssl genrsa -out abcdesktop_jwt_desktop_signing_private_key.pem 1024
+# >openssl rsa     -in abcdesktop_jwt_desktop_signing_private_key.pem -outform PEM -pubout -out abcdesktop_jwt_desktop_signing_public_key.pem
+#
+# ! IMPORTANT 
+# ! the same key files are used by nginx 
+# ! you have to copy the key file to nginx container image
+#
+jwt_token_desktop : {
+      'exp': 420,
+      'jwtdesktopprivatekeyfile':     '/config.signing/abcdesktop_jwt_desktop_signing_private_key.pem',
+      'jwtdesktoppublickeyfile' :     '/config.signing/abcdesktop_jwt_desktop_signing_public_key.pem',
+      'payloaddesktoppublickeyfile' : '/config.payload/abcdesktop_jwt_desktop_payload_public_key.pem' }
+
+# END OF JWT SECTION #
+
+
+controllers: { 'ManagerController': { 'permitip':    [ '10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', 'fd00::/8', '169.254.0.0/16', '127.0.0.0/8' ] },
+               'StoreController':   { 'wrapped_key': {} },
+               'ComposerController' : { 'requestsallowed' : { 'getdesktopdescription': False } },
+               'DesktopController' :  { 'requestsallowed' : { 'dns': False }, 'permitip': [  '10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', 'fd00::/8', '169.254.0.0/16', '127.0.0.0/8' ] } } 
+
+
+### AUTH SECTION ###
+
+# Complete AUTH Sample dictionnary
+# The authmanagers is defined as a dictionnary object :
+#
+#
+# authmanagers: {
+#  'external': { },
+#  'explicit': { },
+#  'implicit': { }
+# }
+# The od.config defines 3 kinds of entries in the authmanagers object :
+# external: use for OAuth 2.0 Authentification
+# explicit: use for LDAP, LDAPS and ActiveDirectory Authentification
+# implicit: use for Anonymous Authentification
+#
+# external: use for OAuth 2.0 Authentification
+# 'external': {
+#    'providers': {
+#      'google': { 
+#        'displayname': 'Google', 
+#        'enabled': True,
+#        'client_id': 'YYYYYY', 
+#        'client_secret': 'XXXXXX',
+#        'scope': 'https://www.googleapis.com/auth/userinfo.email',
+#        'dialog_url': 'https://accounts.google.com/o/oauth2/v2/auth?client_id={client_id}&redirect_uri={callback_url}&response_type=code&scope={scope}',
+#        'auth_url': 'https://oauth2.googleapis.com/token?code={code}&grant_type=authorization_code&redirect_uri={callback_url}&scope={scope}&client_id={client_id}&client_secret={client_secret}',
+#        'userinfo_url': 'https://openidconnect.googleapis.com/v1/userinfo?access_token={access_token}',
+#        'callback_url': 'https://FQDN/API/auth/oauth?manager={manager.name}&provider={name}'
+#      }
+#    }
+#
+# explicit: use for LDAP, LDAPS and ActiveDirectory Authentification
+#
+# 'explicit': {
+#    'show_domains': True,
+#    'providers': {
+#      'LDAP': { 
+#        'config_ref': 'ldapconfig', 
+#        'enabled': True
+#       }
+# }}
+# ldapconfig : { 'planet': {    
+#                        'default'       : True, 
+#                        'ldap_timeout'  : 15,
+#                        'ldap_protocol' : 'ldap',
+#                        'ldap_basedn'   : 'ou=people,dc=planetexpress,dc=com',
+#                        'servers'       : [ '192.168.1.69' ],
+#                        'secure'        : False
+# }}
+#
+# explicit with ActiveDirectory Authentification
+# 'explicit': {
+#    'show_domains': True,
+#    'providers': {
+#      'AD': { 
+#        'config_ref': 'adconfig', 
+#        'enabled': True
+#       }
+# }
+# adconfig : { 'AD': {  'default'       : True, 
+#                       'ldap_timeout'  : 15,
+#                       'ldap_protocol' : 'ldap',
+#                       'ldap_basedn'   : 'DC=ad,DC=domain,DC=local',
+#                       'ldap_fqdn'     : '_ldap._tcp.ad.domain.local',
+#                       'domain'        : 'AD',
+#                       'domain_fqdn': 'AD.DOMAIN.LOCAL',
+#                       'servers'    : [ '192.168.7.12' ],
+#                       'kerberos_realm': 'AD.DOMAIN.LOCAL',
+#                       'query_dcs' : True,
+#                       'wins_servers'  : [ '192.168.1.12' ],
+#     }
+# }
+
+# implicit: use for Anonymous Authentification
+# 'implicit': {
+#    'providers': {
+#      'anonymous': {
+#        'displayname': 'Anonymous',
+#        'caption': 'Have a look !',
+#        'userid': 'anonymous',
+#        'username': 'Anonymous'
+#      }     
+#    }
+
+fail2ban : {      'enable' : False,
+                  'banexpireafterseconds': 600,
+                  'failsbeforeban' : 5,
+                  'protectednetworks' :  ['192.168.1.0/24'] }
+
+
+auth.logmein : {  'enable' : False,
+                  'network_list' : ['0.0.0.0/0'],
+                  'permit_querystring' : True,
+                  'http_attribut' : 'ABCDESKTOPUSERCERT' }
+
+auth.prelogin : { 'enable' : False,
+                  'url' : 'https://FQHN/index.session.mustache.html',
+                  'network_list' : ['0.0.0.0/0'],
+                  'http_attribut ' : 'abcuserid',
+                  'http_attribut_to_force_auth_prelogin':  'MUST_USE_PRELOGIN' }
+
+tipsinfo : { 'networkmap': False }
+
+
+authmanagers: {
+  'external': {
+    'providers': {}
+  },
+  'metaexplicit': {}, 
+  'explicit': {
+    'show_domains': True,
+    'providers'   : { 
+	'planet': { 
+		'config_ref': 'ldapconfig',  
+		'enabled': True } 
+	}
+  },
+  'implicit': {} }
+
+# Note serviceaccount is optional
+ldapconfig : {
+        'planet': {
+                'default'       : True,
+                'ldap_timeout'  : 15,
+                'ldap_protocol' : 'ldap',
+                'ldap_basedn'   : 'ou=people,dc=planetexpress,dc=com',
+                'servers'       : [ 'openldap.abcdesktop.svc.cluster.local' ],
+                'secure'        : False,
+                'serviceaccount': { 'login': 'cn=admin,dc=planetexpress,dc=com', 'password': 'GoodNewsEveryone' },
+                'policies': {
+                        'acls': None,
+                        'rules' : {
+				'rule-dummy' : {
+				 	'conditions' : [ {'boolean':True, 'expected':True } ],
+                                        'expected' : True,
+                                        'label':'labeltrue'
+				},
+                                'rule-ship': {
+                                        'conditions' : [ { 'memberOf': 'cn=ship_crew,ou=people,dc=planetexpress,dc=com',   'expected' : True  } ],
+                                        'expected' : True,
+                                        'label':'shipcrew'
+                                },
+                                'rule-test': {
+                                        'conditions' : [ { 'memberOf': 'cn=admin_staff,ou=people,dc=planetexpress,dc=com', 'expected' : True  } ],
+                                        'expected' : True,
+                                        'label': 'adminstaff'
+                                }
+                        }
+                } } }
+# END OF AUTH SECTION
+
+
+# MEMCACHE SECTION
+# memcache server
+# describe how od.py can reach the memcached server
+# memcacheserver is the name (FQDN) of the memcached server
+# memcacheserver default value is None
+# memcacheserver SHOULD BE SET TO None
+# od.py build the default :
+#       in standalone mode the build value is 'memcached'
+#       in kubernetes mode the build value is 'memcached.abcdesktop.svc.cluster.local'
+# change it if you need or if you have to run od.py in developer env
+# memcacheserver: 'localhost'
+# memcacheserver: 'memcached'
+# memcacheserver: 'memcached.abcdesktop.svc.cluster.local'
+#
+#
+# memcachedport is the tcp port of the memcached server
+# the default value is 11211
+# memcachedport: 11211
+# END OF MEMCACHE SECTION
+
+# MONGO SECTION
+# mongodb url
+# describe how od.py can reach the mongodb server
+# mongodburi is the URI name of the mongodb server
+# the same var name mongodbserver support connection string URI format 
+# read https://docs.mongodb.com/manual/reference/connection-string/#mongodb-uri 
+# the format is:
+# mongodb://[username:password@]host1[:port1][,...hostN[:portN]][/[defaultauthdb][?options]]
+# mongodburl SHOULD BE SET TO None
+# od.py build the default :
+#     in standalone mode the build value is 'mongodb://mongodb:27017'
+#     in kubernetes mode the build value is 'mongodb://mongodb.abcdesktop.svc.cluster.local:27017'
+# change it if you need or if you have to run od.py in developer env 
+# mongodburl: None
+#mongodburl: 'mongodb://localhost:27017'
+# mongodburl: 'mongodb://pyos:Az4MeYWUjZDg4Zjhk@mongodb.abcdesktop.svc.cluster.local:32017'
+mongodburl: 'mongodb://mongodb.abcdesktop.svc.cluster.local:32017'
+# mongodburl: 'mongodb://mongodb:27017'
+# mongodburl: 'mongodb://mongodb:27017'
+# mongodburl: 'mongodb://mongodb.abcdesktop.svc.cluster.local:27017'
+# END OF MONGO SECTION
+
+
+# LANGUAGE SECTION
+# list of default supported language
+# user container must have the supported language installed
+# else the default fallback language is en_US 
+language : [  'af_ZA', 'am_ET', 'an_ES', 'ar_AE', 'ar_BH', 'ar_DZ', 'ar_EG', 'ar_IN', 'ar_IQ', 'ar_JO', 'ar_KW','ar_LB', 'ar_LY', 'ar_MA', 'ar_OM', 'ar_QA', 'ar_SA', 'ar_SD', 'ar_SY', 'ar_TN', 'ar_YE', 'as_IN', 'ast_ES', 'az_AZ', 'be_BY', 'bg_BG', 'bn_BD', 'bn_IN', 'bo_CN', 'bo_IN', 'br_FR', 'bs_BA', 'ca_AD', 'ca_ES', 'ca_FR', 'ca_IT', 'crh_UA', 'cs_CZ', 'cy_GB', 'da_DK', 'de_AT', 'de_BE', 'de_CH', 'de_DE', 'de_LI', 'de_LU', 'dz_BT', 'el_CY', 'el_GR', 'en_AG', 'en_AU', 'en_BW', 'en_CA', 'en_DK', 'en_GB', 'en_HK', 'en_IE', 'en_IN', 'en_NG', 'en_NZ', 'en_PH', 'en_SG', 'en_US', 'en_ZA', 'en_ZM', 'en_ZW', 'eo', 'eo_US', 'es_AR', 'es_BO', 'es_CL', 'es_CO', 'es_CR', 'es_CU', 'es_DO', 'es_EC', 'es_ES', 'es_GT', 'es_HN', 'es_MX', 'es_NI', 'es_PA', 'es_PE', 'es_PR', 'es_PY', 'es_SV', 'es_US', 'es_UY', 'es_VE', 'et_EE', 'eu_ES', 'eu_FR', 'fa_IR', 'fi_FI', 'fr_BE', 'fr_CA', 'fr_CH', 'fr_FR', 'fr_LU', 'ga_IE', 'gd_GB', 'gl_ES', 'gu_IN', 'he_IL', 'hi_IN', 'hr_HR', 'hu_HU', 'id_ID', 'is_IS', 'it_CH', 'it_IT', 'ja_JP', 'ka_GE', 'kk_KZ', 'km_KH', 'kn_IN', 'ko_KR', 'ku_TR', 'lt_LT', 'lv_LV', 'mai_IN', 'mk_MK', 'ml_IN', 'mn_MN', 'mr_IN', 'ms_MY', 'my_MM', 'nb_NO', 'nds_DE', 'nds_NL', 'ne_NP', 'nl_AW', 'nl_BE', 'nl_NL', 'nn_NO', 'oc_FR', 'or_IN', 'pa_IN', 'pa_PK', 'pl_PL', 'pt_BR', 'pt_PT', 'ro_RO', 'ru_RU', 'ru_UA', 'si_LK', 'sk_SK', 'sl_SI', 'sq_AL', 'sq_MK', 'sr_ME', 'sr_RS', 'sv_FI', 'sv_SE', 'ta_IN', 'ta_LK', 'te_IN', 'tg_TJ', 'th_TH', 'tr_CY', 'tr_TR', 'ug_CN', 'uk_UA', 'uz_UZ', 'vi_VN', 'xh_ZA', 'zh_CN', 'zh_HK', 'zh_SG', 'zh_TW' ]
+# END OF LANGUAGE SECTION
+
+
+# WebRTC Janus config
+#
+webrtc.enable : False
+
+# DESKTOP OPTIONS
+# describe how the user container is created
+# desktop options
+
+desktop.release : '3.0'
+
+desktop.pod : { 
+    'graphical' : { 'image': { 'default': 'abcdesktopio/oc.user.kubernetes.18.04:3.0.dev' },
+                    'imagePullPolicy':  'IfNotPresent',
+                    'enable': True,
+                    'acl':  { 'permit': [ 'all' ] },
+                    'waitportbin' : '/composer/node/wait-port/node_modules/.bin/wait-port',
+                    'resources': { 
+			'requests': { 'memory': "320Mi", 'cpu': "250m"  }, 
+			'limits'  : { 'memory': "1Gi",   'cpu': "1000m" } },
+                    'securityContext': { 
+			'readOnlyRootFilesystem':   True, 
+			'allowPrivilegeEscalation': True, 
+			'runAsUser':  		    '{{ uidNumber }}',
+			'runAsGroup': 		    '{{ gidNumber }}' },
+                    'shareProcessNamespace': True,
+                    'tcpport': 6081,
+                    'secrets_requirement' : [ 'abcdesktop/vnc', 'abcdesktop/kerberos']
+    },
+    'spawner' :    { 'enable': True,
+                     'tcpport': 29786,
+                     'waitportbin' : '/composer/node/wait-port/node_modules/.bin/wait-port',
+                     'acl':  { 'permit': [ 'all' ] } 
+    },
+    'broadcast' :  { 'enable': True,
+                     'tcpport': 29784,
+                     'acl':  { 'permit': [ 'all' ] } 
+    },
+    'webshell' :   { 'enable': True,
+                     'tcpport': 29781,
+                     'acl':  { 'permit': [ 'all' ] } 
+    },
+    'printer' :   { 'image': 'abcdesktopio/oc.cupsd.18.04:dev',
+                    'imagePullPolicy': 'IfNotPresent',
+                    'enable': True,
+                    'tcpport': 681,
+                    'securityContext': { 'runAsUser': 0 },
+                    'resources': { 'requests': { 'memory': "64Mi",    'cpu': "125m" },  'limits'  : { 'memory': "512Mi",  'cpu': "500m"  } },
+                    'acl':  { 'permit': [ 'all' ] } 
+    },
+    'printerfile' :{ 'enable': True,
+                     'tcpport': 29782,
+                     'acl':  { 'permit': [ 'all' ] } 
+    },
+    'filer' :     { 'image': 'abcdesktopio/oc.filer:dev',
+                    'imagePullPolicy':  'IfNotPresent',
+                    'enable': True,
+                    'tcpport': 29783,
+                    'securityContext': { 
+			'runAsUser': 	'{{ uidNumber }}',
+                        'runAsGroup':  '{{ gidNumber }}' },
+                    'acl':  { 'permit': [ 'all' ] } 
+    },
+    'storage' :   { 'image': 'k8s.gcr.io/pause:3.2',
+                    'imagePullPolicy':  'IfNotPresent',
+                    'enable': True,
+                    'securityContext': {  
+			'runAsUser': 	'{{ uidNumber }}',
+                        'runAsGroup':	'{{ gidNumber }}' },
+                    'acl':   { 'permit': [ 'all' ] },
+                    'resources': { 'requests': { 'memory': "32Mi",    'cpu': "100m" },  'limits'  : { 'memory': "128Mi",  'cpu': "250m"  } }
+    },
+    'sound':      { 'image': 'abcdesktopio/oc.pulseaudio.22.04:dev',
+                    'imagePullPolicy': 'IfNotPresent',
+                    'enable': False,
+                    'tcpport': 4714,
+                    'securityContext': {  
+			'runAsUser': 	'{{ uidNumber }}',
+                        'runAsGroup':	'{{ gidNumber }}' },
+                    'acl':  { 'permit': [ 'all' ] },
+                    'resources': { 'requests': { 'memory': "8Mi",     'cpu': "50m"  },  'limits'  : { 'memory': "64Mi",   'cpu': "250m"  } } 
+    },
+    'init':       { 'image': 'busybox',
+                    'enable': True,
+                    'imagePullPolicy':  'IfNotPresent',
+                    'securityContext': {  'runAsUser': 0 },
+                    'acl':  { 'permit': [ 'all' ] },
+                    'command':  [ 'sh', '-c',  'chown 4096:4096 /home/balloon && chown 4096:4096 /home/balloon/* || true' ] } }
+
+
+desktop.policies: { 'rules': { } }
+
+#
+# desktop.homedirectorytype: 'persistentVolumeClaim' 
+# User home data are persistent.
+# if desktop.homedirectorytype is 'persistentVolumeClaim', then homedirectory use a kubernetes Persistent Volume Claim
+# This value is only avalaible in kubernetes. 
+# This value is recommanded in kubernetes mode. 
+# PersistentVolumeClaim option use a persistentVolumeClaim to create the user home directory. 
+# The persistentVolumeClaim can be mapped to differents storage data (like NFS, iSCSI, RBD...). 
+# Read more about persistentVolumeClaim on the kubernetes.io website. 
+# If you set desktop.homedirectorytype to 'persistentVolumeClaim' 
+# Then you have to set the value of desktop.persistentvolumeclaim
+desktop.homedirectorytype: 'persistentVolumeClaim'
+# desktop.homedirectorytype: None
+
+# desktop.persistentvolumeclaim
+# value name of the persistentvolumeclaim
+# example persistentvolumeclaim-home-directory
+# This value is only avalaible in kubernetes mode.
+# desktop.persistentvolumeclaim is the name of the Persistent Volume Claim if the desktop.homedirectory is set to 'persistentVolumeClaim'. 
+# The PVC (Persistent Volume Claim) must exist.
+# kubectl get pvc -n abcdesktop
+# NAME                                   STATUS   VOLUME                     CAPACITY   ACCESS MODES   STORAGECLASS                AGE
+# persistentvolumeclaim-home-directory   Bound    pv-volume-home-directory   10Gi       RWX            storage-local-abcdesktop   3h44m
+# desktop.persistentvolumeclaim: 'persistentvolumeclaim-home-directory'
+desktop.persistentvolumeclaim: 'persistentvolumeclaim-home-directory'
+
+
+
+
+# for docker 
+#    Most of these options take a positive integer, followed by a suffix of b, k, m, g, to indicate bytes, kilobytes, megabytes, or gigabytes.
+# for kube
+#    You can express memory as a plain integer or as a fixed-point number using one of these suffixes: E, P, T, G, M, K. 
+#    You can also use the power-of-two equivalents: Ei, Pi, Ti, Gi, Mi, Ki. For example, the following represent roughly the same value:
+#    128974848, 129e6, 129M, 123Mi
+
+desktop.application_config : {      
+                        'auto_remove'   : False,
+                        'network_mode'  : 'container',
+                        'shm_size'      : '2g',
+                        'mem_limit'     : '2g',
+                        'cpu_period'    : 200000,
+                        'cpu_quota'     : 200000 }
+
+desktop.host_config : { 'auto_remove'   : True,
+                        'pid_mode'      : True,
+                        'network_mode'  : 'container',
+                        'mem_limit'     : '8G',
+                        'secrets_requirement' : [ 'abcdesktop/vnc', 'abcdesktop/kerberos' ]
+                      }
+
+
+#
+# desktop.defaultbackgroundcolors
+# list of string color 
+# example [ '#6EC6F0', '#333333' ]
+# The desktop.defaultbackgroundcolors allow you to change the desktop default background color.
+# The default value is a list of string 
+# [ '#6EC6F0', '#333333', '#666666', '#CD3C14', '#4BB4E6', '#50BE87', '#A885D8', '#FFB4E6' ]
+# The desktop.defaultbackgroundcolors length can contain up to 8 entries. 
+desktop.defaultbackgroundcolors : [ '#6EC6F0', '#333333', '#666666', '#CD3C14', '#4BB4E6', '#50BE87', '#A885D8', '#FFB4E6' ]
+
+
+# desktop.nodeselector
+# Value None or dict 
+# This option permits to assign user pods to nodes
+# It specifies a map of key-value pairs. 
+# For the pod to be eligible to run on a node, 
+# the node must have each of the indicated key-value pairs as labels (it can have additional labels as well). 
+# The most common usage is one key-value pair.
+# { 'disktype': 'ssd' }
+# desktop.nodeselector: None
+
+# Add default environment vars 
+# desktop.envlocal is a dictionary. 
+# desktop.envlocal contains a (key,value) added by default as environment variables to oc.user.
+# Only static variables are defined here.
+# Dynamics values are set by python code 
+desktop.envlocal :  {   'DISPLAY'               : ':0.0',
+                        'HOME'                  : '/home/balloon',
+                        'SET_DEFAULT_WALLPAPER' : 'welcometoabcdesktop.png'
+                    }
+
+desktop.removehomedirectory : False
+
+#
+# desktop default generic user
+# balloon is the default generic user name.
+# The user is created inside the oc.user container
+# this user MUST exist in the oc.user image
+# If you change this value, you have to rebuild your own oc.user file
+# The script oc.user in Dockerfile oc.user :
+# oc.user Dockerfile commands extract
+#   ENV BUSER balloon
+#   RUN groupadd --gid 4096 $BUSER
+#   RUN useradd --create-home --shell /bin/bash --uid 4096 -g $BUSER --groups lpadmin,sudo $BUSER
+# 
+desktop.username : 'balloon'
+# default user id of desktop.username
+desktop.userid : 4096
+# default group id of desktop.username
+desktop.groupid : 4096
+# default home directory of desktop.username
+desktop.userhomedirectory : '/home/balloon'
+# END OF DESKTOP OPTIONS
+
+
+# 
+# default dock config
+# dock option describes which default application are show by default
+# dock option is a dictionary
+# 'terminal'    :  Terminal application
+# 'webshell'    :  HTML 5, terminal application based on xterm.js
+# The values are parsed by javascript front  
+# 
+dock : {  'terminal': { 'args': '',
+                        'acl': { 'permit': [ 'all' ] },
+                        'name': u'TerminalBuiltin',
+                        'keyword': u'terminal,shell,bash,builtin,pantheon',
+                        'launch': u'qterminal.qterminal',
+                        'displayname': u'Terminal Builtin',
+                        'execmode': u'builtin',
+                        'cat': u'utilities,development',
+                        'id': u'terminalbuiltin.d',
+                        'hideindock': True,
+                        'icon': u'pantheon-terminal-builtin-icons.svg' 
+          },
+          'webshell': { 'name': u'WebShell',
+                        'acl': { 'permit': [ 'all' ] },
+                        'keyword': u'terminal,shell,webshell,bash,cmd',
+                        'launch': u'frontendjs.webshell',
+                        'displayname': u'Web Shell',
+                        'execmode': u'frontendjs',
+                        'cat': u'utilities,development',
+                        'id': u'webshell.d',
+                        'icon': u'webshell.svg'
+           } }
+
+
+
+# FRONT END OPTIONS 
+# front.menuconfig is a dictionary to show or hide menu entries 
+# at the to rignt corner 
+# in front js
+# 'grabmouse': False,
+front.menuconfig  : { 'settings': True, 'appstore': True, 'screenshot':True, 'download': True, 'logout': True, 'disconnect': True }
+
+
+#
+# GEOLOCATION Geolocation
+# params used for https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/getCurrentPosition
+# An optional object including the following parameters:
+# 
+# maximumAge A positive long value indicating the maximum age in milliseconds of a possible cached position that is acceptable to return. If set to 0, it means that the device cannot use a cached position and must attempt to retrieve the real current position. If set to Infinity the device must return a cached position regardless of its age. Default: 0.
+# timeout A positive long value representing the maximum length of time (in milliseconds) the device is allowed to take in order to return a position. The default value is Infinity, meaning that getCurrentPosition() won't return until the position is available.
+# enableHighAccuracy A boolean value that indicates the application would like to receive the best possible results. If true and if the device is able to provide a more accurate position, it will do so. Note that this can result in slower response times or increased power consumption (with a GPS chip on a mobile device for example). On the other hand, if false, the device can take the liberty to save resources by responding more quickly and/or using less power. Default: false.
+# geolocation : { 'enableHighAccuracy': True, 'timeout': 5000, 'maximumAge': 0 }
+
+#
+# LOGGING SECTION
+# The logging configuration is a dictionnary object. 
+# The logging configuration describes where and how log message information have to been send.
+# The syslog and graylog protocol messaging are supported too.
+# The default features for each handlers are :
+# handler Features
+# console log message using a logging.StreamHandler to the stream: ext://sys.stdout formated as standard
+# cherrypy_console log message using a logging.StreamHandler to the stream: ext://sys.stdout formatted as access
+# cherrypy_access  log message using a logging.StreamHandler to the file stream logs/access.log formatted as access
+# cherrypy_trace   log message using a logging.StreamHandler to the stream: logs/trace.log formatted as standard
+# 
+# Sub modules used by od.py can log information too.
+# 
+# Sub module Default Values
+# docker.utils.config    { 'level': 'INFO' },
+# urllib3.connectionpool { 'level': 'ERROR'},
+# 
+#              
+# logging configuration 
+# come from https://docs.python.org/3.8/library/logging.config.html
+# need double %% to escape %
+# 
+# graylog https://github.com/severb/graypy
+# use handler class name as
+# graypy.GELFUDPHandler - UDP log forwarding
+# graypy.GELFTCPHandler - TCP log forwarding
+# graypy.GELFTLSHandler - TCP log forwarding with TLS support
+# graypy.GELFHTTPHandler - HTTP log forwarding
+# graypy.GELFRabbitHandler - RabbitMQ log forwarding
+
+logging: {
+  'version': 1,
+  'disable_existing_loggers': False,
+  'formatters': {
+    'access': {
+      'format': '%%(message)s - user: %%(userid)s',
+      'datefmt': '%%Y-%%m-%%d %%H:%%M:%%S'
+    },
+    'standard': {
+      'format': '%%(asctime)s %%(module)s [%%(levelname)-7s] %%(name)s.%%(funcName)s:%%(userid)s %%(message)s',
+      'datefmt': '%%Y-%%m-%%d %%H:%%M:%%S'
+    },
+    'syslog': {
+      'format': '%%(asctime)s %%(levelname)s %%(module)s %%(process)d %%(name)s.%%(funcName)s:%%(userid)s %%(message)s',
+      'datefmt': '%%Y-%%m-%%d %%H:%%M:%%S'
+    },
+    'graylog': {
+      'format': '%%(levelname)s %%(module)s %%(process)d %%(name)s.%%(funcName)s:%%(userid)s %%(message)s'      
+    }
+  },
+  'filters': {
+    'odcontext': {
+      '()': 'oc.logging.OdContextFilter'
+    }
+  },
+  'handlers': {
+    'console': {
+      'class': 'logging.StreamHandler',
+      'filters': [ 'odcontext' ],
+      'formatter': 'standard',
+      'stream': 'ext://sys.stdout'
+    },
+    'cherrypy_console': {
+      'class': 'logging.StreamHandler',
+      'filters': [ 'odcontext' ],
+      'formatter': 'access',
+      'stream': 'ext://sys.stdout'
+    },
+    'cherrypy_access': {
+      'class': 'logging.handlers.RotatingFileHandler',
+      'filters': [ 'odcontext' ],
+      'formatter': 'access',
+      'filename': 'logs/access.log',
+      'maxBytes': 10485760,
+      'backupCount': 20,
+      'encoding': 'utf8'
+    },
+    'cherrypy_trace': {
+      'class': 'logging.handlers.RotatingFileHandler',
+      'filters': [ 'odcontext' ],
+      'formatter': 'standard',
+      'filename': 'logs/trace.log',
+      'maxBytes': 10485760,
+      'backupCount': 20,
+      'encoding': 'utf8',
+      'mode': 'w'
+    }
+  },
+  'loggers': {
+    '': {
+      'handlers': [ 'console', 'cherrypy_trace'  ],
+      'level': 'DEBUG'
+    },
+    'docker.utils.config': {
+      'level': 'INFO'
+    },
+    'urllib3.connectionpool': {
+      'level': 'ERROR'
+    },
+    'cherrypy.access': {
+      'handlers': [ 'cherrypy_access' ],
+      'level': 'INFO',
+      'propagate': False
+    },
+    'cherrypy.error': {
+      'handlers': [ 'console', 'cherrypy_trace' ],
+      'level': 'DEBUG',
+      'propagate': False
+    }
+  } }
+# END OF LOGGING SECTION
+
+[/]
+[/img]
+
