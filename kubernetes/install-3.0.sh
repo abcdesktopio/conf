@@ -32,19 +32,36 @@ ABCDESKTOP_RELEASE=3.0
 REGISTRY_DOCKERHUB="docker.io/abcdesktopio"
 
 # list of default applications to prefetch
-ABCDESKTOP_APPLICATIONS="
-$REGISTRY_DOCKERHUB/writer.d:$ABCDESKTOP_RELEASE 
-$REGISTRY_DOCKERHUB/calc.d:$ABCDESKTOP_RELEASE 
-$REGISTRY_DOCKERHUB/impress.d:$ABCDESKTOP_RELEASE 
-$REGISTRY_DOCKERHUB/firefox.d:$ABCDESKTOP_RELEASE 
-$REGISTRY_DOCKERHUB/gimp.d:$ABCDESKTOP_RELEASE"
+# ABCDESKTOP_APPLICATIONS="
+# $REGISTRY_DOCKERHUB/writer.d:$ABCDESKTOP_RELEASE 
+# $REGISTRY_DOCKERHUB/calc.d:$ABCDESKTOP_RELEASE 
+# $REGISTRY_DOCKERHUB/impress.d:$ABCDESKTOP_RELEASE 
+# $REGISTRY_DOCKERHUB/firefox.d:$ABCDESKTOP_RELEASE 
+# $REGISTRY_DOCKERHUB/gimp.d:$ABCDESKTOP_RELEASE"
+
+# list of template application to download quickly
+ABCDESKTOP_TEMPLATE_APPLICATIONS="
+$REGISTRY_DOCKERHUB/oc.template:$ABCDESKTOP_RELEASE
+$REGISTRY_DOCKERHUB/oc.template.gtk:$ABCDESKTOP_RELEASE"
+
+URL_APPLICATION_CONF_SOURCE="https://raw.githubusercontent.com/abcdesktopio/conf/apps/"
+# list of json default applications to prefetch
+ABCDESKTOP_JSON_APPLICATIONS="
+writer.d.$ABCDESKTOP_RELEASE.json
+calc.d.$ABCDESKTOP_RELEASE.json
+impress.d.$ABCDESKTOP_RELEASE.json
+firefox.d.$ABCDESKTOP_RELEASE.json
+gimpd.d.$ABCDESKTOP_RELEASE.json
+"
+
 
 # list of pod container image to prefetch
 ABCDESKTOP_POD_IMAGES="
 $REGISTRY_DOCKERHUB/oc.user.kubernetes.18.04:$ABCDESKTOP_RELEASE 
 $REGISTRY_DOCKERHUB/oc.pulseaudio.18.04:$ABCDESKTOP_RELEASE 
 $REGISTRY_DOCKERHUB/oc.cupsd.18.04:$ABCDESKTOP_RELEASE 
-docker.io/library/busybox"
+docker.io/library/busybox:latest
+k8s.gcr.io/pause:3.8"
 
 # Determines the operating system.
 OS="$(uname)"
@@ -150,11 +167,6 @@ kubectl create secret generic abcdesktopjwtusersigning    --from-file=abcdesktop
 
 
 
-REGISTRY_DOCKERHUB="docker.io/abcdesktopio"
-ABCDESKTOP_APPLICATIONS="$REGISTRY_DOCKERHUB/writer.d:$ABCDESKTOP_RELEASE $REGISTRY_DOCKERHUB/calc.d:$ABCDESKTOP_RELEASE $REGISTRY_DOCKERHUB/impress.d:$ABCDESKTOP_RELEASE $REGISTRY_DOCKERHUB/firefox.d:$ABCDESKTOP_RELEASE $REGISTRY_DOCKERHUB/gimp.d:$ABCDESKTOP_RELEASE"
-ABCDESKTOP_POD_IMAGES="$REGISTRY_DOCKERHUB/oc.user.kubernetes.18.04:$ABCDESKTOP_RELEASE $REGISTRY_DOCKERHUB/oc.pulseaudio.18.04:$ABCDESKTOP_RELEASE $REGISTRY_DOCKERHUB/oc.cupsd.18.04:$ABCDESKTOP_RELEASE docker.io/library/busybox"
-
-
 echo "Downloading file abcdesktop.yaml if need" 
 # create abcdesktop.yaml file
 if [ -f abcdesktop.yaml ]; then
@@ -196,14 +208,12 @@ if which ctr >/dev/null; then
 	done
 
 	echo "pulling applications"
-        echo $ABCDESKTOP_APPLICATIONS
+        echo $ABCDESKTOP_TEMPLATE_APPLICATIONS
 	if [ -z ${NOPULLAPPS} ]; then
-		for value in $ABCDESKTOP_APPLICATIONS
+		for value in $ABCDESKTOP_TEMPLATE_APPLICATIONS
 		do
 			ctr -n k8s.io images pull $value
 		done
-	else
-		echo "do not pull images option detected"
 	fi
 else
 	echo 'ctr command line not found, skipping prefetch images'
@@ -237,16 +247,36 @@ done
 
 # list all pods 
 kubectl get pods --namespace=abcdesktop
+echo "Setup done"
 
-if [ -z ${NOPULLAPPS} ]; then
-                for value in $ABCDESKTOP_APPLICATIONS
-                do
-                        echo $value
-                done
-        else
-                echo "do not pull images option detected"
+echo "checking for applications"
+PYOS_CLUSTERIP=$(kubectl get service pyos -n abcdesktop -o jsonpath='{.spec.clusterIP}')
+echo "PYOS_CLUSTERIP=$PYOS_CLUSTERIP"
+
+# define service URL
+PYOS_MANAGEMENT_SERVICE_URL="http://$PYOS_CLUSTERIP:8000/API/manager/image"
+PYOS_HEALTZ_SERVICE_URL="http://$PYOS_CLUSTERIP:8000/healtz"
+
+# call HEALTZ
+echo "query to curl $PYOS_HEALTZ_SERVICE_URL"
+curl $PYOS_HEALTZ_SERVICE_URL
+EXIT_CODE=$?
+if [ $EXIT_CODE -eq 0 ]; then
+  echo "pyos is ready"
+  echo "adding some applications to pyos repo" 
+  for app in $ABCDESKTOP_JSON_APPLICATIONS
+  do
+	echo "Downloading $URL_APPLICATION_CONF_SOURCE/$app"
+	echo "to register it in $PYOS_SERVICE_URL"
+	curl $URL_APPLICATION_CONF_SOURCE/$app | curl -X PUT -H 'Content-Type: text/javascript' $PYOS_MANAGEMENT_SERVICE_URL  -d @-
+  done
+else
+  echo "pyos is not ready"	
+  echo "Something wrong with $PYOS_HEALTZ_SERVICE_URL"
+  PYOS_POD_NAME=$(kubectl get pods --selector=name=daemonset-pyospods -o jsonpath={.items..metadata.name} -n abcdesktop)
+  echo "Look at pod $PYOS_POD_NAME log"
+  kubectl logs $PYOS_POD_NAME -n abcdesktop
 fi
 
-echo "Setup done"
 echo "Open your navigator to http://[your-ip-hostname]:30443/"
 echo "For example http://localhost:30443"
