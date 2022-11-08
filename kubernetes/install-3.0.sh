@@ -25,6 +25,26 @@
 # define ABCDESKTOP_YAML path
 ABCDESKTOP_YAML=abcdesktop.yaml 
 
+# current release
+ABCDESKTOP_RELEASE=3.0
+
+# docker hub prefix
+REGISTRY_DOCKERHUB="docker.io/abcdesktopio"
+
+# list of default applications to prefetch
+ABCDESKTOP_APPLICATIONS="
+$REGISTRY_DOCKERHUB/writer.d:$ABCDESKTOP_RELEASE 
+$REGISTRY_DOCKERHUB/calc.d:$ABCDESKTOP_RELEASE 
+$REGISTRY_DOCKERHUB/impress.d:$ABCDESKTOP_RELEASE 
+$REGISTRY_DOCKERHUB/firefox.d:$ABCDESKTOP_RELEASE 
+$REGISTRY_DOCKERHUB/gimp.d:$ABCDESKTOP_RELEASE"
+
+# list of pod container image to prefetch
+ABCDESKTOP_POD_IMAGES="
+$REGISTRY_DOCKERHUB/oc.user.kubernetes.18.04:$ABCDESKTOP_RELEASE 
+$REGISTRY_DOCKERHUB/oc.pulseaudio.18.04:$ABCDESKTOP_RELEASE 
+$REGISTRY_DOCKERHUB/oc.cupsd.18.04:$ABCDESKTOP_RELEASE 
+docker.io/library/busybox"
 
 # Determines the operating system.
 OS="$(uname)"
@@ -41,19 +61,19 @@ fi
 
 case "${LOCAL_ARCH}" in 
   x86_64)
-    ABCDESKTOPIO_ARCH=amd64
+    ABCDESKTOP_ARCH=amd64
     ;;
   # armv8*)
-  #  ABCDESKTOPIO_ARCH=arm64
+  #  ABCDESKTOP_ARCH=arm64
   #  ;;
   # aarch64*)
-  #  ABCDESKTOPIO_ARCH=arm64
+  #  ABCDESKTOP_ARCH=arm64
   #  ;;
   # armv*)
-  #  ABCDESKTOPIO_ARCH=armv7
+  #  ABCDESKTOP_ARCH=armv7
   #  ;;
   amd64|arm64)
-    ABCDESKTOPIO_ARCH=${LOCAL_ARCH}
+    ABCDESKTOP_ARCH=${LOCAL_ARCH}
     ;;
   *)
     echo "This system's architecture, ${LOCAL_ARCH}, isn't supported"
@@ -61,7 +81,7 @@ case "${LOCAL_ARCH}" in
     ;;
 esac
 
-echo "This system's architecture is ${ABCDESKTOPIO_ARCH}"
+echo "This system's architecture is ${ABCDESKTOP_ARCH}"
 
 
 # Check if kubectl command is supported
@@ -130,7 +150,9 @@ kubectl create secret generic abcdesktopjwtusersigning    --from-file=abcdesktop
 
 
 
-REGISTRY_DOCKERHUB="abcdesktopio"
+REGISTRY_DOCKERHUB="docker.io/abcdesktopio"
+ABCDESKTOP_APPLICATIONS="$REGISTRY_DOCKERHUB/writer.d:$ABCDESKTOP_RELEASE $REGISTRY_DOCKERHUB/calc.d:$ABCDESKTOP_RELEASE $REGISTRY_DOCKERHUB/impress.d:$ABCDESKTOP_RELEASE $REGISTRY_DOCKERHUB/firefox.d:$ABCDESKTOP_RELEASE $REGISTRY_DOCKERHUB/gimp.d:$ABCDESKTOP_RELEASE"
+ABCDESKTOP_POD_IMAGES="$REGISTRY_DOCKERHUB/oc.user.kubernetes.18.04:$ABCDESKTOP_RELEASE $REGISTRY_DOCKERHUB/oc.pulseaudio.18.04:$ABCDESKTOP_RELEASE $REGISTRY_DOCKERHUB/oc.cupsd.18.04:$ABCDESKTOP_RELEASE docker.io/library/busybox"
 
 
 echo "Downloading file abcdesktop.yaml if need" 
@@ -162,6 +184,30 @@ else
         exit $?
 fi
 
+# pull images if ctr exist
+# ctr pull image core images
+if which ctr >/dev/null; then
+then
+	# graphical container
+	echo "pulling images for pod user"
+	echo $ABCDESKTOP_POD_IMAGES
+	for value in $ABCDESKTOP_POD_IMAGES
+	do 
+		ctr -n k8s.io images pull $value
+	done
+
+	echo "pulling applications"
+        echo $ABCDESKTOP_APPLICATIONS
+	if [ -z ${NOPULLAPPS} ]; then
+		for value in $ABCDESKTOP_APPLICATIONS
+		do
+			ctr -n k8s.io images pull $value
+		done
+	else
+		echo "do not pull images option detected"
+fi
+
+
 echo "kubectl create -f $ABCDESKTOP_YAML"
 kubectl create -f $ABCDESKTOP_YAML
 
@@ -190,6 +236,15 @@ done
 
 # list all pods 
 kubectl get pods --namespace=abcdesktop
+
+if [ -z ${NOPULLAPPS} ]; then
+                for value in $ABCDESKTOP_APPLICATIONS
+                do
+                        echo $value
+                done
+        else
+                echo "do not pull images option detected"
+fi
 
 echo "Setup done"
 echo "Open your navigator to http://[your-ip-hostname]:30443/"
