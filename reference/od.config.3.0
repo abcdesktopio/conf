@@ -429,10 +429,7 @@ desktop.pod : {
                         'runAsUser':   '{{ uidNumber }}',
                         'runAsGroup':  '{{ gidNumber }}'
                     },
-                    'acl':  { 'permit': [ 'all' ] }
-    } 
-}
-
+                    'acl':  { 'permit': [ 'all' ] } } }
 
 desktop.policies: { 'rules': { } }
 
