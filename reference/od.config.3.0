@@ -412,7 +412,26 @@ desktop.pod : {
                     'imagePullPolicy':  'IfNotPresent',
                     'securityContext': {  'runAsUser': 0 },
                     'acl':  { 'permit': [ 'all' ] },
-                    'command':  [ 'sh', '-c',  'chown {{ uidNumber }}:{{ gidNumber }} /home/balloon' ] } }
+                    'command':  [ 'sh', '-c',  'chown {{ uidNumber }}:{{ gidNumber }} /home/balloon' ] 
+    },
+    'ephemeral_container': {
+                    'enable': True,
+                    'securityContext': { 
+                        'runAsUser':   '{{ uidNumber }}', 
+                        'runAsGroup':  '{{ gidNumber }}' 
+                    },
+                    'acl':  { 'permit': [ 'all' ] }
+    },
+    'pod_application' : {
+                    'enable': True,
+                    # 'imagePullSecrets': [ { 'name': name_of_secret } ]
+                    'securityContext': {
+                        'runAsUser':   '{{ uidNumber }}',
+                        'runAsGroup':  '{{ gidNumber }}'
+                    },
+                    'acl':  { 'permit': [ 'all' ] }
+    } 
+}
 
 
 desktop.policies: { 'rules': { } }
