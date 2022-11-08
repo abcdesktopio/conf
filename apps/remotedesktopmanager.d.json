@@ -1,0 +1,161 @@
+[
+    {
+        "Id": "sha256:f0826fb9940881020390b8e1fb933bc9a34e32765dffb97a9b4d73c5a8b6275f",
+        "RepoTags": [
+            "abcdesktopio/remotedesktopmanager.d:dev"
+        ],
+        "RepoDigests": [],
+        "Parent": "sha256:743577f8e912ac8b5cc6ca5f42259ad4cc4ba6931eac0ef86f34f5e645b8cc89",
+        "Comment": "",
+        "Created": "2022-10-28T14:44:52.946028836Z",
+        "Container": "ef00f4bad548025e291cd637a463e109178602c04ee47ffd0d1cbdc53af399ec",
+        "ContainerConfig": {
+            "Hostname": "ef00f4bad548",
+            "Domainname": "",
+            "User": "root",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "DEBCONF_FRONTEND=noninteractive",
+                "TERM=linux",
+                "BUSER=balloon",
+                "XDG_RUNTIME_DIR=/run/user/4096",
+                "APPNAME=remotedesktopmanager",
+                "APPBIN=/bin/remotedesktopmanager.free",
+                "APP=/bin/remotedesktopmanager.free"
+            ],
+            "Cmd": [
+                "/bin/sh",
+                "-c",
+                "#(nop) WORKDIR /home/balloon"
+            ],
+            "Image": "sha256:743577f8e912ac8b5cc6ca5f42259ad4cc4ba6931eac0ef86f34f5e645b8cc89",
+            "Volumes": null,
+            "WorkingDir": "/home/balloon",
+            "Entrypoint": null,
+            "OnBuild": null,
+            "Labels": {
+                "oc.acl": "{\"permit\":[\"all\"]}",
+                "oc.cat": "utilities",
+                "oc.desktopfile": "remotedesktopmanager.free.desktop",
+                "oc.displayname": "RemoteDesktop",
+                "oc.icon": "circle-remotedesktopmanager.svg",
+                "oc.icondata": "PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiA8ZGVmcz4KICA8ZmlsdGVyIGlkPSJjLTMiIHg9Ii0uMDM2IiB5PSItLjAzNiIgd2lkdGg9IjEuMDcyIiBoZWlnaHQ9IjEuMDcyIiBjb2xvci1pbnRlcnBvbGF0aW9uLWZpbHRlcnM9InNSR0IiPgogICA8ZmVHYXVzc2lhbkJsdXIgc3RkRGV2aWF0aW9uPSIwLjQxOTk5ODc0Ii8+CiAgPC9maWx0ZXI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJiLTYiIHgxPSIzOTkuNTciIHgyPSIzOTkuNTciIHkxPSI1NDUuOCIgeTI9IjUxNy44IiBncmFkaWVudFRyYW5zZm9ybT0ibWF0cml4KDIuMTQyOSwwLDAsMi4xNDI5LC04MjYuMzYsLTExMDcuNSkiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KICAgPHN0b3Agc3RvcC1jb2xvcj0iIzM4ODllOSIgb2Zmc2V0PSIwIi8+CiAgIDxzdG9wIHN0b3AtY29sb3I9IiM1ZWE1ZmIiIG9mZnNldD0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJlLTMiIHgxPSI1MTkuMiIgeDI9IjUxOS4yIiB5MT0iMTAyNC44IiB5Mj0iNC44IiBncmFkaWVudFRyYW5zZm9ybT0ibWF0cml4KC4wNjM1ODYgMCAwIC4wNjM1ODMgLS41NTYxNyAtLjU1MjcpIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgIDxzdG9wIHN0b3AtY29sb3I9IiM2MDYwNjAiIG9mZnNldD0iMCIvPgogICA8c3RvcCBzdG9wLWNvbG9yPSIjNDE0MTQxIiBvZmZzZXQ9Ii4wMTk1NTEiLz4KICAgPHN0b3Agc3RvcC1jb2xvcj0iIzFlMWUxZSIgb2Zmc2V0PSIxIi8+CiAgPC9saW5lYXJHcmFkaWVudD4KICA8ZmlsdGVyIGlkPSJnLTUiIHg9Ii0uMDMxNjUyIiB5PSItLjA0MTk0NyIgd2lkdGg9IjEuMDYzMyIgaGVpZ2h0PSIxLjA4MzkiIGNvbG9yLWludGVycG9sYXRpb24tZmlsdGVycz0ic1JHQiI+CiAgIDxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjAuNjEwNjU4NDIiLz4KICA8L2ZpbHRlcj4KICA8bGluZWFyR3JhZGllbnQgaWQ9ImYtNiIgeDE9IjQwOS41NyIgeDI9IjQwOS45NCIgeTE9IjU0Mi44IiB5Mj0iNTA0LjE5IiBncmFkaWVudFRyYW5zZm9ybT0ibWF0cml4KDEuMDUyMywwLDAsMS4wMjc2LC03Mi41NjgsLTguNjkzMikiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KICAgPHN0b3Agc3RvcC1jb2xvcj0iIzg2ZDBmYiIgb2Zmc2V0PSIwIi8+CiAgIDxzdG9wIHN0b3AtY29sb3I9IiMyNzk0ZjUiIG9mZnNldD0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiA8L2RlZnM+CiA8Y2lyY2xlIHRyYW5zZm9ybT0ibWF0cml4KDIuMTQyOSwwLDAsMi4xNDI5LC04MjYuMzYsLTExMDcuNSkiIGN4PSI0MDAuNTciIGN5PSI1MzEuOCIgcj0iMTQiIGZpbHRlcj0idXJsKCNjLTMpIiBvcGFjaXR5PSIuMjUiIHN0cm9rZS13aWR0aD0iLjczMzMzIi8+CiA8Y2lyY2xlIGN4PSIzMi4wMiIgY3k9IjMyLjA0NCIgcj0iMzAuMDAxIiBmaWxsLW9wYWNpdHk9IjAiIHN0cm9rZS13aWR0aD0iMS41NzE1Ii8+CiA8Y2lyY2xlIGN4PSIzMi4wMiIgY3k9IjMyLjA0NCIgcj0iMCIgZmlsbD0idXJsKCNiLTYpIiBzdHJva2Utd2lkdGg9IjEuNTcxNSIvPgogPHBhdGggZD0ibTUwLjI0OSA4LjE5MzJxLTMuODU5Ny0yLjk3MjUtOC40NDQtNC41NTU3LTQuNzM3Mi0xLjYzNzMtOS44MDIxLTEuNjM3M2MtMTYuNTcgMC0zMC4wMDMgMTMuNDMyLTMwLjAwMyAzMC4wMDEgMCAxNS4xNTggMTEuMjQ1IDI3LjY4NCAyNS44NDUgMjkuNzA5IDAuNzEyMTYgMC4wOTg1NSAxLjQzMzkgMC4xNzQ4NSAyLjE1ODcgMC4yMTkzNiAwLjY2MTI4IDAuMDQxMzMgMS4zMjU4IDAuMDY5OTQgMS45OTk4IDAuMDY5OTQgMTYuNTY3IDAgMjkuOTk3LTEzLjQzMiAyOS45OTctMjkuOTk5IDAtMS4zMDk4LTAuMDgyNjYtMi42MDM3LTAuMjQ0ODEtMy44NjU4LTAuMTg3NTgtMS40NzUxLTAuNDkyNzktMi45MDktMC44ODM4Ny00LjMwNDZxLTEuMzI4OS00LjY4OTItNC4wODIyLTguNzI2NS0yLjcyMTUtMy45NzcxLTYuNTQwMS02LjkxMTJ6IiBmaWxsPSJ1cmwoI2UtMykiIHN0cm9rZS13aWR0aD0iLjk5NzI0Ii8+CiA8ZyB0cmFuc2Zvcm09Im1hdHJpeCguNDY1ODYgLS4wNTU1NjYgLjA1NzI1OCAuNDUyMDkgLTIwOS40MSAtMTUzLjYzKSI+CiAgPHJlY3QgdHJhbnNmb3JtPSJtYXRyaXgoMS43MzUgLjIxMzI1IC0uMjEzMjUgMS43MzUgLTQ2LjExNyAtNTI5Ljc2KSIgeD0iMzM0LjIzIiB5PSI1MTMuMTMiIHdpZHRoPSI0Ni4zMDMiIGhlaWdodD0iMzQuOTM5IiByeT0iMS42NDQyIiBmaWx0ZXI9InVybCgjZy01KSIgb3BhY2l0eT0iLjc1Ii8+CiAgPHJlY3QgdHJhbnNmb3JtPSJtYXRyaXgoMS43MzUgLjIxMzI1IC0uMjEzMjUgMS43MzUgLTQ2LjExNyAtNTI5Ljc2KSIgeD0iMzM0LjIzIiB5PSI1MTMuMTMiIHdpZHRoPSI0Ni4zMDMiIGhlaWdodD0iMzQuOTM5IiByeT0iMS42NDQyIiBmaWxsPSJ1cmwoI2YtNikiLz4KICA8ZyBmaWxsPSIjZDVmZmZmIj4KICAgPGVsbGlwc2UgdHJhbnNmb3JtPSJyb3RhdGUoNy4wMDcpIiBjeD0iNDk4LjM1IiBjeT0iMzg0LjQ5IiByeD0iMy4xOTU4IiByeT0iMy4yOTMyIi8+CiAgIDxlbGxpcHNlIHRyYW5zZm9ybT0icm90YXRlKDcuMDA3KSIgY3g9IjQ4OS44MyIgY3k9IjM4NC40OSIgcng9IjMuMTk1OCIgcnk9IjMuMjkzMiIvPgogICA8ZWxsaXBzZSB0cmFuc2Zvcm09InJvdGF0ZSg3LjAwNykiIGN4PSI0ODEuMzEiIGN5PSIzODQuNDkiIHJ4PSIzLjE5NTgiIHJ5PSIzLjI5MzIiLz4KICA8L2c+CiA8L2c+CiA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxNiwxNikiIGZpbGw9IiNmZmYiPgogIDxwYXRoIGQ9Im0xNiAxMmE5IDkgMCAwIDAtNy44NzcgNC42NjhjMC4xMjkgMC4zNjQgMC4zNTcgMC42NzcgMC42NTYgMC45MDhhOCA4IDAgMCAxIDcuMjIxLTQuNTc2IDQgNCAwIDAgMC00IDQgNCA0IDAgMCAwIDQgNCA0IDQgMCAwIDAgNC00IDQgNCAwIDAgMC0zLjY1LTMuOTgyIDggOCAwIDAgMSA2Ljg3IDQuNTU4YzAuMzAyLTAuMjM0IDAuNTMzLTAuNTUgMC42Ni0wLjkxOGE5IDkgMCAwIDAtNy44OC00LjY1OHptMCAyYTMgMyAwIDAgMSAzIDMgMyAzIDAgMCAxLTMgMyAzIDMgMCAwIDEtMy0zIDMgMyAwIDAgMSAzLTN6bTAgMWEyIDIgMCAwIDAtMiAyIDIgMiAwIDAgMCAyIDIgMiAyIDAgMCAwIDItMiAyIDIgMCAwIDAtMC4wOS0wLjU4OCAxIDEgMCAwIDEtMC45MSAwLjU4OCAxIDEgMCAwIDEtMS0xIDEgMSAwIDAgMSAwLjU5LTAuOTEgMiAyIDAgMCAwLTAuNTktMC4wOXoiLz4KICA8cGF0aCBkPSJtOCAxMXYxMWg3djJoLTN2MWg4di0xaC0zdi0yaDd2LTExaC0xNXptMSAxaDE0djloLTE0eiIvPgogPC9nPgo8L3N2Zz4K",
+                "oc.keyword": "remotedesktopmanager,remote,desktop,ssh",
+                "oc.launch": "RemoteDesktopManager.Free.RemoteDesktopManager.Free",
+                "oc.licence": "non-free",
+                "oc.name": "remotedesktopmanager",
+                "oc.path": "/bin/remotedesktopmanager.free",
+                "oc.template": "abcdesktopio/oc.template.gtk",
+                "oc.type": "app"
+            }
+        },
+        "DockerVersion": "20.10.16",
+        "Author": "",
+        "Config": {
+            "Hostname": "",
+            "Domainname": "",
+            "User": "root",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "DEBCONF_FRONTEND=noninteractive",
+                "TERM=linux",
+                "BUSER=balloon",
+                "XDG_RUNTIME_DIR=/run/user/4096",
+                "APPNAME=remotedesktopmanager",
+                "APPBIN=/bin/remotedesktopmanager.free",
+                "APP=/bin/remotedesktopmanager.free"
+            ],
+            "Cmd": [
+                "/composer/appli-docker-entrypoint.sh"
+            ],
+            "Image": "sha256:743577f8e912ac8b5cc6ca5f42259ad4cc4ba6931eac0ef86f34f5e645b8cc89",
+            "Volumes": null,
+            "WorkingDir": "/home/balloon",
+            "Entrypoint": null,
+            "OnBuild": null,
+            "Labels": {
+                "oc.acl": "{\"permit\":[\"all\"]}",
+                "oc.cat": "utilities",
+                "oc.desktopfile": "remotedesktopmanager.free.desktop",
+                "oc.displayname": "RemoteDesktop",
+                "oc.icon": "circle-remotedesktopmanager.svg",
+                "oc.icondata": "PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiA8ZGVmcz4KICA8ZmlsdGVyIGlkPSJjLTMiIHg9Ii0uMDM2IiB5PSItLjAzNiIgd2lkdGg9IjEuMDcyIiBoZWlnaHQ9IjEuMDcyIiBjb2xvci1pbnRlcnBvbGF0aW9uLWZpbHRlcnM9InNSR0IiPgogICA8ZmVHYXVzc2lhbkJsdXIgc3RkRGV2aWF0aW9uPSIwLjQxOTk5ODc0Ii8+CiAgPC9maWx0ZXI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJiLTYiIHgxPSIzOTkuNTciIHgyPSIzOTkuNTciIHkxPSI1NDUuOCIgeTI9IjUxNy44IiBncmFkaWVudFRyYW5zZm9ybT0ibWF0cml4KDIuMTQyOSwwLDAsMi4xNDI5LC04MjYuMzYsLTExMDcuNSkiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KICAgPHN0b3Agc3RvcC1jb2xvcj0iIzM4ODllOSIgb2Zmc2V0PSIwIi8+CiAgIDxzdG9wIHN0b3AtY29sb3I9IiM1ZWE1ZmIiIG9mZnNldD0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJlLTMiIHgxPSI1MTkuMiIgeDI9IjUxOS4yIiB5MT0iMTAyNC44IiB5Mj0iNC44IiBncmFkaWVudFRyYW5zZm9ybT0ibWF0cml4KC4wNjM1ODYgMCAwIC4wNjM1ODMgLS41NTYxNyAtLjU1MjcpIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgIDxzdG9wIHN0b3AtY29sb3I9IiM2MDYwNjAiIG9mZnNldD0iMCIvPgogICA8c3RvcCBzdG9wLWNvbG9yPSIjNDE0MTQxIiBvZmZzZXQ9Ii4wMTk1NTEiLz4KICAgPHN0b3Agc3RvcC1jb2xvcj0iIzFlMWUxZSIgb2Zmc2V0PSIxIi8+CiAgPC9saW5lYXJHcmFkaWVudD4KICA8ZmlsdGVyIGlkPSJnLTUiIHg9Ii0uMDMxNjUyIiB5PSItLjA0MTk0NyIgd2lkdGg9IjEuMDYzMyIgaGVpZ2h0PSIxLjA4MzkiIGNvbG9yLWludGVycG9sYXRpb24tZmlsdGVycz0ic1JHQiI+CiAgIDxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjAuNjEwNjU4NDIiLz4KICA8L2ZpbHRlcj4KICA8bGluZWFyR3JhZGllbnQgaWQ9ImYtNiIgeDE9IjQwOS41NyIgeDI9IjQwOS45NCIgeTE9IjU0Mi44IiB5Mj0iNTA0LjE5IiBncmFkaWVudFRyYW5zZm9ybT0ibWF0cml4KDEuMDUyMywwLDAsMS4wMjc2LC03Mi41NjgsLTguNjkzMikiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KICAgPHN0b3Agc3RvcC1jb2xvcj0iIzg2ZDBmYiIgb2Zmc2V0PSIwIi8+CiAgIDxzdG9wIHN0b3AtY29sb3I9IiMyNzk0ZjUiIG9mZnNldD0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiA8L2RlZnM+CiA8Y2lyY2xlIHRyYW5zZm9ybT0ibWF0cml4KDIuMTQyOSwwLDAsMi4xNDI5LC04MjYuMzYsLTExMDcuNSkiIGN4PSI0MDAuNTciIGN5PSI1MzEuOCIgcj0iMTQiIGZpbHRlcj0idXJsKCNjLTMpIiBvcGFjaXR5PSIuMjUiIHN0cm9rZS13aWR0aD0iLjczMzMzIi8+CiA8Y2lyY2xlIGN4PSIzMi4wMiIgY3k9IjMyLjA0NCIgcj0iMzAuMDAxIiBmaWxsLW9wYWNpdHk9IjAiIHN0cm9rZS13aWR0aD0iMS41NzE1Ii8+CiA8Y2lyY2xlIGN4PSIzMi4wMiIgY3k9IjMyLjA0NCIgcj0iMCIgZmlsbD0idXJsKCNiLTYpIiBzdHJva2Utd2lkdGg9IjEuNTcxNSIvPgogPHBhdGggZD0ibTUwLjI0OSA4LjE5MzJxLTMuODU5Ny0yLjk3MjUtOC40NDQtNC41NTU3LTQuNzM3Mi0xLjYzNzMtOS44MDIxLTEuNjM3M2MtMTYuNTcgMC0zMC4wMDMgMTMuNDMyLTMwLjAwMyAzMC4wMDEgMCAxNS4xNTggMTEuMjQ1IDI3LjY4NCAyNS44NDUgMjkuNzA5IDAuNzEyMTYgMC4wOTg1NSAxLjQzMzkgMC4xNzQ4NSAyLjE1ODcgMC4yMTkzNiAwLjY2MTI4IDAuMDQxMzMgMS4zMjU4IDAuMDY5OTQgMS45OTk4IDAuMDY5OTQgMTYuNTY3IDAgMjkuOTk3LTEzLjQzMiAyOS45OTctMjkuOTk5IDAtMS4zMDk4LTAuMDgyNjYtMi42MDM3LTAuMjQ0ODEtMy44NjU4LTAuMTg3NTgtMS40NzUxLTAuNDkyNzktMi45MDktMC44ODM4Ny00LjMwNDZxLTEuMzI4OS00LjY4OTItNC4wODIyLTguNzI2NS0yLjcyMTUtMy45NzcxLTYuNTQwMS02LjkxMTJ6IiBmaWxsPSJ1cmwoI2UtMykiIHN0cm9rZS13aWR0aD0iLjk5NzI0Ii8+CiA8ZyB0cmFuc2Zvcm09Im1hdHJpeCguNDY1ODYgLS4wNTU1NjYgLjA1NzI1OCAuNDUyMDkgLTIwOS40MSAtMTUzLjYzKSI+CiAgPHJlY3QgdHJhbnNmb3JtPSJtYXRyaXgoMS43MzUgLjIxMzI1IC0uMjEzMjUgMS43MzUgLTQ2LjExNyAtNTI5Ljc2KSIgeD0iMzM0LjIzIiB5PSI1MTMuMTMiIHdpZHRoPSI0Ni4zMDMiIGhlaWdodD0iMzQuOTM5IiByeT0iMS42NDQyIiBmaWx0ZXI9InVybCgjZy01KSIgb3BhY2l0eT0iLjc1Ii8+CiAgPHJlY3QgdHJhbnNmb3JtPSJtYXRyaXgoMS43MzUgLjIxMzI1IC0uMjEzMjUgMS43MzUgLTQ2LjExNyAtNTI5Ljc2KSIgeD0iMzM0LjIzIiB5PSI1MTMuMTMiIHdpZHRoPSI0Ni4zMDMiIGhlaWdodD0iMzQuOTM5IiByeT0iMS42NDQyIiBmaWxsPSJ1cmwoI2YtNikiLz4KICA8ZyBmaWxsPSIjZDVmZmZmIj4KICAgPGVsbGlwc2UgdHJhbnNmb3JtPSJyb3RhdGUoNy4wMDcpIiBjeD0iNDk4LjM1IiBjeT0iMzg0LjQ5IiByeD0iMy4xOTU4IiByeT0iMy4yOTMyIi8+CiAgIDxlbGxpcHNlIHRyYW5zZm9ybT0icm90YXRlKDcuMDA3KSIgY3g9IjQ4OS44MyIgY3k9IjM4NC40OSIgcng9IjMuMTk1OCIgcnk9IjMuMjkzMiIvPgogICA8ZWxsaXBzZSB0cmFuc2Zvcm09InJvdGF0ZSg3LjAwNykiIGN4PSI0ODEuMzEiIGN5PSIzODQuNDkiIHJ4PSIzLjE5NTgiIHJ5PSIzLjI5MzIiLz4KICA8L2c+CiA8L2c+CiA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxNiwxNikiIGZpbGw9IiNmZmYiPgogIDxwYXRoIGQ9Im0xNiAxMmE5IDkgMCAwIDAtNy44NzcgNC42NjhjMC4xMjkgMC4zNjQgMC4zNTcgMC42NzcgMC42NTYgMC45MDhhOCA4IDAgMCAxIDcuMjIxLTQuNTc2IDQgNCAwIDAgMC00IDQgNCA0IDAgMCAwIDQgNCA0IDQgMCAwIDAgNC00IDQgNCAwIDAgMC0zLjY1LTMuOTgyIDggOCAwIDAgMSA2Ljg3IDQuNTU4YzAuMzAyLTAuMjM0IDAuNTMzLTAuNTUgMC42Ni0wLjkxOGE5IDkgMCAwIDAtNy44OC00LjY1OHptMCAyYTMgMyAwIDAgMSAzIDMgMyAzIDAgMCAxLTMgMyAzIDMgMCAwIDEtMy0zIDMgMyAwIDAgMSAzLTN6bTAgMWEyIDIgMCAwIDAtMiAyIDIgMiAwIDAgMCAyIDIgMiAyIDAgMCAwIDItMiAyIDIgMCAwIDAtMC4wOS0wLjU4OCAxIDEgMCAwIDEtMC45MSAwLjU4OCAxIDEgMCAwIDEtMS0xIDEgMSAwIDAgMSAwLjU5LTAuOTEgMiAyIDAgMCAwLTAuNTktMC4wOXoiLz4KICA8cGF0aCBkPSJtOCAxMXYxMWg3djJoLTN2MWg4di0xaC0zdi0yaDd2LTExaC0xNXptMSAxaDE0djloLTE0eiIvPgogPC9nPgo8L3N2Zz4K",
+                "oc.keyword": "remotedesktopmanager,remote,desktop,ssh",
+                "oc.launch": "RemoteDesktopManager.Free.RemoteDesktopManager.Free",
+                "oc.licence": "non-free",
+                "oc.name": "remotedesktopmanager",
+                "oc.path": "/bin/remotedesktopmanager.free",
+                "oc.template": "abcdesktopio/oc.template.gtk",
+                "oc.type": "app"
+            }
+        },
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Size": 1956641800,
+        "VirtualSize": 1956641800,
+        "GraphDriver": {
+            "Data": {
+                "LowerDir": "/mnt/nvme0n1/var/lib/docker/overlay2/fd451c96c6c8920f3ea890851ac91c326614f50ae937cefd6d154d8667b21130/diff:/mnt/nvme0n1/var/lib/docker/overlay2/44066f64fd34f8424037ff632b713c9c19cd8c012893455a3a3de622ff590d21/diff:/mnt/nvme0n1/var/lib/docker/overlay2/a24cd20323c0c2e0064f058e02a17ea4d3682d58044d3c437f9db9404dea208c/diff:/mnt/nvme0n1/var/lib/docker/overlay2/23f784704eec1481e1f991e26de3f538925c80f16ec8073ef443e09be80c6acd/diff:/mnt/nvme0n1/var/lib/docker/overlay2/ecc6ad560d654b95938667ae17fbba7f057514e3c28deb2480851f18d4bc6047/diff:/mnt/nvme0n1/var/lib/docker/overlay2/e23fba7ab6db8ba2c1c524e275abbc5a96e841ab46c87a324476924b09929331/diff:/mnt/nvme0n1/var/lib/docker/overlay2/2cb3fc48b567f305a5b827fd6bcdea83611708c11170ea0da5db5492b9ad67ff/diff:/mnt/nvme0n1/var/lib/docker/overlay2/4ccb16e69b8a5c64916c05abefb1db6b28ff201af0c9de230d99edbb3dd14ec3/diff:/mnt/nvme0n1/var/lib/docker/overlay2/a72fd743a3ddd27ca2cb9f516bcd323966ba01845aa62869a1e0d429e7adbe2b/diff:/mnt/nvme0n1/var/lib/docker/overlay2/01bd7aeaec60c945c1384c5d1bef2cc4b9db3fba0e5efd7bdb1760863f0fa0b5/diff:/mnt/nvme0n1/var/lib/docker/overlay2/d30c589c0b605c6684353327c3dfa58ba2d8fdcbc87aff2b7ccf6ae1756d10a6/diff:/mnt/nvme0n1/var/lib/docker/overlay2/529111dbda04402846c787a51b6eb09e37669d9f3573fadaf2edd3fca08430ec/diff:/mnt/nvme0n1/var/lib/docker/overlay2/e5298e984c004580eaaec8da923df9375f55aa68d511739b3528d112283dac7a/diff:/mnt/nvme0n1/var/lib/docker/overlay2/2f777af4570d471e64b9afbdcbb0fd3c9f1a3ebaba88786e6204875910b645ed/diff:/mnt/nvme0n1/var/lib/docker/overlay2/888c5968f84509579c61285176ca2c440026911ee4bc48068fcb7b5630bb5683/diff:/mnt/nvme0n1/var/lib/docker/overlay2/18773e86dd465b0b044c5a503fc6f06b9be50b6ee15109152cd7a9998c4b467c/diff:/mnt/nvme0n1/var/lib/docker/overlay2/633069c55ebac95921f47d2dbd834a554e8cb860673fbb1a93696bef6d818707/diff:/mnt/nvme0n1/var/lib/docker/overlay2/4629e8fbcf20519f247e1c6b861f959de0335831a78deddefca6299b2fabb0b2/diff:/mnt/nvme0n1/var/lib/docker/overlay2/f96b7eccdeee0dd67fccb0d9503b94a27a8e1fc3056a46585ade056383084d27/diff:/mnt/nvme0n1/var/lib/docker/overlay2/9d068b94e594074fb1bba32666a428b8b446c39f3b406fdd886c94fab746ce6d/diff:/mnt/nvme0n1/var/lib/docker/overlay2/5e09301e67b8e19f6222f64e07ef8ed8a548f6aeb0104d1db858b9827fc88d3e/diff:/mnt/nvme0n1/var/lib/docker/overlay2/befe3d457e6a0e018fa21924eecf8cb48e37cb4bc905bf324d55a12cd30dbd03/diff:/mnt/nvme0n1/var/lib/docker/overlay2/7e5dd076b107bbc4acc7fa2ade8617786390140f33b8056d8ae31f3f6b5b5fcf/diff:/mnt/nvme0n1/var/lib/docker/overlay2/26a14274b26fbfb049e1f3c2ee6c1d25f88070158f8915f8d7d115d42dba22ed/diff:/mnt/nvme0n1/var/lib/docker/overlay2/62937b1076ec0e7a2b7975b28d4f6dcdddd79b2c93c4b43fa31ee3754d4061ef/diff:/mnt/nvme0n1/var/lib/docker/overlay2/b02ef42ff1b14fdcdb40ddd8d3d9029035e0c352e3164cf92c36bea91261e6c7/diff:/mnt/nvme0n1/var/lib/docker/overlay2/a2aa995af91d29909342dce9f6b71de5527e3d3c121d1530ec05419df095e9a9/diff:/mnt/nvme0n1/var/lib/docker/overlay2/be3686c689e1db75e0ecdb0548ed5c5d3958579cdbceb7bf935894ac83aa8cf0/diff:/mnt/nvme0n1/var/lib/docker/overlay2/7be9b9802393489daad92f5e93c4bdb7b49694e7a2200462175c452772e055ba/diff:/mnt/nvme0n1/var/lib/docker/overlay2/1802af12739c13c15a618ae902d0d5149d935737c5b67391b545aca9fcc2eaca/diff:/mnt/nvme0n1/var/lib/docker/overlay2/d0f83a3d034230609a44a40ec70bd986cfb3cbfb1ccfa5bb0b283d6f5f04718f/diff:/mnt/nvme0n1/var/lib/docker/overlay2/f334a64cd804a8954aeac40033d047251b6ad6e55b4b1807373dabb3160d4cc4/diff:/mnt/nvme0n1/var/lib/docker/overlay2/3bc9f6ec07f2d68910d0ff8176269aa4873444b7713525eae29b352954db8033/diff:/mnt/nvme0n1/var/lib/docker/overlay2/eda98cad2a1dbd7c513da4df22414f8416ca7e83929ac96dae2ec04025ad5ffb/diff",
+                "MergedDir": "/mnt/nvme0n1/var/lib/docker/overlay2/8bfe061970a98a48db00194c307af9743868c3d194d528da574bb28491496ebb/merged",
+                "UpperDir": "/mnt/nvme0n1/var/lib/docker/overlay2/8bfe061970a98a48db00194c307af9743868c3d194d528da574bb28491496ebb/diff",
+                "WorkDir": "/mnt/nvme0n1/var/lib/docker/overlay2/8bfe061970a98a48db00194c307af9743868c3d194d528da574bb28491496ebb/work"
+            },
+            "Name": "overlay2"
+        },
+        "RootFS": {
+            "Type": "layers",
+            "Layers": [
+                "sha256:7f5cbd8cc787c8d628630756bcc7240e6c96b876c2882e6fc980a8b60cdfa274",
+                "sha256:53f3c74e5ee6c49bf3a405fcc3b9010f6862b50178a5afc501f246b8dde8cfae",
+                "sha256:fdeb0e851f015764f59bec40a90dbf02c1c69948d47d2e30b0cb7c066aa11428",
+                "sha256:205194811c416d34ecf4674e9e445d9b512ddefff63423e87020e6e21a70dc8c",
+                "sha256:16673cd8b63566288539248914c0f06e3e7254be93e882cd9afc6f101cdec8fa",
+                "sha256:316fa927eb669e35a03a69c7d3b7b2b69b0f5e60bca0c9debdd49365bf9b55fb",
+                "sha256:72e94822d186ab0def7fb28e43f2794c05125058fa488156e3960c117bb821cc",
+                "sha256:1c24d46f018fbc214bc58fbcd4f33383bbd58862e1f09def05dcc5dd6ee084f1",
+                "sha256:c596cab3828572939d27614511efa44dcaff66742d2cf3d6705fa2fc6027dec9",
+                "sha256:ccb92e4df3fccb18a6f2f60da883e0e705753991867efaa2a63bd80613c2ee56",
+                "sha256:ed428ea7d71cdd8ab7f4da601e85312cb81019d4aeffee8b6fd270c270bb2189",
+                "sha256:d8635d095aff5d44f16c39089f168bae2f9d12c3a1e17a8115effcae4bbf3445",
+                "sha256:d97b423dc9fae30a2b3a0185418404f05224e3016a42b8d2dfb445630b126d4b",
+                "sha256:ad351243716bc6774eba3b9af78fdcf6081fd007ddfce97adb339a425664dc3f",
+                "sha256:5f907b9992b0d146be9bc1948d46916db7a4284f2d0c55718289857bab85d5f1",
+                "sha256:893ec1bf19b137545e382a09994d3e7294a159d1a57e8cac696d2a020d2741be",
+                "sha256:9816ecbe12e90c1f5bab67b6b2f3ffd4e52223bd122a73415537eb69350a8996",
+                "sha256:d56283a3c2260aeafa7da19e9b160693aa353b88848798250a7a887644334c7a",
+                "sha256:b39b76fd2177613ab9d7bb3a19e71fe873e3d9408e5a532893a595429d95fb51",
+                "sha256:5e5266ff97b50f6652ee2fe1b802693e32a85302df277a54d534aa2f5f3a9c8a",
+                "sha256:8614934c7520d0d42406192985c2d9ce9b0e7e18fca1b17a62b37233b15e35fc",
+                "sha256:9b9c281e5c95738902a64fc8116927eafcc6495e4a7ee14ce7e6e83dabae3b39",
+                "sha256:ec27dc3f0a55f35665cd49bcdfaae9eb3a69dbe67583bbe2daa392e60a30ada0",
+                "sha256:42b1e247e55b795c12805b5e089d9d76b2eabe2d6050e7f70742862fb86b4e09",
+                "sha256:059c279421d88a086ee3bc5552637ff0bbd5cc7a5c4cf340f95fccfb2f2b922f",
+                "sha256:856a279bbb0ae0eb39e97d3321e73bca92ebc01c67c30ddeaa9a053446caf903",
+                "sha256:f94d4e8d0465ab13ccb961dbe9d67fce38e061a1a6b1322ee6792a78af7c83ac",
+                "sha256:de49bb9676295942ccb35344290309817e78c5ca61b6d742186d644c67a373bf",
+                "sha256:bb7c5438df269a5f3a2f1cb52ae139c2c5279a07f6aa53af275ea6580dfe75d1",
+                "sha256:0d2190af87d721e5eb82e62b62c572cccbc4fa8685c3cd14ac4161ad48695333",
+                "sha256:64f528b5566b86124ce4a42c46e60a16d0090555d04513331522680f2222a04c",
+                "sha256:17efe2cbee568600db8911ea31f15fdc0a8f9d47b1e3db28914bc87f83984448",
+                "sha256:2988db20f7dd199162eac7d7f1cd85a08687d606ba9aa07975bda3d8ec89d9d0",
+                "sha256:d45f8cb04bed9ec7b10df9ac74f3c0e9aa9e4ff7b3fafea30bd0d1bdb22b505a",
+                "sha256:f3636ed5acb5a8459212a1e72e3e4363d85ab5d7f25c0a5358cf202cc160106e"
+            ]
+        },
+        "Metadata": {
+            "LastTagTime": "2022-10-28T16:44:53.199431926+02:00"
+        }
+    }
+]

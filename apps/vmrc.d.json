@@ -1,0 +1,158 @@
+[
+    {
+        "Id": "sha256:faea693139ab5babcca4aa1a818922c0d0120d2150b4a29994d06adbe48f9ee5",
+        "RepoTags": [
+            "abcdesktopio/vmrc.d:dev"
+        ],
+        "RepoDigests": [],
+        "Parent": "sha256:96dbc32dd9f1dbc262540e9697ac090190a9d42c7d34b02e3ff07ce0fc72c9dd",
+        "Comment": "",
+        "Created": "2022-06-22T16:56:07.005061675Z",
+        "Container": "3e319d851291af3d298d649416da6e9409e40d07e4080699ec2835d8fa3fdcab",
+        "ContainerConfig": {
+            "Hostname": "3e319d851291",
+            "Domainname": "",
+            "User": "balloon",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "DEBCONF_FRONTEND=noninteractive",
+                "TERM=linux",
+                "BUSER=balloon",
+                "XDG_RUNTIME_DIR=/run/user/4096",
+                "APPNAME=vmrc",
+                "APPBIN=/usr/bin/vmrc",
+                "APP=/usr/bin/vmrc"
+            ],
+            "Cmd": [
+                "/bin/sh",
+                "-c",
+                "#(nop) WORKDIR /home/balloon"
+            ],
+            "Image": "sha256:96dbc32dd9f1dbc262540e9697ac090190a9d42c7d34b02e3ff07ce0fc72c9dd",
+            "Volumes": null,
+            "WorkingDir": "/home/balloon",
+            "Entrypoint": null,
+            "OnBuild": null,
+            "Labels": {
+                "oc.acl": "{\"permit\":[\"all\"]}",
+                "oc.cat": "utilities",
+                "oc.desktopfile": "vmware-vmrc.desktop",
+                "oc.displayname": "VMRC",
+                "oc.icon": "circle_vmware.svg",
+                "oc.icondata": "PHN2ZyBpZD0iQXBwLVN0b3JlIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDEwMjQgMTAyNCIgaW1hZ2UtcmVuZGVyaW5nPSJvcHRpbWl6ZVNwZWVkIiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCA2NCA2NCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiA8ZGVmcz4KICA8ZmlsdGVyIGlkPSJnIiB4PSItLjAzNiIgeT0iLS4wMzYiIHdpZHRoPSIxLjA3MiIgaGVpZ2h0PSIxLjA3MiIgY29sb3ItaW50ZXJwb2xhdGlvbi1maWx0ZXJzPSJzUkdCIj4KICAgPGZlR2F1c3NpYW5CbHVyIHN0ZERldmlhdGlvbj0iMTQuMTYiLz4KICA8L2ZpbHRlcj4KICA8bGluZWFyR3JhZGllbnQgaWQ9ImIiIHgxPSI1MjAiIHgyPSI1MjAuMDMiIHkxPSI0NCIgeTI9Ijk4NS44NSIgZ3JhZGllbnRUcmFuc2Zvcm09Im1hdHJpeCguMDYzNTYgMCAwIC4wNjM1NiAtLjU0MjM3IC0uNTQyMzcpIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgIDxzdG9wIHN0b3AtY29sb3I9IiMxNWUxZmMiIG9mZnNldD0iMCIvPgogICA8c3RvcCBzdG9wLWNvbG9yPSIjMTg2M2VlIiBvZmZzZXQ9IjEiLz4KICA8L2xpbmVhckdyYWRpZW50PgogIDxsaW5lYXJHcmFkaWVudCBpZD0iYyIgeDE9Ii0xLjM1NTkiIHgyPSItMS4zNTU5IiB5MT0iLTU5LjExOSIgeTI9IjE5Ni44OCIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgogICA8c3RvcCBzdG9wLWNvbG9yPSIjZmZlYjQyIiBvZmZzZXQ9IjAiLz4KICAgPHN0b3Agc3RvcC1jb2xvcj0iI2ZmOTMxMSIgb2Zmc2V0PSIxIi8+CiAgPC9saW5lYXJHcmFkaWVudD4KICA8bGluZWFyR3JhZGllbnQgaWQ9ImEiIHgxPSI2Mi42NDQiIHgyPSI2Mi42NDQiIHkxPSItMTIzLjEyIiB5Mj0iMTMyLjg4IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgIDxzdG9wIHN0b3AtY29sb3I9IiNmZmYiIG9mZnNldD0iMCIvPgogICA8c3RvcCBzdG9wLWNvbG9yPSIjZThlOGU4IiBvZmZzZXQ9IjEiLz4KICA8L2xpbmVhckdyYWRpZW50PgogIDxmaWx0ZXIgaWQ9ImUiIHg9Ii0uMDc1IiB5PSItLjA3NSIgd2lkdGg9IjEuMTUiIGhlaWdodD0iMS4xNSIgY29sb3ItaW50ZXJwb2xhdGlvbi1maWx0ZXJzPSJzUkdCIj4KICAgPGZlR2F1c3NpYW5CbHVyIHN0ZERldmlhdGlvbj0iNy45OTk5OTk4Ii8+CiAgPC9maWx0ZXI+CiAgPGZpbHRlciBpZD0iZCIgeD0iLS4wNzUiIHk9Ii0uMDc1IiB3aWR0aD0iMS4xNSIgaGVpZ2h0PSIxLjE1IiBjb2xvci1pbnRlcnBvbGF0aW9uLWZpbHRlcnM9InNSR0IiPgogICA8ZmVHYXVzc2lhbkJsdXIgc3RkRGV2aWF0aW9uPSI3Ljk5OTk5OTgiLz4KICA8L2ZpbHRlcj4KIDwvZGVmcz4KIDxwYXRoIHRyYW5zZm9ybT0ibWF0cml4KC4wNjM1NiAwIDAgLjA2MzU2IC0uNTQyMzcgLS41NDIzNykiIGQ9Im05NjkuNyAzOTJjLTEuMS00LjM1LTIuMzUtOS0zLjY1LTEzLjYtMi41LTguNzUtNS4zNS0xNy42LTguNDUtMjYuMzUtNi40NS0xOC4yNS0xNC4xNS0zNi4wNS0yMy4xNS01My42NS0zLjgtNy40LTcuOTUtMTQuOTUtMTIuMy0yMi40aC0wLjAyNXEtMzAuNjAxLTUyLjAxLTc2LjMyNS05Ny43NWMtOTIuMTUtOTIuMTUtMjAzLjQ1LTEzOC4yNS0zMzMuOC0xMzguMjVzLTI0MS42IDQ2LjEtMzMzLjc1IDEzOC4yNS0xMzguMjUgMjAzLjQtMTM4LjI1IDMzMy43NSA0Ni4xIDI0MS42NSAxMzguMjUgMzMzLjhjNjguMDUgNjguMDUgMTQ2LjUgMTEwLjk1IDIzNC45IDEyOC42NSAzMS45NSA2LjQgNjQuNzUgOS41NSA5OC44NSA5LjU1IDEzMC4zNSAwIDI0MS42NS00Ni4wNSAzMzMuOC0xMzguMiA0OC42LTQ4LjYgODQuNC0xMDIuNSAxMDcuMzUtMTYxLjggMTctNDMuOTUgMjctOTAuOCAyOS45NS0xNDAuNzUgMC42LTEwLjIgMC45LTIwLjY1IDAuOS0zMS4yNSAwLTQxLjc1LTQuNy04MS42LTE0LjMtMTIweiIgZmlsdGVyPSJ1cmwoI2cpIiBvcGFjaXR5PSIuMjUiIHN0cm9rZS13aWR0aD0iMTUuNjcyIi8+CiA8cGF0aCBkPSJtNjEuMDkxIDI0LjM3M2MtMC4wNjk5MTYtMC4yNzY0OC0wLjE0OTM2LTAuNTcyMDQtMC4yMzE5OS0wLjg2NDQxLTAuMTU4OS0wLjU1NjE1LTAuMzQwMDQtMS4xMTg2LTAuNTM3MDgtMS42NzQ4LTAuNDA5OTYtMS4xNi0wLjg5OTM3LTIuMjkxMy0xLjQ3MTQtMy40MS0wLjI0MTUzLTAuNDcwMzQtMC41MDUzLTAuOTUwMjItMC43ODE3OC0xLjQyMzdoLTAuMDAxNnEtMS45NDUtMy4zMDU3LTQuODUxMi02LjIxMjljLTUuODU3LTUuODU3LTEyLjkzMS04Ljc4NzEtMjEuMjE2LTguNzg3MXMtMTUuMzU2IDIuOTMwMS0yMS4yMTMgOC43ODcxLTguNzg3MSAxMi45MjgtOC43ODcxIDIxLjIxMyAyLjkzMDEgMTUuMzU5IDguNzg3MSAyMS4yMTZjNC4zMjUyIDQuMzI1MiA5LjMxMTUgNy4wNTE5IDE0LjkzIDguMTc2OSAyLjAzMDcgMC40MDY3OCA0LjExNTUgMC42MDY5OSA2LjI4MjkgMC42MDY5OSA4LjI4NSAwIDE1LjM1OS0yLjkyNjkgMjEuMjE2LTguNzgzOSAzLjA4OS0zLjA4OSA1LjM2NDQtNi41MTQ4IDYuODIzMS0xMC4yODQgMS4wODA1LTIuNzkzNCAxLjcxNjEtNS43NzEyIDEuOTAzNi04Ljk0NiAwLjAzODE0LTAuNjQ4MzEgMC4wNTcyLTEuMzEyNSAwLjA1NzItMS45ODYyIDAtMi42NTM2LTAuMjk4NzMtNS4xODY1LTAuOTA4OS03LjYyNzF6IiBmaWxsPSJ1cmwoI2IpIiBzdHJva2Utd2lkdGg9Ii45OTYxIi8+CiA8ZyB0cmFuc2Zvcm09Im1hdHJpeCguMSAwIDAgLjEgMjguOTM2IDI4LjMxMikiIHN0cm9rZS13aWR0aD0iMTMuMzMzIj4KICA8cGF0aCBkPSJtMTAyLjY0IDE5Ni44OGMxMy4yOTcgMCAyNC0xMC43MDMgMjQtMjR2LTIwOGMwLTEzLjI5Ny0xMC43MDMtMjQtMjQtMjRoLTIwOGMtMTMuMjk3IDAtMjQgMTAuNzAzLTI0IDI0djIwOGMwIDEzLjI5NyAxMC43MDMgMjQgMjQgMjR6bS00MC02NGgtMTI4di0xMjhoMTI4eiIgZmlsdGVyPSJ1cmwoI2UpIiBvcGFjaXR5PSIuMTUiLz4KICA8cGF0aCBkPSJtMTY2LjY0IDEzMi44OGMxMy4yOTcgMCAyNC0xMC43MDMgMjQtMjR2LTIwOGMwLTEzLjI5Ny0xMC43MDMtMjQtMjQtMjRoLTIwOGMtMTMuMjk3IDAtMjQgMTAuNzAzLTI0IDI0djQwaDE5MnYxMjhoLTEyOHYtNjRoLTY0djEwNGMwIDEzLjI5NyAxMC43MDMgMjQgMjQgMjR6IiBmaWx0ZXI9InVybCgjZCkiIG9wYWNpdHk9Ii4xNSIvPgogIDxwYXRoIGQ9Im0xMDIuNjQgMTk2Ljg4YzEzLjI5NyAwIDI0LTEwLjcwMyAyNC0yNHYtMjA4YzAtMTMuMjk3LTEwLjcwMy0yNC0yNC0yNGgtMjA4Yy0xMy4yOTcgMC0yNCAxMC43MDMtMjQgMjR2MjA4YzAgMTMuMjk3IDEwLjcwMyAyNCAyNCAyNHptLTQwLTY0aC0xMjh2LTEyOGgxMjh6IiBmaWxsPSJ1cmwoI2MpIi8+CiAgPHBhdGggZD0ibTE2Ni42NCAxMzIuODhjMTMuMjk3IDAgMjQtMTAuNzAzIDI0LTI0di0yMDhjMC0xMy4yOTctMTAuNzAzLTI0LTI0LTI0aC0yMDhjLTEzLjI5NyAwLTI0IDEwLjcwMy0yNCAyNHY0MGgxOTJ2MTI4aC0xMjh2LTY0aC02NHYxMDRjMCAxMy4yOTcgMTAuNzAzIDI0IDI0IDI0eiIgZmlsbD0idXJsKCNhKSIvPgogPC9nPgo8L3N2Zz4K",
+                "oc.keyword": "vmrc,vmrc,vmware,remote,console",
+                "oc.launch": "vmrc.Vmrc",
+                "oc.licence": "non-free",
+                "oc.mimetype": "x-scheme-handler/vmrc;",
+                "oc.name": "vmrc",
+                "oc.path": "/usr/bin/vmrc",
+                "oc.template": "abcdesktopio/oc.template.gtk",
+                "oc.type": "app"
+            }
+        },
+        "DockerVersion": "20.10.16",
+        "Author": "",
+        "Config": {
+            "Hostname": "",
+            "Domainname": "",
+            "User": "balloon",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "DEBCONF_FRONTEND=noninteractive",
+                "TERM=linux",
+                "BUSER=balloon",
+                "XDG_RUNTIME_DIR=/run/user/4096",
+                "APPNAME=vmrc",
+                "APPBIN=/usr/bin/vmrc",
+                "APP=/usr/bin/vmrc"
+            ],
+            "Cmd": [
+                "/composer/appli-docker-entrypoint.sh"
+            ],
+            "Image": "sha256:96dbc32dd9f1dbc262540e9697ac090190a9d42c7d34b02e3ff07ce0fc72c9dd",
+            "Volumes": null,
+            "WorkingDir": "/home/balloon",
+            "Entrypoint": null,
+            "OnBuild": null,
+            "Labels": {
+                "oc.acl": "{\"permit\":[\"all\"]}",
+                "oc.cat": "utilities",
+                "oc.desktopfile": "vmware-vmrc.desktop",
+                "oc.displayname": "VMRC",
+                "oc.icon": "circle_vmware.svg",
+                "oc.icondata": "PHN2ZyBpZD0iQXBwLVN0b3JlIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDEwMjQgMTAyNCIgaW1hZ2UtcmVuZGVyaW5nPSJvcHRpbWl6ZVNwZWVkIiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCA2NCA2NCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiA8ZGVmcz4KICA8ZmlsdGVyIGlkPSJnIiB4PSItLjAzNiIgeT0iLS4wMzYiIHdpZHRoPSIxLjA3MiIgaGVpZ2h0PSIxLjA3MiIgY29sb3ItaW50ZXJwb2xhdGlvbi1maWx0ZXJzPSJzUkdCIj4KICAgPGZlR2F1c3NpYW5CbHVyIHN0ZERldmlhdGlvbj0iMTQuMTYiLz4KICA8L2ZpbHRlcj4KICA8bGluZWFyR3JhZGllbnQgaWQ9ImIiIHgxPSI1MjAiIHgyPSI1MjAuMDMiIHkxPSI0NCIgeTI9Ijk4NS44NSIgZ3JhZGllbnRUcmFuc2Zvcm09Im1hdHJpeCguMDYzNTYgMCAwIC4wNjM1NiAtLjU0MjM3IC0uNTQyMzcpIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgIDxzdG9wIHN0b3AtY29sb3I9IiMxNWUxZmMiIG9mZnNldD0iMCIvPgogICA8c3RvcCBzdG9wLWNvbG9yPSIjMTg2M2VlIiBvZmZzZXQ9IjEiLz4KICA8L2xpbmVhckdyYWRpZW50PgogIDxsaW5lYXJHcmFkaWVudCBpZD0iYyIgeDE9Ii0xLjM1NTkiIHgyPSItMS4zNTU5IiB5MT0iLTU5LjExOSIgeTI9IjE5Ni44OCIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgogICA8c3RvcCBzdG9wLWNvbG9yPSIjZmZlYjQyIiBvZmZzZXQ9IjAiLz4KICAgPHN0b3Agc3RvcC1jb2xvcj0iI2ZmOTMxMSIgb2Zmc2V0PSIxIi8+CiAgPC9saW5lYXJHcmFkaWVudD4KICA8bGluZWFyR3JhZGllbnQgaWQ9ImEiIHgxPSI2Mi42NDQiIHgyPSI2Mi42NDQiIHkxPSItMTIzLjEyIiB5Mj0iMTMyLjg4IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgIDxzdG9wIHN0b3AtY29sb3I9IiNmZmYiIG9mZnNldD0iMCIvPgogICA8c3RvcCBzdG9wLWNvbG9yPSIjZThlOGU4IiBvZmZzZXQ9IjEiLz4KICA8L2xpbmVhckdyYWRpZW50PgogIDxmaWx0ZXIgaWQ9ImUiIHg9Ii0uMDc1IiB5PSItLjA3NSIgd2lkdGg9IjEuMTUiIGhlaWdodD0iMS4xNSIgY29sb3ItaW50ZXJwb2xhdGlvbi1maWx0ZXJzPSJzUkdCIj4KICAgPGZlR2F1c3NpYW5CbHVyIHN0ZERldmlhdGlvbj0iNy45OTk5OTk4Ii8+CiAgPC9maWx0ZXI+CiAgPGZpbHRlciBpZD0iZCIgeD0iLS4wNzUiIHk9Ii0uMDc1IiB3aWR0aD0iMS4xNSIgaGVpZ2h0PSIxLjE1IiBjb2xvci1pbnRlcnBvbGF0aW9uLWZpbHRlcnM9InNSR0IiPgogICA8ZmVHYXVzc2lhbkJsdXIgc3RkRGV2aWF0aW9uPSI3Ljk5OTk5OTgiLz4KICA8L2ZpbHRlcj4KIDwvZGVmcz4KIDxwYXRoIHRyYW5zZm9ybT0ibWF0cml4KC4wNjM1NiAwIDAgLjA2MzU2IC0uNTQyMzcgLS41NDIzNykiIGQ9Im05NjkuNyAzOTJjLTEuMS00LjM1LTIuMzUtOS0zLjY1LTEzLjYtMi41LTguNzUtNS4zNS0xNy42LTguNDUtMjYuMzUtNi40NS0xOC4yNS0xNC4xNS0zNi4wNS0yMy4xNS01My42NS0zLjgtNy40LTcuOTUtMTQuOTUtMTIuMy0yMi40aC0wLjAyNXEtMzAuNjAxLTUyLjAxLTc2LjMyNS05Ny43NWMtOTIuMTUtOTIuMTUtMjAzLjQ1LTEzOC4yNS0zMzMuOC0xMzguMjVzLTI0MS42IDQ2LjEtMzMzLjc1IDEzOC4yNS0xMzguMjUgMjAzLjQtMTM4LjI1IDMzMy43NSA0Ni4xIDI0MS42NSAxMzguMjUgMzMzLjhjNjguMDUgNjguMDUgMTQ2LjUgMTEwLjk1IDIzNC45IDEyOC42NSAzMS45NSA2LjQgNjQuNzUgOS41NSA5OC44NSA5LjU1IDEzMC4zNSAwIDI0MS42NS00Ni4wNSAzMzMuOC0xMzguMiA0OC42LTQ4LjYgODQuNC0xMDIuNSAxMDcuMzUtMTYxLjggMTctNDMuOTUgMjctOTAuOCAyOS45NS0xNDAuNzUgMC42LTEwLjIgMC45LTIwLjY1IDAuOS0zMS4yNSAwLTQxLjc1LTQuNy04MS42LTE0LjMtMTIweiIgZmlsdGVyPSJ1cmwoI2cpIiBvcGFjaXR5PSIuMjUiIHN0cm9rZS13aWR0aD0iMTUuNjcyIi8+CiA8cGF0aCBkPSJtNjEuMDkxIDI0LjM3M2MtMC4wNjk5MTYtMC4yNzY0OC0wLjE0OTM2LTAuNTcyMDQtMC4yMzE5OS0wLjg2NDQxLTAuMTU4OS0wLjU1NjE1LTAuMzQwMDQtMS4xMTg2LTAuNTM3MDgtMS42NzQ4LTAuNDA5OTYtMS4xNi0wLjg5OTM3LTIuMjkxMy0xLjQ3MTQtMy40MS0wLjI0MTUzLTAuNDcwMzQtMC41MDUzLTAuOTUwMjItMC43ODE3OC0xLjQyMzdoLTAuMDAxNnEtMS45NDUtMy4zMDU3LTQuODUxMi02LjIxMjljLTUuODU3LTUuODU3LTEyLjkzMS04Ljc4NzEtMjEuMjE2LTguNzg3MXMtMTUuMzU2IDIuOTMwMS0yMS4yMTMgOC43ODcxLTguNzg3MSAxMi45MjgtOC43ODcxIDIxLjIxMyAyLjkzMDEgMTUuMzU5IDguNzg3MSAyMS4yMTZjNC4zMjUyIDQuMzI1MiA5LjMxMTUgNy4wNTE5IDE0LjkzIDguMTc2OSAyLjAzMDcgMC40MDY3OCA0LjExNTUgMC42MDY5OSA2LjI4MjkgMC42MDY5OSA4LjI4NSAwIDE1LjM1OS0yLjkyNjkgMjEuMjE2LTguNzgzOSAzLjA4OS0zLjA4OSA1LjM2NDQtNi41MTQ4IDYuODIzMS0xMC4yODQgMS4wODA1LTIuNzkzNCAxLjcxNjEtNS43NzEyIDEuOTAzNi04Ljk0NiAwLjAzODE0LTAuNjQ4MzEgMC4wNTcyLTEuMzEyNSAwLjA1NzItMS45ODYyIDAtMi42NTM2LTAuMjk4NzMtNS4xODY1LTAuOTA4OS03LjYyNzF6IiBmaWxsPSJ1cmwoI2IpIiBzdHJva2Utd2lkdGg9Ii45OTYxIi8+CiA8ZyB0cmFuc2Zvcm09Im1hdHJpeCguMSAwIDAgLjEgMjguOTM2IDI4LjMxMikiIHN0cm9rZS13aWR0aD0iMTMuMzMzIj4KICA8cGF0aCBkPSJtMTAyLjY0IDE5Ni44OGMxMy4yOTcgMCAyNC0xMC43MDMgMjQtMjR2LTIwOGMwLTEzLjI5Ny0xMC43MDMtMjQtMjQtMjRoLTIwOGMtMTMuMjk3IDAtMjQgMTAuNzAzLTI0IDI0djIwOGMwIDEzLjI5NyAxMC43MDMgMjQgMjQgMjR6bS00MC02NGgtMTI4di0xMjhoMTI4eiIgZmlsdGVyPSJ1cmwoI2UpIiBvcGFjaXR5PSIuMTUiLz4KICA8cGF0aCBkPSJtMTY2LjY0IDEzMi44OGMxMy4yOTcgMCAyNC0xMC43MDMgMjQtMjR2LTIwOGMwLTEzLjI5Ny0xMC43MDMtMjQtMjQtMjRoLTIwOGMtMTMuMjk3IDAtMjQgMTAuNzAzLTI0IDI0djQwaDE5MnYxMjhoLTEyOHYtNjRoLTY0djEwNGMwIDEzLjI5NyAxMC43MDMgMjQgMjQgMjR6IiBmaWx0ZXI9InVybCgjZCkiIG9wYWNpdHk9Ii4xNSIvPgogIDxwYXRoIGQ9Im0xMDIuNjQgMTk2Ljg4YzEzLjI5NyAwIDI0LTEwLjcwMyAyNC0yNHYtMjA4YzAtMTMuMjk3LTEwLjcwMy0yNC0yNC0yNGgtMjA4Yy0xMy4yOTcgMC0yNCAxMC43MDMtMjQgMjR2MjA4YzAgMTMuMjk3IDEwLjcwMyAyNCAyNCAyNHptLTQwLTY0aC0xMjh2LTEyOGgxMjh6IiBmaWxsPSJ1cmwoI2MpIi8+CiAgPHBhdGggZD0ibTE2Ni42NCAxMzIuODhjMTMuMjk3IDAgMjQtMTAuNzAzIDI0LTI0di0yMDhjMC0xMy4yOTctMTAuNzAzLTI0LTI0LTI0aC0yMDhjLTEzLjI5NyAwLTI0IDEwLjcwMy0yNCAyNHY0MGgxOTJ2MTI4aC0xMjh2LTY0aC02NHYxMDRjMCAxMy4yOTcgMTAuNzAzIDI0IDI0IDI0eiIgZmlsbD0idXJsKCNhKSIvPgogPC9nPgo8L3N2Zz4K",
+                "oc.keyword": "vmrc,vmrc,vmware,remote,console",
+                "oc.launch": "vmrc.Vmrc",
+                "oc.licence": "non-free",
+                "oc.mimetype": "x-scheme-handler/vmrc;",
+                "oc.name": "vmrc",
+                "oc.path": "/usr/bin/vmrc",
+                "oc.template": "abcdesktopio/oc.template.gtk",
+                "oc.type": "app"
+            }
+        },
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Size": 1810176672,
+        "VirtualSize": 1810176672,
+        "GraphDriver": {
+            "Data": {
+                "LowerDir": "/mnt/nvme0n1/var/lib/docker/overlay2/e30a214311e29c739b589331b9e50dff6f7359ebb8a8b3f4f80337ec04b2c1a2/diff:/mnt/nvme0n1/var/lib/docker/overlay2/d53df1ebbdc1226d85de52ffa637185af44a9a132ad21dc8ad1b2d669c14dcda/diff:/mnt/nvme0n1/var/lib/docker/overlay2/b6e91dbfc847e23210f022498c435c213f9c52c062bfdb0d283bfd34995e4220/diff:/mnt/nvme0n1/var/lib/docker/overlay2/b27446bdf472b2310882e800e7a7e7aa43b0a82d9a1d2c9124c7c8c112a3e8fa/diff:/mnt/nvme0n1/var/lib/docker/overlay2/2b500a69edc12017866251ac70c03d7fc2c1dec396961b7278fddf2348765857/diff:/mnt/nvme0n1/var/lib/docker/overlay2/288d32ac5230e7ccc23aa578b0c759f2ffad0f2875ada056242117f5b895b94e/diff:/mnt/nvme0n1/var/lib/docker/overlay2/d6dcdf0bf8491c43f4c642f5653ee958e4e3305183e715ab0c484acce9876d0c/diff:/mnt/nvme0n1/var/lib/docker/overlay2/944f21f7ee2b63e7b2a5fa39b22ea140ac8707abacf9882f6b96e83c16de6220/diff:/mnt/nvme0n1/var/lib/docker/overlay2/c2be5d2614835f4c536aeb0077e20a7ae8b27a3f03405090dc19707d5ad473d5/diff:/mnt/nvme0n1/var/lib/docker/overlay2/f15dc4e4c15a0cb14e48870ce66cb2948e7bce5b2cb9fa7bd883676568971690/diff:/mnt/nvme0n1/var/lib/docker/overlay2/8b3fae61dd77cf6b7c63a16f75548fed80199cfb6676dcca933adc2931b02e51/diff:/mnt/nvme0n1/var/lib/docker/overlay2/eda4df5d44d7a80aea3dd59ea37fc5509f7666810fe960d360269b009587dc74/diff:/mnt/nvme0n1/var/lib/docker/overlay2/41931074feadf3b98ddc342734f6b641f581fe8623c7fe44519e892d082f6089/diff:/mnt/nvme0n1/var/lib/docker/overlay2/f5230cb45c66c29887d4a1f955a077e7b9407411529a7c298b72e5b69fe04429/diff:/mnt/nvme0n1/var/lib/docker/overlay2/2d88124fb9bbafdb9959d1a3ab5c212133154e5195caff79e6e534c801d5cdad/diff:/mnt/nvme0n1/var/lib/docker/overlay2/07b54d6a8d50bbaf7fb8dcba402c2f921b868892277614be6a3cb971cbb5cab7/diff:/mnt/nvme0n1/var/lib/docker/overlay2/f2d26c542c195379b261b78536975c7ce0c8738ed87210302a0f7ab3c0cf8518/diff:/mnt/nvme0n1/var/lib/docker/overlay2/11f9ffb1c82e7e295d4ac36fa62a8c3d979f979e9ae7a35d9a472fdb429ff2ba/diff:/mnt/nvme0n1/var/lib/docker/overlay2/2d801a6af3a9d92df0dc98609a5a643ec735442173f7eb3f4a486d9c939059e9/diff:/mnt/nvme0n1/var/lib/docker/overlay2/35ef8abe5bb71445d982a673ef9e771223b15e1189d073e1e4d0a4b4b0c8c8c9/diff:/mnt/nvme0n1/var/lib/docker/overlay2/a4603aba145b5c9a91bc199421329e76b826e01ae4959cab2faa031abf962dd1/diff:/mnt/nvme0n1/var/lib/docker/overlay2/fb3a224d22b552f4140f07fc80f335a7ecaa76da212d3236520774100cb3d21a/diff:/mnt/nvme0n1/var/lib/docker/overlay2/9ecb092a85985d4185a8e85276f2f3e1f1c4ad8d93f5c3c204277671636a6324/diff:/mnt/nvme0n1/var/lib/docker/overlay2/01f6a824d6a7e4ffed8b911971f84e59299b7ec63169def022e73aabf61b3392/diff:/mnt/nvme0n1/var/lib/docker/overlay2/ae01b64fabf37894bca3acc7288d23789122f107eebc90b38dfad257ff85ec15/diff:/mnt/nvme0n1/var/lib/docker/overlay2/42ed064f793d67d032550fc3ec3417a704f4b199c755bc3cb70565593fe7f384/diff:/mnt/nvme0n1/var/lib/docker/overlay2/fd01fa30d922ee531d5beb538d2de99711dcf17c554fece6fd68b4ff28e0ee67/diff:/mnt/nvme0n1/var/lib/docker/overlay2/c5e4a3eea16982d64f03f821c73aab1a9143c03f1d0807fd45a27678709fc885/diff:/mnt/nvme0n1/var/lib/docker/overlay2/1cf2d260e744c5f6759a04e5ee5230edcf30cce25c5151d500f6782ded7dc081/diff",
+                "MergedDir": "/mnt/nvme0n1/var/lib/docker/overlay2/6600a58d5204167abab6431f32f07e6398a87720de4aa1cb165ae759a13bdc22/merged",
+                "UpperDir": "/mnt/nvme0n1/var/lib/docker/overlay2/6600a58d5204167abab6431f32f07e6398a87720de4aa1cb165ae759a13bdc22/diff",
+                "WorkDir": "/mnt/nvme0n1/var/lib/docker/overlay2/6600a58d5204167abab6431f32f07e6398a87720de4aa1cb165ae759a13bdc22/work"
+            },
+            "Name": "overlay2"
+        },
+        "RootFS": {
+            "Type": "layers",
+            "Layers": [
+                "sha256:e59fc94956120a6c7629f085027578e6357b48061d45714107e79f04a81a6f0c",
+                "sha256:401765d14b7f0a81a1c975c88da842b67162032b3fea07bfd26b25a182bbd637",
+                "sha256:63540a8c26b3300b189656512cc1a2ab099b6720979fa92dae68d4b5210c2f09",
+                "sha256:d105962eda140ed33c54a6b1e54d490d862d99eee33ce418bfdee1043216a5b0",
+                "sha256:e35fb625e0e52baf39ea9a00cd046a8c57f00ec257f05a7a3aedb7b3279f1010",
+                "sha256:3a3ff23d98738b41a5fbdb2f212216d56648669d7e6a49359e8d7a519ab7ca41",
+                "sha256:e07fb1939c90f06f4cdbbd54aa93bae6ace575e2eb06c5bbac19e3cb21abf966",
+                "sha256:03d44d45ad12e6760da752c05add4bd97fa69244edac498f596e134c3c148888",
+                "sha256:3d3ebcb79ca091fb8462b85b08b41c66277bff64c82029ff55f47b42fa059ac0",
+                "sha256:5f69b6b99e10091fa8ce97af4aa5ff3471afa8b2cdb166e130fa3367a6caaf9f",
+                "sha256:2eae36fcf3a599067c6f9a2c99f3316b98e06bdf811f414739e0cb27757a524b",
+                "sha256:1f3f0c91681bc5bb3d7e0cba8d8e98306941e7f9a4c912b76e3419e29c5ca314",
+                "sha256:c041581b6e7d90b01fe6b1cc0c781c8e14ec89bfc8fb185cd223e698173ab18c",
+                "sha256:47c0ac47582740ed9a082bbec2033373a9f355372bb511d6147d6be857cf2ab0",
+                "sha256:f0a6fa2ecaad9d61cae3ac3149899948444c75368e56b93e0aca7fd05d2ece97",
+                "sha256:b36c306babdbb48ad95da6cb6282c917baf7e059d50a43f0d46be531ed29a5da",
+                "sha256:23ebf461c8dbe924526d1635baba991b53ae816fbe9cd28e0f094ff45d9fd607",
+                "sha256:3b428b611b00ff8b8e808d2e29acbf933906d06bd1186566b51f2bfa801fdb7e",
+                "sha256:040c2ed846cc4271e00aff5780fccd4625eca12785ad77b12dd4d8805e11fd73",
+                "sha256:5fbfff7da48bdf19285f8c009bdaccc35c5ba29765c81cf2d1483b7f707a8a94",
+                "sha256:73ed069909ffdcb544c9f04321477b14870a110d9483602afc515988ee029220",
+                "sha256:1386c5d14c1210e795b04fe3e95ab537d2202df77a2ab973086a8a7d561427fb",
+                "sha256:7bb9e238c64a83da6bc666f302beb0fb1b1ed5553bdfc687091ce89fbd94d927",
+                "sha256:cb5a22030a7998dc58161f5b482a0f4b6b4b763729b1279c63d403f1fa9ad0a3",
+                "sha256:af1e374e91cb5a3e70903d702a62f52eac287eb046d194ad7396f6cc7cc561c3",
+                "sha256:2b5fe5eda279f09c8c0cdf41b3aee0cab6a6bd4104aa60aa965639ec5b9bcc4e",
+                "sha256:8fb02dcb0478da7246135663ed4912a796eab6ebca1cc9b506e383249b3f9e1b",
+                "sha256:7e955566d9cfe298b83dc9059e4c872c266073bc75cf58adb5577c588b6eeed3",
+                "sha256:c1e777767b0d162e1f3df81202f578fd75e17de87e8f0fe9d1dc23ebc74f111a",
+                "sha256:5077c5b89a3a3bb1ce5c2ee8b70f6a13609724f07e700058d35379c999772d66"
+            ]
+        },
+        "Metadata": {
+            "LastTagTime": "2022-09-02T14:09:50.934668113+02:00"
+        }
+    }
+]

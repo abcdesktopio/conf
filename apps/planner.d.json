@@ -1,0 +1,165 @@
+[
+    {
+        "Id": "sha256:35eb091afac5c53ee4dac6d950ffd7a57567c86dd3ee4c0406d6942c974cf438",
+        "RepoTags": [
+            "abcdesktopio/planner.d:dev"
+        ],
+        "RepoDigests": [],
+        "Parent": "sha256:8bb60e73552d88ad5518aab17600f717fb991a510c7a9233f89287295d130235",
+        "Comment": "",
+        "Created": "2022-11-08T11:55:19.129398452Z",
+        "Container": "8bcb05a169f48f5258f6848d5f93a3c1e6aa78dc0c1a78405a64f1e0172ffece",
+        "ContainerConfig": {
+            "Hostname": "8bcb05a169f4",
+            "Domainname": "",
+            "User": "balloon",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "DEBCONF_FRONTEND=noninteractive",
+                "TERM=linux",
+                "BUSER=balloon",
+                "XDG_RUNTIME_DIR=/run/user/4096",
+                "DEBIAN_FRONTEND=noninteractive",
+                "APPNAME=Planner",
+                "APPBIN=/usr/bin/planner",
+                "APP=/usr/bin/planner"
+            ],
+            "Cmd": [
+                "/bin/sh",
+                "-c",
+                "#(nop) WORKDIR /home/balloon"
+            ],
+            "Image": "sha256:8bb60e73552d88ad5518aab17600f717fb991a510c7a9233f89287295d130235",
+            "Volumes": null,
+            "WorkingDir": "/home/balloon",
+            "Entrypoint": null,
+            "OnBuild": null,
+            "Labels": {
+                "oc.acl": "{\"permit\":[\"all\"]}",
+                "oc.cat": "office",
+                "oc.displayname": "Planner",
+                "oc.fileextensions": "mpp;mpx",
+                "oc.icon": "planner.svg",
+                "oc.icondata": "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCINCgkgdmlld0JveD0iMCAwIDQ5MCA0OTAiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDQ5MCA0OTA7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxnPg0KCQk8ZyBpZD0iWE1MSURfODFfIj4NCgkJCTxnPg0KCQkJCTxwb2x5Z29uIHN0eWxlPSJmaWxsOiNBRkI2QkI7IiBwb2ludHM9IjQ4MCwyOTcuNSA0MTUsMzYyLjUgNDE1LDI5Ny41IAkJCQkiLz4NCgkJCQk8cG9seWdvbiBzdHlsZT0iZmlsbDojRkZGRkZGOyIgcG9pbnRzPSI0ODAsNTIuNSA0ODAsMjk3LjUgNDE1LDI5Ny41IDQxNSwzNjIuNSAxMCwzNjIuNSAxMCw1Mi41IAkJCQkiLz4NCgkJCTwvZz4NCgkJCTxwYXRoIHN0eWxlPSJmaWxsOiMyMzFGMjA7IiBkPSJNNDkwLDUyLjVjMC01LjUyMi00LjQ3Ny0xMC0xMC0xMEgxMGMtNS41MjMsMC0xMCw0LjQ3OC0xMCwxMHYzMTBjMCw1LjUyMiw0LjQ3NywxMCwxMCwxMGg0MDVsMCwwDQoJCQkJYzIuNjAyLTAuMDAxLDUuMTU5LTEuMDE2LDcuMDcxLTIuOTI5bDY1LTY1YzEuOTEyLTEuOTEzLDIuOTA0LTQuNDcsMi45MDUtNy4wNzFINDkwVjUyLjV6IE00MTUsMjg3LjVjLTUuNTIzLDAtMTAsNC40NzgtMTAsMTANCgkJCQl2NTVIMjB2LTI5MGg0NTB2MjI1SDQxNXogTTQyNSwzMzguMzU3VjMwNy41aDMwLjg1OEw0MjUsMzM4LjM1N3oiLz4NCgkJPC9nPg0KCTwvZz4NCgk8Zz4NCgkJPGcgaWQ9IlhNTElEXzgyXyI+DQoJCQk8Zz4NCgkJCQk8cmVjdCB4PSI2MCIgeT0iOTcuNSIgc3R5bGU9ImZpbGw6I0FGQjZCQjsiIHdpZHRoPSIxMjAiIGhlaWdodD0iNjAiLz4NCgkJCQk8cmVjdCB4PSIyNTAiIHk9IjEwMi41IiBzdHlsZT0iZmlsbDojQUZCNkJCOyIgd2lkdGg9IjEwMCIgaGVpZ2h0PSI1MCIvPg0KCQkJCTxyZWN0IHg9IjI1MCIgeT0iMTgyLjUiIHN0eWxlPSJmaWxsOiNBRkI2QkI7IiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjUwIi8+DQoJCQkJPHJlY3QgeD0iMjUwIiB5PSIyNjIuNSIgc3R5bGU9ImZpbGw6I0FGQjZCQjsiIHdpZHRoPSIxMDAiIGhlaWdodD0iNTAiLz4NCgkJCTwvZz4NCgkJCTxwYXRoIHN0eWxlPSJmaWxsOiMyMzFGMjA7IiBkPSJNMjUwLDE2Mi41aDEwMGM1LjUyMywwLDEwLTQuNDc4LDEwLTEwdi01MGMwLTUuNTIyLTQuNDc3LTEwLTEwLTEwSDI1MGMtNS41MjMsMC0xMCw0LjQ3OC0xMCwxMA0KCQkJCXYxNWgtMjVjLTUuNTIzLDAtMTAsNC40NzgtMTAsMTB2NzVoLTgwdi0zNWg1NWM1LjUyMywwLDEwLTQuNDc4LDEwLTEwdi02MGMwLTUuNTIyLTQuNDc3LTEwLTEwLTEwSDYwYy01LjUyMywwLTEwLDQuNDc4LTEwLDEwDQoJCQkJdjYwYzAsNS41MjIsNC40NzcsMTAsMTAsMTBoNDV2NDVjMCw1LjUyMiw0LjQ3NywxMCwxMCwxMGg5MHY3MGMwLDUuNTIyLDQuNDc3LDEwLDEwLDEwaDI1djEwYzAsNS41MjIsNC40NzcsMTAsMTAsMTBoMTAwDQoJCQkJYzUuNTIzLDAsMTAtNC40NzgsMTAtMTB2LTUwYzAtNS41MjItNC40NzctMTAtMTAtMTBIMjUwYy01LjUyMywwLTEwLDQuNDc4LTEwLDEwdjIwaC0xNXYtNjBoMTV2MTBjMCw1LjUyMiw0LjQ3NywxMCwxMCwxMGgxMDANCgkJCQljNS41MjMsMCwxMC00LjQ3OCwxMC0xMHYtNTBjMC01LjUyMi00LjQ3Ny0xMC0xMC0xMEgyNTBjLTUuNTIzLDAtMTAsNC40NzgtMTAsMTB2MjBoLTE1di02NWgxNXYxNQ0KCQkJCUMyNDAsMTU4LjAyMiwyNDQuNDc3LDE2Mi41LDI1MCwxNjIuNXogTTI2MCwxMTIuNWg4MHYzMGgtODBWMTEyLjV6IE03MCwxMDcuNWgxMDB2NDBINzBWMTA3LjV6IE0yNjAsMjcyLjVoODB2MzBoLTgwVjI3Mi41eg0KCQkJCSBNMjYwLDE5Mi41aDgwdjMwaC04MFYxOTIuNXoiLz4NCgkJPC9nPg0KCTwvZz4NCgk8Zz4NCgkJPHJlY3QgeD0iNTAiIHk9IjI0Ny41IiBzdHlsZT0iZmlsbDojMjMxRjIwOyIgd2lkdGg9Ijc1IiBoZWlnaHQ9IjIwIi8+DQoJPC9nPg0KCTxnPg0KCQk8cmVjdCB4PSI1MCIgeT0iMjc3LjUiIHN0eWxlPSJmaWxsOiMyMzFGMjA7IiB3aWR0aD0iNzUiIGhlaWdodD0iMjAiLz4NCgk8L2c+DQoJPGc+DQoJCTxyZWN0IHg9IjUwIiB5PSIzMDcuNSIgc3R5bGU9ImZpbGw6IzIzMUYyMDsiIHdpZHRoPSIxMzAiIGhlaWdodD0iMjAiLz4NCgk8L2c+DQoJPGc+DQoJCTxyZWN0IHg9IjEzNSIgeT0iMjQ3LjUiIHN0eWxlPSJmaWxsOiMyMzFGMjA7IiB3aWR0aD0iMjAiIGhlaWdodD0iMjAiLz4NCgk8L2c+DQoJPGc+DQoJCTxyZWN0IHg9IjM4MCIgeT0iOTIuNSIgc3R5bGU9ImZpbGw6IzIzMUYyMDsiIHdpZHRoPSIyNSIgaGVpZ2h0PSIyMCIvPg0KCTwvZz4NCgk8Zz4NCgkJPHJlY3QgeD0iNDIwIiB5PSI5Mi41IiBzdHlsZT0iZmlsbDojMjMxRjIwOyIgd2lkdGg9IjI1IiBoZWlnaHQ9IjIwIi8+DQoJPC9nPg0KCTxnPg0KCQk8cmVjdCB4PSIzODAiIHk9IjEyMi41IiBzdHlsZT0iZmlsbDojMjMxRjIwOyIgd2lkdGg9IjI1IiBoZWlnaHQ9IjIwIi8+DQoJPC9nPg0KCTxnPg0KCQk8cmVjdCB4PSI0MjAiIHk9IjEyMi41IiBzdHlsZT0iZmlsbDojMjMxRjIwOyIgd2lkdGg9IjI1IiBoZWlnaHQ9IjIwIi8+DQoJPC9nPg0KCTxnPg0KCQk8cmVjdCB4PSIzODAiIHk9IjE1Mi41IiBzdHlsZT0iZmlsbDojMjMxRjIwOyIgd2lkdGg9IjI1IiBoZWlnaHQ9IjIwIi8+DQoJPC9nPg0KCTxnPg0KCQk8cmVjdCB4PSI0MjAiIHk9IjE1Mi41IiBzdHlsZT0iZmlsbDojMjMxRjIwOyIgd2lkdGg9IjI1IiBoZWlnaHQ9IjIwIi8+DQoJPC9nPg0KCTxnPg0KCQk8cmVjdCB4PSIzODAiIHk9IjE4Mi41IiBzdHlsZT0iZmlsbDojMjMxRjIwOyIgd2lkdGg9IjI1IiBoZWlnaHQ9IjIwIi8+DQoJPC9nPg0KCTxnPg0KCQk8cmVjdCB4PSI0MjAiIHk9IjE4Mi41IiBzdHlsZT0iZmlsbDojMjMxRjIwOyIgd2lkdGg9IjI1IiBoZWlnaHQ9IjIwIi8+DQoJPC9nPg0KCTxnPg0KCQk8ZyBpZD0iWE1MSURfODNfIj4NCgkJCTxnPg0KCQkJCTxwb2x5Z29uIHN0eWxlPSJmaWxsOiNFN0VDRUQ7IiBwb2ludHM9IjQ4MCw0MTcuNSA0MjAsNDM3LjUgNDIwLDM5Ny41IAkJCQkiLz4NCgkJCQk8cmVjdCB4PSIxMCIgeT0iMzk3LjUiIHN0eWxlPSJmaWxsOiNBRkI2QkI7IiB3aWR0aD0iNjAiIGhlaWdodD0iNDAiLz4NCgkJCQk8cmVjdCB4PSI3MCIgeT0iMzk3LjUiIHN0eWxlPSJmaWxsOiNGRkQyNDg7IiB3aWR0aD0iMzUwIiBoZWlnaHQ9IjQwIi8+DQoJCQk8L2c+DQoJCQk8cGF0aCBzdHlsZT0iZmlsbDojMjMxRjIwOyIgZD0iTTQ4My4xNjIsNDA4LjAxM2wtNjAtMjBjLTEuMDMzLTAuMzQ0LTIuMS0wLjQ5OC0zLjE2Mi0wLjQ5OFYzODcuNUgxMGMtNS41MjMsMC0xMCw0LjQ3OC0xMCwxMHY0MA0KCQkJCWMwLDUuNTIyLDQuNDc3LDEwLDEwLDEwaDQxMGwwLDBoMC4wMDFjMS4wNjEsMCwyLjEyOS0wLjE2OSwzLjE2MS0wLjUxM2w2MC0yMGM0LjA4My0xLjM2MSw2LjgzOC01LjE4Myw2LjgzOC05LjQ4Nw0KCQkJCUM0OTAsNDEzLjE5Niw0ODcuMjQ2LDQwOS4zNzQsNDgzLjE2Miw0MDguMDEzeiBNNjAsNDI3LjVIMjB2LTIwaDQwVjQyNy41eiBNNDEwLDQwNy41djIwSDgwdi0yMEg0MTB6IE00MzAsNDIzLjYyNnYtMTIuMjUyDQoJCQkJbDE4LjM3Nyw2LjEyNkw0MzAsNDIzLjYyNnoiLz4NCgkJPC9nPg0KCTwvZz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjwvc3ZnPg0K",
+                "oc.keyword": "planner",
+                "oc.launch": "planner.Planner",
+                "oc.legacyfileextensions": "mpp;mpx",
+                "oc.mimetype": "application/x-planner;",
+                "oc.name": "Planner",
+                "oc.path": "/usr/bin/planner",
+                "oc.rules": "{\"homedir\":{\"default\":true}}",
+                "oc.template": "abcdesktopio/oc.template.gtk.language-pack-all",
+                "oc.type": "app"
+            }
+        },
+        "DockerVersion": "20.10.16",
+        "Author": "",
+        "Config": {
+            "Hostname": "",
+            "Domainname": "",
+            "User": "balloon",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "DEBCONF_FRONTEND=noninteractive",
+                "TERM=linux",
+                "BUSER=balloon",
+                "XDG_RUNTIME_DIR=/run/user/4096",
+                "DEBIAN_FRONTEND=noninteractive",
+                "APPNAME=Planner",
+                "APPBIN=/usr/bin/planner",
+                "APP=/usr/bin/planner"
+            ],
+            "Cmd": [
+                "/composer/appli-docker-entrypoint.sh"
+            ],
+            "Image": "sha256:8bb60e73552d88ad5518aab17600f717fb991a510c7a9233f89287295d130235",
+            "Volumes": null,
+            "WorkingDir": "/home/balloon",
+            "Entrypoint": null,
+            "OnBuild": null,
+            "Labels": {
+                "oc.acl": "{\"permit\":[\"all\"]}",
+                "oc.cat": "office",
+                "oc.displayname": "Planner",
+                "oc.fileextensions": "mpp;mpx",
+                "oc.icon": "planner.svg",
+                "oc.icondata": "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCINCgkgdmlld0JveD0iMCAwIDQ5MCA0OTAiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDQ5MCA0OTA7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxnPg0KCQk8ZyBpZD0iWE1MSURfODFfIj4NCgkJCTxnPg0KCQkJCTxwb2x5Z29uIHN0eWxlPSJmaWxsOiNBRkI2QkI7IiBwb2ludHM9IjQ4MCwyOTcuNSA0MTUsMzYyLjUgNDE1LDI5Ny41IAkJCQkiLz4NCgkJCQk8cG9seWdvbiBzdHlsZT0iZmlsbDojRkZGRkZGOyIgcG9pbnRzPSI0ODAsNTIuNSA0ODAsMjk3LjUgNDE1LDI5Ny41IDQxNSwzNjIuNSAxMCwzNjIuNSAxMCw1Mi41IAkJCQkiLz4NCgkJCTwvZz4NCgkJCTxwYXRoIHN0eWxlPSJmaWxsOiMyMzFGMjA7IiBkPSJNNDkwLDUyLjVjMC01LjUyMi00LjQ3Ny0xMC0xMC0xMEgxMGMtNS41MjMsMC0xMCw0LjQ3OC0xMCwxMHYzMTBjMCw1LjUyMiw0LjQ3NywxMCwxMCwxMGg0MDVsMCwwDQoJCQkJYzIuNjAyLTAuMDAxLDUuMTU5LTEuMDE2LDcuMDcxLTIuOTI5bDY1LTY1YzEuOTEyLTEuOTEzLDIuOTA0LTQuNDcsMi45MDUtNy4wNzFINDkwVjUyLjV6IE00MTUsMjg3LjVjLTUuNTIzLDAtMTAsNC40NzgtMTAsMTANCgkJCQl2NTVIMjB2LTI5MGg0NTB2MjI1SDQxNXogTTQyNSwzMzguMzU3VjMwNy41aDMwLjg1OEw0MjUsMzM4LjM1N3oiLz4NCgkJPC9nPg0KCTwvZz4NCgk8Zz4NCgkJPGcgaWQ9IlhNTElEXzgyXyI+DQoJCQk8Zz4NCgkJCQk8cmVjdCB4PSI2MCIgeT0iOTcuNSIgc3R5bGU9ImZpbGw6I0FGQjZCQjsiIHdpZHRoPSIxMjAiIGhlaWdodD0iNjAiLz4NCgkJCQk8cmVjdCB4PSIyNTAiIHk9IjEwMi41IiBzdHlsZT0iZmlsbDojQUZCNkJCOyIgd2lkdGg9IjEwMCIgaGVpZ2h0PSI1MCIvPg0KCQkJCTxyZWN0IHg9IjI1MCIgeT0iMTgyLjUiIHN0eWxlPSJmaWxsOiNBRkI2QkI7IiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjUwIi8+DQoJCQkJPHJlY3QgeD0iMjUwIiB5PSIyNjIuNSIgc3R5bGU9ImZpbGw6I0FGQjZCQjsiIHdpZHRoPSIxMDAiIGhlaWdodD0iNTAiLz4NCgkJCTwvZz4NCgkJCTxwYXRoIHN0eWxlPSJmaWxsOiMyMzFGMjA7IiBkPSJNMjUwLDE2Mi41aDEwMGM1LjUyMywwLDEwLTQuNDc4LDEwLTEwdi01MGMwLTUuNTIyLTQuNDc3LTEwLTEwLTEwSDI1MGMtNS41MjMsMC0xMCw0LjQ3OC0xMCwxMA0KCQkJCXYxNWgtMjVjLTUuNTIzLDAtMTAsNC40NzgtMTAsMTB2NzVoLTgwdi0zNWg1NWM1LjUyMywwLDEwLTQuNDc4LDEwLTEwdi02MGMwLTUuNTIyLTQuNDc3LTEwLTEwLTEwSDYwYy01LjUyMywwLTEwLDQuNDc4LTEwLDEwDQoJCQkJdjYwYzAsNS41MjIsNC40NzcsMTAsMTAsMTBoNDV2NDVjMCw1LjUyMiw0LjQ3NywxMCwxMCwxMGg5MHY3MGMwLDUuNTIyLDQuNDc3LDEwLDEwLDEwaDI1djEwYzAsNS41MjIsNC40NzcsMTAsMTAsMTBoMTAwDQoJCQkJYzUuNTIzLDAsMTAtNC40NzgsMTAtMTB2LTUwYzAtNS41MjItNC40NzctMTAtMTAtMTBIMjUwYy01LjUyMywwLTEwLDQuNDc4LTEwLDEwdjIwaC0xNXYtNjBoMTV2MTBjMCw1LjUyMiw0LjQ3NywxMCwxMCwxMGgxMDANCgkJCQljNS41MjMsMCwxMC00LjQ3OCwxMC0xMHYtNTBjMC01LjUyMi00LjQ3Ny0xMC0xMC0xMEgyNTBjLTUuNTIzLDAtMTAsNC40NzgtMTAsMTB2MjBoLTE1di02NWgxNXYxNQ0KCQkJCUMyNDAsMTU4LjAyMiwyNDQuNDc3LDE2Mi41LDI1MCwxNjIuNXogTTI2MCwxMTIuNWg4MHYzMGgtODBWMTEyLjV6IE03MCwxMDcuNWgxMDB2NDBINzBWMTA3LjV6IE0yNjAsMjcyLjVoODB2MzBoLTgwVjI3Mi41eg0KCQkJCSBNMjYwLDE5Mi41aDgwdjMwaC04MFYxOTIuNXoiLz4NCgkJPC9nPg0KCTwvZz4NCgk8Zz4NCgkJPHJlY3QgeD0iNTAiIHk9IjI0Ny41IiBzdHlsZT0iZmlsbDojMjMxRjIwOyIgd2lkdGg9Ijc1IiBoZWlnaHQ9IjIwIi8+DQoJPC9nPg0KCTxnPg0KCQk8cmVjdCB4PSI1MCIgeT0iMjc3LjUiIHN0eWxlPSJmaWxsOiMyMzFGMjA7IiB3aWR0aD0iNzUiIGhlaWdodD0iMjAiLz4NCgk8L2c+DQoJPGc+DQoJCTxyZWN0IHg9IjUwIiB5PSIzMDcuNSIgc3R5bGU9ImZpbGw6IzIzMUYyMDsiIHdpZHRoPSIxMzAiIGhlaWdodD0iMjAiLz4NCgk8L2c+DQoJPGc+DQoJCTxyZWN0IHg9IjEzNSIgeT0iMjQ3LjUiIHN0eWxlPSJmaWxsOiMyMzFGMjA7IiB3aWR0aD0iMjAiIGhlaWdodD0iMjAiLz4NCgk8L2c+DQoJPGc+DQoJCTxyZWN0IHg9IjM4MCIgeT0iOTIuNSIgc3R5bGU9ImZpbGw6IzIzMUYyMDsiIHdpZHRoPSIyNSIgaGVpZ2h0PSIyMCIvPg0KCTwvZz4NCgk8Zz4NCgkJPHJlY3QgeD0iNDIwIiB5PSI5Mi41IiBzdHlsZT0iZmlsbDojMjMxRjIwOyIgd2lkdGg9IjI1IiBoZWlnaHQ9IjIwIi8+DQoJPC9nPg0KCTxnPg0KCQk8cmVjdCB4PSIzODAiIHk9IjEyMi41IiBzdHlsZT0iZmlsbDojMjMxRjIwOyIgd2lkdGg9IjI1IiBoZWlnaHQ9IjIwIi8+DQoJPC9nPg0KCTxnPg0KCQk8cmVjdCB4PSI0MjAiIHk9IjEyMi41IiBzdHlsZT0iZmlsbDojMjMxRjIwOyIgd2lkdGg9IjI1IiBoZWlnaHQ9IjIwIi8+DQoJPC9nPg0KCTxnPg0KCQk8cmVjdCB4PSIzODAiIHk9IjE1Mi41IiBzdHlsZT0iZmlsbDojMjMxRjIwOyIgd2lkdGg9IjI1IiBoZWlnaHQ9IjIwIi8+DQoJPC9nPg0KCTxnPg0KCQk8cmVjdCB4PSI0MjAiIHk9IjE1Mi41IiBzdHlsZT0iZmlsbDojMjMxRjIwOyIgd2lkdGg9IjI1IiBoZWlnaHQ9IjIwIi8+DQoJPC9nPg0KCTxnPg0KCQk8cmVjdCB4PSIzODAiIHk9IjE4Mi41IiBzdHlsZT0iZmlsbDojMjMxRjIwOyIgd2lkdGg9IjI1IiBoZWlnaHQ9IjIwIi8+DQoJPC9nPg0KCTxnPg0KCQk8cmVjdCB4PSI0MjAiIHk9IjE4Mi41IiBzdHlsZT0iZmlsbDojMjMxRjIwOyIgd2lkdGg9IjI1IiBoZWlnaHQ9IjIwIi8+DQoJPC9nPg0KCTxnPg0KCQk8ZyBpZD0iWE1MSURfODNfIj4NCgkJCTxnPg0KCQkJCTxwb2x5Z29uIHN0eWxlPSJmaWxsOiNFN0VDRUQ7IiBwb2ludHM9IjQ4MCw0MTcuNSA0MjAsNDM3LjUgNDIwLDM5Ny41IAkJCQkiLz4NCgkJCQk8cmVjdCB4PSIxMCIgeT0iMzk3LjUiIHN0eWxlPSJmaWxsOiNBRkI2QkI7IiB3aWR0aD0iNjAiIGhlaWdodD0iNDAiLz4NCgkJCQk8cmVjdCB4PSI3MCIgeT0iMzk3LjUiIHN0eWxlPSJmaWxsOiNGRkQyNDg7IiB3aWR0aD0iMzUwIiBoZWlnaHQ9IjQwIi8+DQoJCQk8L2c+DQoJCQk8cGF0aCBzdHlsZT0iZmlsbDojMjMxRjIwOyIgZD0iTTQ4My4xNjIsNDA4LjAxM2wtNjAtMjBjLTEuMDMzLTAuMzQ0LTIuMS0wLjQ5OC0zLjE2Mi0wLjQ5OFYzODcuNUgxMGMtNS41MjMsMC0xMCw0LjQ3OC0xMCwxMHY0MA0KCQkJCWMwLDUuNTIyLDQuNDc3LDEwLDEwLDEwaDQxMGwwLDBoMC4wMDFjMS4wNjEsMCwyLjEyOS0wLjE2OSwzLjE2MS0wLjUxM2w2MC0yMGM0LjA4My0xLjM2MSw2LjgzOC01LjE4Myw2LjgzOC05LjQ4Nw0KCQkJCUM0OTAsNDEzLjE5Niw0ODcuMjQ2LDQwOS4zNzQsNDgzLjE2Miw0MDguMDEzeiBNNjAsNDI3LjVIMjB2LTIwaDQwVjQyNy41eiBNNDEwLDQwNy41djIwSDgwdi0yMEg0MTB6IE00MzAsNDIzLjYyNnYtMTIuMjUyDQoJCQkJbDE4LjM3Nyw2LjEyNkw0MzAsNDIzLjYyNnoiLz4NCgkJPC9nPg0KCTwvZz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjwvc3ZnPg0K",
+                "oc.keyword": "planner",
+                "oc.launch": "planner.Planner",
+                "oc.legacyfileextensions": "mpp;mpx",
+                "oc.mimetype": "application/x-planner;",
+                "oc.name": "Planner",
+                "oc.path": "/usr/bin/planner",
+                "oc.rules": "{\"homedir\":{\"default\":true}}",
+                "oc.template": "abcdesktopio/oc.template.gtk.language-pack-all",
+                "oc.type": "app"
+            }
+        },
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Size": 1570954108,
+        "VirtualSize": 1570954108,
+        "GraphDriver": {
+            "Data": {
+                "LowerDir": "/mnt/nvme0n1/var/lib/docker/overlay2/fcdbbe3bacdba98e272a5cab5b2db0bd532819589568bbd6609bc2c66f8aa9a1/diff:/mnt/nvme0n1/var/lib/docker/overlay2/83b31ddf444f05c5cb66b8f6e83632e8fd49e8d7e9d8a9613dcef65f7f9174e0/diff:/mnt/nvme0n1/var/lib/docker/overlay2/2f1ffef05a281813eb4f53ef1ed71cff323f31d34d137cdb49227e406c419675/diff:/mnt/nvme0n1/var/lib/docker/overlay2/6810479450a6b5ec7b21765d4e962698e3fc91e70e4ad1e52d3cc9827784b454/diff:/mnt/nvme0n1/var/lib/docker/overlay2/7c4bab747ddd3c41e16498ab95304a92f8cd62fd623120e2f5e737726c655d30/diff:/mnt/nvme0n1/var/lib/docker/overlay2/67fdc483ffe46ba56be5b28569df3ecdc4d9de62a57972f26f24d7bce195b7ff/diff:/mnt/nvme0n1/var/lib/docker/overlay2/ccc728af08f2ab4002b51cc569bb4de21f254dd22059f56d69971129b1bd3ca5/diff:/mnt/nvme0n1/var/lib/docker/overlay2/943afd89b7dc279c4b208e3667be273f03ff9db9073d9050f501711b19e181fc/diff:/mnt/nvme0n1/var/lib/docker/overlay2/a33f8692d0e73d407dbe82e703a37e47eb3a4587d443a7c8d4b2797ccdc7c2a9/diff:/mnt/nvme0n1/var/lib/docker/overlay2/f5bce750575502f3bcae4a6039cc8e6fd8bb05d2175160c58373d566e2f73b97/diff:/mnt/nvme0n1/var/lib/docker/overlay2/61c43be2f22ac2b9feab45b0fc9d905894729cad49f3888405d07e95e0a9523f/diff:/mnt/nvme0n1/var/lib/docker/overlay2/15fcce60bf513fbac30b3b1da81967589fbcd8d4536b63f4d056071e52682caa/diff:/mnt/nvme0n1/var/lib/docker/overlay2/2faea8fabb8a1a7d3881ea4bb2dc6a65f5d97fc7a8e22fda8dc32076479a85d5/diff:/mnt/nvme0n1/var/lib/docker/overlay2/5199d5522c546514dda88ac1bd7f5ccccef918aa2108d65f19cda4304e77ef8a/diff:/mnt/nvme0n1/var/lib/docker/overlay2/f6b75dee099babdb075eba7d53b47c674e921863743dd1ea8df704d74dcea2b3/diff:/mnt/nvme0n1/var/lib/docker/overlay2/db76cd7e0f1dfb7df7b83d8d35c6e4b1626bc68878f032f2bb688ccd2c9d30a5/diff:/mnt/nvme0n1/var/lib/docker/overlay2/8f570fd73c5844652dbaa9cf8efa833fc631ec068e171551567a310d8915a8fd/diff:/mnt/nvme0n1/var/lib/docker/overlay2/c4522a5c31bd890061b53ab9d36212fdc4e900d8a9f972ea378c0f8fe509f5e6/diff:/mnt/nvme0n1/var/lib/docker/overlay2/3130d73203b59f9feec4e643f8872f0677f13fd54e04bba986c946246877409c/diff:/mnt/nvme0n1/var/lib/docker/overlay2/477194002ba33bc6e829586d7eb07ab6c3b9ffe4cda8553271d3b735a6e044ff/diff:/mnt/nvme0n1/var/lib/docker/overlay2/bcc756292e27d87425db1c77dd4a8b14aa5d6f7a83310fb97ba717d861637415/diff:/mnt/nvme0n1/var/lib/docker/overlay2/dfa7d3e3a3a80d39085c1fa4c28542007fde409ab4f0c01c2ca09dcb391a309d/diff:/mnt/nvme0n1/var/lib/docker/overlay2/d6162dd636bd3c3d4b1c6e2a40062f7894c3cf8b698cad2c633e2b2df030bf49/diff:/mnt/nvme0n1/var/lib/docker/overlay2/1ceeeadf1fd45eb18cd120ebb3df9afc2f47fb3a81942bb8ef82968239a30988/diff:/mnt/nvme0n1/var/lib/docker/overlay2/d6c11e2542fcd5930ef2986b2d5897142fe85a9b2b6b61801d137f501f6f698f/diff:/mnt/nvme0n1/var/lib/docker/overlay2/cad2396a2e8115ec8afe8d4c8f634efcaeea412c89a678bb45e97314e69540f9/diff:/mnt/nvme0n1/var/lib/docker/overlay2/acd0b556a7da36d93384237e10f4200acabadb0d15926f134ca7ce09bbd26acb/diff:/mnt/nvme0n1/var/lib/docker/overlay2/b8693ece78c11dcaf25d7e5d096910feec8222ea07695ef04491cb21dad5f291/diff:/mnt/nvme0n1/var/lib/docker/overlay2/cb417e8a9c4b78bed9d925fca86fd29d066fa3e02b479b5dfcde8b2996f0b90d/diff:/mnt/nvme0n1/var/lib/docker/overlay2/ccb63799f1f6005632426f0509374d2248770ec57855f13b2909b8275e5ff5da/diff:/mnt/nvme0n1/var/lib/docker/overlay2/c405a2b9c5498e8dc2399627fb862df43f8d659e26928063e373cca4fb1952c8/diff:/mnt/nvme0n1/var/lib/docker/overlay2/80ac5ab7b85a9cb20c9352503358c8a182c95d7b83a1b11098da3c67b3b57850/diff",
+                "MergedDir": "/mnt/nvme0n1/var/lib/docker/overlay2/75425d792e7ac4022ef9a93f81be6afc19d4c49960f5cb6f33478ee57103103b/merged",
+                "UpperDir": "/mnt/nvme0n1/var/lib/docker/overlay2/75425d792e7ac4022ef9a93f81be6afc19d4c49960f5cb6f33478ee57103103b/diff",
+                "WorkDir": "/mnt/nvme0n1/var/lib/docker/overlay2/75425d792e7ac4022ef9a93f81be6afc19d4c49960f5cb6f33478ee57103103b/work"
+            },
+            "Name": "overlay2"
+        },
+        "RootFS": {
+            "Type": "layers",
+            "Layers": [
+                "sha256:f4a670ac65b68f8757aea863ac0de19e627c0ea57165abad8094eae512ca7dad",
+                "sha256:1274bd6e24cf282f1a1b47563578c15e5b3122e8272231eb9778b50c0b014e79",
+                "sha256:c48f6bafc39f7ba93a528bc2da36a3829e7bc9b41829fc4d47a6f2b9113f8568",
+                "sha256:1e405cf6de282010910f8f744156407fef767511e191fefbfae4925a90d4a422",
+                "sha256:9e0aceab78accce31478c69172e1db7184ce893bb84479af2e20143c35c52a9d",
+                "sha256:4b2e314e5939daf60bb2fbb46abb16476bd24a29aeee2825b6e390cc0c930018",
+                "sha256:9bc4aa8288587fe1b917e4413af6811c82d20cf46f0bb494a850ea667c05ade4",
+                "sha256:21f01cdfa6941e6c7e62ade4449a4e346f7293121dfd6d933fd53bf236937106",
+                "sha256:affd0305cdb0d01d655db8c15af50a15dc32860b104538afc92ec80444391e25",
+                "sha256:3ac33f688ab0ee179e700328af2ac894eda0bf12828b16a1b29a5ea217bf8585",
+                "sha256:cd9ceb6f0eaa1e54f901d19808707f1ae40dfdbfa027d2423351c6c3727da911",
+                "sha256:2fed473c0fa9846bb60d54d7353be9929e98136deca6eedadfe48b3f73168ca4",
+                "sha256:bcbb908703eec159c706884f94888035db9cee2bb14092ca48dc2b78bd6fed0f",
+                "sha256:4544bb8b37397bb54b3d960dc67d52e42527a086520ad132aeb2137c4caa25fd",
+                "sha256:31bcf7ebea35bc2e6b67067ebab4a8e3e128f16ec615fcd3b22ff1033b1a1dcc",
+                "sha256:38fa36e5eb4222aebb7f37a7355f85ac16091c51287e1bf70d8ce6e5d42abcb2",
+                "sha256:70203970bf7831ec41f98854d615d2a87da254b2bf91f2681f09e196bdf38449",
+                "sha256:a532f686b89f5ff69ea73a4bcc4a9abc7ca01c0bc1ceb76ec618dd1f57c6714f",
+                "sha256:ef3b29f24b82e799b71e240d0efc69ce7e6f8f8f7e88e2d4334970426544e964",
+                "sha256:828949440f6944269d7707e044f561255aedc232b74b6b1fa888d25f378e9b00",
+                "sha256:7159aecfd87a4ce2f99aa7aee9a3604d487e4f3ef72aa253e555cf3a6b84f632",
+                "sha256:dc4777012a8e2a5453fa0b2eecb40de15355360acd95c961570437e94064722c",
+                "sha256:96eee91b73242a2dc58e2e7d7c691fddd3968fb3ea0dbb9e93c2719bf6eabc5b",
+                "sha256:ce2b4d4c751cd76c8259599af46cdfd1b5ac189dfa696ddfc5daff41af93991f",
+                "sha256:84aeebb4a17a95683e9e2f2298da534f3750c1ac4cb23498436d527fd28cbe9b",
+                "sha256:12b3a5083b629ec54620a7e74ca9606d6b8ec4fa6f5a1a93f84a7b3199ceff6d",
+                "sha256:b4b14f1e4015ec27b5996cd7fc726fc1c4e3ea2fa03dede2308d99505adba8b0",
+                "sha256:db1b8e42572c35fd8bc90fbeb99fb9cbaba535ab54226266b71d396f78f5f5a4",
+                "sha256:2e4a4cd4ae56c2d4c1f68ae094018e9c74e2c133000da3ba862ff1273d9eeff7",
+                "sha256:e3eb812d2deb95c08f650573a282ee19f998c322525110b43f6366e5499b1fa9",
+                "sha256:3a0210e1f86bbe321c0dad2dfe435cf2abb07bb7aeb7b8aeeb778525f70cbb8b",
+                "sha256:e2d95148c82cb8046d17e5a7a8271b3af0219a352137a5cceb10f2c0d2e17f26",
+                "sha256:dae0afbdebf3e03c330700c7c1326bc966107235d2069228eafab07b3be1c4be"
+            ]
+        },
+        "Metadata": {
+            "LastTagTime": "2022-11-08T12:55:19.379628262+01:00"
+        }
+    }
+]
