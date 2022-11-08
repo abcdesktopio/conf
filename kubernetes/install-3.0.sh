@@ -86,7 +86,7 @@ echo "This system's architecture is ${ABCDESKTOP_ARCH}"
 
 # Check if kubectl command is supported
 # run command kubectl version
-KUBE_VERSION=$(kubectl version)
+KUBE_VERSION=$(kubectl version --output=yaml)
 EXIT_CODE=$?
 if [ $EXIT_CODE -eq 0 ] 
 then 
