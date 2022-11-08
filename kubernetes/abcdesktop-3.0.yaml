@@ -72,36 +72,6 @@ allowVolumeExpansion: true
 volumeBindingMode: Immediate
 ---
 apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: pv-volume-home-directory
-  namespace: abcdesktop
-  labels:
-     type: local
-spec:
-  storageClassName: storage-local-abcdesktop
-  capacity:
-     storage: 10Gi
-  volumeMode: Filesystem
-  accessModes:
-  - ReadWriteMany
-  hostPath:
-    path: '/tmp'
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: persistentvolumeclaim-home-directory
-  namespace: abcdesktop
-spec:
-  storageClassName: storage-local-abcdesktop
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 3Gi
----
-apiVersion: v1
 kind: ConfigMap
 metadata:
   name: nginx-config
