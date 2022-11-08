@@ -337,7 +337,7 @@ webrtc.enable : False
 desktop.release : '3.0'
 
 desktop.pod : { 
-    'graphical' : { 'image': { 'default': 'abcdesktopio/oc.user.kubernetes.18.04:3.0.dev' },
+    'graphical' : { 'image': { 'default': 'abcdesktopio/oc.user.kubernetes.18.04:3.0' },
                     'imagePullPolicy':  'IfNotPresent',
                     'enable': True,
                     'acl':  { 'permit': [ 'all' ] },
@@ -367,7 +367,7 @@ desktop.pod : {
                      'tcpport': 29781,
                      'acl':  { 'permit': [ 'all' ] } 
     },
-    'printer' :   { 'image': 'abcdesktopio/oc.cupsd.18.04:dev',
+    'printer' :   { 'image': 'abcdesktopio/oc.cupsd.18.04:3.0',
                     'imagePullPolicy': 'IfNotPresent',
                     'enable': True,
                     'tcpport': 681,
@@ -379,16 +379,16 @@ desktop.pod : {
                      'tcpport': 29782,
                      'acl':  { 'permit': [ 'all' ] } 
     },
-    'filer' :     { 'image': 'abcdesktopio/oc.filer:dev',
+    'filer' :     { 'image': 'abcdesktopio/oc.filer:3.0',
                     'imagePullPolicy':  'IfNotPresent',
                     'enable': True,
                     'tcpport': 29783,
                     'securityContext': { 
-			'runAsUser': 	'{{ uidNumber }}',
+			'runAsUser':   '{{ uidNumber }}',
                         'runAsGroup':  '{{ gidNumber }}' },
                     'acl':  { 'permit': [ 'all' ] } 
     },
-    'storage' :   { 'image': 'k8s.gcr.io/pause:3.2',
+    'storage' :   { 'image': 'k8s.gcr.io/pause:3.8',
                     'imagePullPolicy':  'IfNotPresent',
                     'enable': True,
                     'securityContext': {  
@@ -397,7 +397,7 @@ desktop.pod : {
                     'acl':   { 'permit': [ 'all' ] },
                     'resources': { 'requests': { 'memory': "32Mi",    'cpu': "100m" },  'limits'  : { 'memory': "128Mi",  'cpu': "250m"  } }
     },
-    'sound':      { 'image': 'abcdesktopio/oc.pulseaudio.22.04:dev',
+    'sound':      { 'image': 'abcdesktopio/oc.pulseaudio.18.04:3.0',
                     'imagePullPolicy': 'IfNotPresent',
                     'enable': False,
                     'tcpport': 4714,
@@ -412,39 +412,22 @@ desktop.pod : {
                     'imagePullPolicy':  'IfNotPresent',
                     'securityContext': {  'runAsUser': 0 },
                     'acl':  { 'permit': [ 'all' ] },
-                    'command':  [ 'sh', '-c',  'chown 4096:4096 /home/balloon && chown 4096:4096 /home/balloon/* || true' ] } }
+                    'command':  [ 'sh', '-c',  'chown {{ uidNumber }}:{{ gidNumber }} /home/balloon' ] } }
 
 
 desktop.policies: { 'rules': { } }
 
-#
+# persistentVolumeClaim is not supported in relase 3.0
 # desktop.homedirectorytype: 'persistentVolumeClaim' 
-# User home data are persistent.
-# if desktop.homedirectorytype is 'persistentVolumeClaim', then homedirectory use a kubernetes Persistent Volume Claim
-# This value is only avalaible in kubernetes. 
-# This value is recommanded in kubernetes mode. 
-# PersistentVolumeClaim option use a persistentVolumeClaim to create the user home directory. 
-# The persistentVolumeClaim can be mapped to differents storage data (like NFS, iSCSI, RBD...). 
-# Read more about persistentVolumeClaim on the kubernetes.io website. 
-# If you set desktop.homedirectorytype to 'persistentVolumeClaim' 
-# Then you have to set the value of desktop.persistentvolumeclaim
-desktop.homedirectorytype: 'persistentVolumeClaim'
-# desktop.homedirectorytype: None
+# desktop.homedirectorytype: 'hostPath' MUST BE SET TO 'hostPath'
+desktop.homedirectorytype: 'hostPath'
 
-# desktop.persistentvolumeclaim
-# value name of the persistentvolumeclaim
-# example persistentvolumeclaim-home-directory
-# This value is only avalaible in kubernetes mode.
-# desktop.persistentvolumeclaim is the name of the Persistent Volume Claim if the desktop.homedirectory is set to 'persistentVolumeClaim'. 
-# The PVC (Persistent Volume Claim) must exist.
-# kubectl get pvc -n abcdesktop
-# NAME                                   STATUS   VOLUME                     CAPACITY   ACCESS MODES   STORAGECLASS                AGE
-# persistentvolumeclaim-home-directory   Bound    pv-volume-home-directory   10Gi       RWX            storage-local-abcdesktop   3h44m
-# desktop.persistentvolumeclaim: 'persistentvolumeclaim-home-directory'
-desktop.persistentvolumeclaim: 'persistentvolumeclaim-home-directory'
-
-
-
+# where user home dir are located
+# this can be /tmp for example
+# in production the recommanded value is a mount point (like nfs) 
+# set :
+# desktop.hostPathRoot: '/mnt/abcdesktop'
+desktop.hostPathRoot: '/tmp'
 
 # for docker 
 #    Most of these options take a positive integer, followed by a suffix of b, k, m, g, to indicate bytes, kilobytes, megabytes, or gigabytes.
