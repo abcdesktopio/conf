@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 #
 # Install script kubernetes for abcdesktopio
@@ -187,7 +187,6 @@ fi
 # pull images if ctr exist
 # ctr pull image core images
 if which ctr >/dev/null; then
-then
 	# graphical container
 	echo "pulling images for pod user"
 	echo $ABCDESKTOP_POD_IMAGES
@@ -205,6 +204,9 @@ then
 		done
 	else
 		echo "do not pull images option detected"
+	fi
+else
+	echo 'ctr command line not found, skipping prefetch images'
 fi
 
 
@@ -212,8 +214,7 @@ echo "kubectl create -f $ABCDESKTOP_YAML"
 kubectl create -f $ABCDESKTOP_YAML
 
 EXIT_CODE=$?
-if [ $EXIT_CODE -eq 0 ] 
-then
+if [ $EXIT_CODE -eq 0 ]; then
         echo "kubectl create -f $ABCDESKTOP_YAML command was successful"
 else
         echo "kubectl create -f $ABCDESKTOP_YAML failed"
