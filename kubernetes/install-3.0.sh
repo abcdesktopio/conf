@@ -44,7 +44,7 @@ ABCDESKTOP_TEMPLATE_APPLICATIONS="
 $REGISTRY_DOCKERHUB/oc.template:$ABCDESKTOP_RELEASE
 $REGISTRY_DOCKERHUB/oc.template.gtk:$ABCDESKTOP_RELEASE"
 
-URL_APPLICATION_CONF_SOURCE="https://raw.githubusercontent.com/abcdesktopio/conf/apps/"
+URL_APPLICATION_CONF_SOURCE="https://raw.githubusercontent.com/abcdesktopio/conf/apps"
 # list of json default applications to prefetch
 ABCDESKTOP_JSON_APPLICATIONS="
 writer.d.$ABCDESKTOP_RELEASE.json
