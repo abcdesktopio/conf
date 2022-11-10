@@ -253,14 +253,13 @@ authmanagers: {
               'rule-net-home': {  
                 'conditions' : [ { 'network': '10.0.0.0/8', 'expected' : True } ],
                 'expected'   : True,
-                'label'      : 'tennetwork' 
+                'label'      : 'tennetwork'
               } 
             } 
-          }
+          } 
         } 
-      } 
-   } 
-}  
+    } 
+} }  
 
 # Note serviceaccount is optional
 ldapconfig : {
