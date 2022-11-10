@@ -167,9 +167,10 @@ if [ $EXIT_CODE -eq 0 ]; then
 	echo "to register it in $PYOS_SERVICE_URL"
 	curl $URL_APPLICATION_CONF_SOURCE/$app | curl -X PUT -H 'Content-Type: text/javascript' $PYOS_MANAGEMENT_SERVICE_URL  -d @-
   done
-  echo "Please wait for pull-* pod ready'
+  echo 'Please wait for pull-* pod ready'
   kubectl get pods -n abcdesktop
-  pods=$(kubectl -n abcdesktop get pods --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+  pods=$(kubectl -n abcdesktop get pods --selector=type=pod_application --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+  echo "list of created pods for pulling is $pods" 
   for d in $pods;
   do
         echo "waiting for pod/$d available";
