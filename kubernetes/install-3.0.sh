@@ -31,31 +31,6 @@ ABCDESKTOP_RELEASE=3.0
 # docker hub prefix
 REGISTRY_DOCKERHUB="docker.io/abcdesktopio"
 
-# list of default applications to prefetch
-# and
-# list of template application to download quickly
-ABCDESKTOP_APPLICATIONS="
-$REGISTRY_DOCKERHUB/oc.template:$ABCDESKTOP_RELEASE
-$REGISTRY_DOCKERHUB/oc.template.gtk:$ABCDESKTOP_RELEASE
-$REGISTRY_DOCKERHUB/2048.d:$ABCDESKTOP_RELEASE 
-$REGISTRY_DOCKERHUB/writer.d:$ABCDESKTOP_RELEASE 
-$REGISTRY_DOCKERHUB/calc.d:$ABCDESKTOP_RELEASE 
-$REGISTRY_DOCKERHUB/impress.d:$ABCDESKTOP_RELEASE 
-$REGISTRY_DOCKERHUB/firefox.d:$ABCDESKTOP_RELEASE 
-$REGISTRY_DOCKERHUB/gimp.d:$ABCDESKTOP_RELEASE"
-
-URL_APPLICATION_CONF_SOURCE="https://raw.githubusercontent.com/abcdesktopio/conf/main/apps"
-# list of json default applications to prefetch
-ABCDESKTOP_JSON_APPLICATIONS="
-2048.d.$ABCDESKTOP_RELEASE.json
-writer.d.$ABCDESKTOP_RELEASE.json
-calc.d.$ABCDESKTOP_RELEASE.json
-impress.d.$ABCDESKTOP_RELEASE.json
-firefox.d.$ABCDESKTOP_RELEASE.json
-gimp.d.$ABCDESKTOP_RELEASE.json
-"
-
-
 # list of pod container image to prefetch
 ABCDESKTOP_POD_IMAGES="
 $REGISTRY_DOCKERHUB/oc.user.kubernetes.18.04:$ABCDESKTOP_RELEASE 
@@ -197,7 +172,6 @@ else
         exit $?
 fi
 
-# pull images if ctr exist
 # ctr pull image core images
 if which ctr >/dev/null; then
 	# graphical container
@@ -207,15 +181,6 @@ if which ctr >/dev/null; then
 	do 
 		ctr -n k8s.io images pull $value
 	done
-
-	echo "pulling applications"
-        echo $ABCDESKTOP_APPLICATIONS
-	if [ -z ${NOPULLAPPS} ]; then
-		for value in $ABCDESKTOP_APPLICATIONS
-		do
-			ctr -n k8s.io images pull $value
-		done
-	fi
 else
 	echo 'ctr command line not found, skipping prefetch images'
 fi
@@ -249,35 +214,6 @@ done
 # list all pods 
 kubectl get pods --namespace=abcdesktop
 echo "Setup done"
-
-echo "checking for applications"
-PYOS_CLUSTERIP=$(kubectl get service pyos -n abcdesktop -o jsonpath='{.spec.clusterIP}')
-echo "PYOS_CLUSTERIP=$PYOS_CLUSTERIP"
-
-# define service URL
-PYOS_MANAGEMENT_SERVICE_URL="http://$PYOS_CLUSTERIP:8000/API/manager/image"
-PYOS_HEALTZ_SERVICE_URL="http://$PYOS_CLUSTERIP:8000/healtz"
-
-# call HEALTZ
-echo "query to curl $PYOS_HEALTZ_SERVICE_URL"
-curl $PYOS_HEALTZ_SERVICE_URL
-EXIT_CODE=$?
-if [ $EXIT_CODE -eq 0 ]; then
-  echo "pyos is ready"
-  echo "adding some applications to pyos repo" 
-  for app in $ABCDESKTOP_JSON_APPLICATIONS
-  do
-	echo "Downloading $URL_APPLICATION_CONF_SOURCE/$app"
-	echo "to register it in $PYOS_SERVICE_URL"
-	curl $URL_APPLICATION_CONF_SOURCE/$app | curl -X PUT -H 'Content-Type: text/javascript' $PYOS_MANAGEMENT_SERVICE_URL  -d @-
-  done
-else
-  echo "pyos is not ready"	
-  echo "Something wrong with $PYOS_HEALTZ_SERVICE_URL"
-  PYOS_POD_NAME=$(kubectl get pods --selector=name=daemonset-pyospods -o jsonpath={.items..metadata.name} -n abcdesktop)
-  echo "Look at pod $PYOS_POD_NAME log"
-  kubectl logs $PYOS_POD_NAME -n abcdesktop
-fi
 
 echo "Open your navigator to http://[your-ip-hostname]:30443/"
 echo "For example http://localhost:30443"
