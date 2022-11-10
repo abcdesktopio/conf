@@ -79,20 +79,6 @@
         }
       },
       {
-        "name": "auth-localaccount-758b58db-7dcc-47d1-b95e-4f18bee61f68",
-        "secret": {
-          "secretName": "auth-localaccount-758b58db-7dcc-47d1-b95e-4f18bee61f68",
-          "defaultMode": 420
-        }
-      },
-      {
-        "name": "auth-vnc-758b58db-7dcc-47d1-b95e-4f18bee61f68",
-        "secret": {
-          "secretName": "auth-vnc-758b58db-7dcc-47d1-b95e-4f18bee61f68",
-          "defaultMode": 420
-        }
-      },
-      {
         "name": "home-758b58db-7dcc-47d1-b95e-4f18bee61f68",
         "emptyDir": {}
       }
@@ -132,14 +118,6 @@
           {
             "name": "log",
             "mountPath": "/var/log/desktop"
-          },
-          {
-            "name": "auth-localaccount-758b58db-7dcc-47d1-b95e-4f18bee61f68",
-            "mountPath": "/var/secrets/abcdesktop/localaccount"
-          },
-          {
-            "name": "auth-vnc-758b58db-7dcc-47d1-b95e-4f18bee61f68",
-            "mountPath": "/var/secrets/abcdesktop/vnc"
           },
           {
             "name": "home-758b58db-7dcc-47d1-b95e-4f18bee61f68",
@@ -505,14 +483,6 @@
           {
             "name": "log",
             "mountPath": "/var/log/desktop"
-          },
-          {
-            "name": "auth-localaccount-758b58db-7dcc-47d1-b95e-4f18bee61f68",
-            "mountPath": "/var/secrets/abcdesktop/localaccount"
-          },
-          {
-            "name": "auth-vnc-758b58db-7dcc-47d1-b95e-4f18bee61f68",
-            "mountPath": "/var/secrets/abcdesktop/vnc"
           },
           {
             "name": "home-758b58db-7dcc-47d1-b95e-4f18bee61f68",
@@ -925,14 +895,6 @@
             "mountPath": "/var/log/desktop"
           },
           {
-            "name": "auth-localaccount-758b58db-7dcc-47d1-b95e-4f18bee61f68",
-            "mountPath": "/var/secrets/abcdesktop/localaccount"
-          },
-          {
-            "name": "auth-vnc-758b58db-7dcc-47d1-b95e-4f18bee61f68",
-            "mountPath": "/var/secrets/abcdesktop/vnc"
-          },
-          {
             "name": "home-758b58db-7dcc-47d1-b95e-4f18bee61f68",
             "mountPath": "/home/balloon"
           }
@@ -1133,14 +1095,6 @@
           {
             "name": "log",
             "mountPath": "/var/log/desktop"
-          },
-          {
-            "name": "auth-localaccount-758b58db-7dcc-47d1-b95e-4f18bee61f68",
-            "mountPath": "/var/secrets/abcdesktop/localaccount"
-          },
-          {
-            "name": "auth-vnc-758b58db-7dcc-47d1-b95e-4f18bee61f68",
-            "mountPath": "/var/secrets/abcdesktop/vnc"
           },
           {
             "name": "home-758b58db-7dcc-47d1-b95e-4f18bee61f68",
