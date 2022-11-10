@@ -260,7 +260,7 @@ authmanagers: {
         } 
       } 
    } 
-}
+}  
 
 # Note serviceaccount is optional
 ldapconfig : {
