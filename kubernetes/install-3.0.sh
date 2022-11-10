@@ -32,26 +32,27 @@ ABCDESKTOP_RELEASE=3.0
 REGISTRY_DOCKERHUB="docker.io/abcdesktopio"
 
 # list of default applications to prefetch
-# ABCDESKTOP_APPLICATIONS="
-# $REGISTRY_DOCKERHUB/writer.d:$ABCDESKTOP_RELEASE 
-# $REGISTRY_DOCKERHUB/calc.d:$ABCDESKTOP_RELEASE 
-# $REGISTRY_DOCKERHUB/impress.d:$ABCDESKTOP_RELEASE 
-# $REGISTRY_DOCKERHUB/firefox.d:$ABCDESKTOP_RELEASE 
-# $REGISTRY_DOCKERHUB/gimp.d:$ABCDESKTOP_RELEASE"
-
+# and
 # list of template application to download quickly
-ABCDESKTOP_TEMPLATE_APPLICATIONS="
+ABCDESKTOP_APPLICATIONS="
 $REGISTRY_DOCKERHUB/oc.template:$ABCDESKTOP_RELEASE
-$REGISTRY_DOCKERHUB/oc.template.gtk:$ABCDESKTOP_RELEASE"
+$REGISTRY_DOCKERHUB/oc.template.gtk:$ABCDESKTOP_RELEASE
+$REGISTRY_DOCKERHUB/2048.d:$ABCDESKTOP_RELEASE 
+$REGISTRY_DOCKERHUB/writer.d:$ABCDESKTOP_RELEASE 
+$REGISTRY_DOCKERHUB/calc.d:$ABCDESKTOP_RELEASE 
+$REGISTRY_DOCKERHUB/impress.d:$ABCDESKTOP_RELEASE 
+$REGISTRY_DOCKERHUB/firefox.d:$ABCDESKTOP_RELEASE 
+$REGISTRY_DOCKERHUB/gimp.d:$ABCDESKTOP_RELEASE"
 
 URL_APPLICATION_CONF_SOURCE="https://raw.githubusercontent.com/abcdesktopio/conf/main/apps"
 # list of json default applications to prefetch
 ABCDESKTOP_JSON_APPLICATIONS="
+2048.d.$ABCDESKTOP_RELEASE.json
 writer.d.$ABCDESKTOP_RELEASE.json
 calc.d.$ABCDESKTOP_RELEASE.json
 impress.d.$ABCDESKTOP_RELEASE.json
 firefox.d.$ABCDESKTOP_RELEASE.json
-gimpd.d.$ABCDESKTOP_RELEASE.json
+gimp.d.$ABCDESKTOP_RELEASE.json
 "
 
 
@@ -208,9 +209,9 @@ if which ctr >/dev/null; then
 	done
 
 	echo "pulling applications"
-        echo $ABCDESKTOP_TEMPLATE_APPLICATIONS
+        echo $ABCDESKTOP_APPLICATIONS
 	if [ -z ${NOPULLAPPS} ]; then
-		for value in $ABCDESKTOP_TEMPLATE_APPLICATIONS
+		for value in $ABCDESKTOP_APPLICATIONS
 		do
 			ctr -n k8s.io images pull $value
 		done
