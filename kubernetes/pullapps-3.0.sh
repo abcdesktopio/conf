@@ -138,9 +138,6 @@ if which ctr >/dev/null; then
 		for value in $ABCDESKTOP_APPLICATIONS
 		do
 			ctr -n k8s.io images pull $value
-			EXIT_CODE=$?
-			if [ $EXIT_CODE -eq 0 ]; then
-			fi
 		done
 	fi
 else
