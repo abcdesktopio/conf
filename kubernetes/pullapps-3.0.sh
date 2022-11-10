@@ -170,12 +170,8 @@ if [ $EXIT_CODE -eq 0 ]; then
   echo 'Please wait for pull-* pod ready'
   kubectl get pods -n abcdesktop
   pods=$(kubectl -n abcdesktop get pods --selector=type=pod_application --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-  echo "list of created pods for pulling is $pods" 
-  for d in $pods;
-  do
-        echo "waiting for pod/$d available";
-        kubectl -n abcdesktop wait pod/$d --for=condition=Ready --timeout=-1s;
-  done
+  echo "list of created pods for pulling is $pods"
+  kubectl wait --for=condition=Ready pods --selector=type=pod_application -n abcdesktop
 else
   echo "pyos is not ready"	
   echo "Something wrong with $PYOS_HEALTZ_SERVICE_URL"
