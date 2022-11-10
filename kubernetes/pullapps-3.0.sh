@@ -34,16 +34,16 @@ REGISTRY_DOCKERHUB="docker.io/abcdesktopio"
 # list of default applications to prefetch
 # and
 # list of template application to download quickly
-ABCDESKTOP_APPLICATIONS="
-$REGISTRY_DOCKERHUB/oc.template:$ABCDESKTOP_RELEASE
-$REGISTRY_DOCKERHUB/oc.template.gtk:$ABCDESKTOP_RELEASE
-$REGISTRY_DOCKERHUB/2048.d:$ABCDESKTOP_RELEASE 
-$REGISTRY_DOCKERHUB/xterm.d:$ABCDESKTOP_RELEASE
-$REGISTRY_DOCKERHUB/writer.d:$ABCDESKTOP_RELEASE 
-$REGISTRY_DOCKERHUB/calc.d:$ABCDESKTOP_RELEASE 
-$REGISTRY_DOCKERHUB/impress.d:$ABCDESKTOP_RELEASE 
-$REGISTRY_DOCKERHUB/firefox.d:$ABCDESKTOP_RELEASE 
-$REGISTRY_DOCKERHUB/gimp.d:$ABCDESKTOP_RELEASE"
+# ABCDESKTOP_APPLICATIONS="
+# $REGISTRY_DOCKERHUB/oc.template:$ABCDESKTOP_RELEASE
+# $REGISTRY_DOCKERHUB/oc.template.gtk:$ABCDESKTOP_RELEASE
+# $REGISTRY_DOCKERHUB/2048.d:$ABCDESKTOP_RELEASE 
+# $REGISTRY_DOCKERHUB/xterm.d:$ABCDESKTOP_RELEASE
+# $REGISTRY_DOCKERHUB/writer.d:$ABCDESKTOP_RELEASE 
+# $REGISTRY_DOCKERHUB/calc.d:$ABCDESKTOP_RELEASE 
+# $REGISTRY_DOCKERHUB/impress.d:$ABCDESKTOP_RELEASE 
+# $REGISTRY_DOCKERHUB/firefox.d:$ABCDESKTOP_RELEASE 
+# $REGISTRY_DOCKERHUB/gimp.d:$ABCDESKTOP_RELEASE"
 
 URL_APPLICATION_CONF_SOURCE="https://raw.githubusercontent.com/abcdesktopio/conf/main/apps"
 # list of json default applications to prefetch
@@ -133,18 +133,18 @@ fi
 
 # pull images if ctr exist
 # ctr pull image core images
-if which ctr >/dev/null; then
-	echo "pulling applications"
-        echo $ABCDESKTOP_APPLICATIONS
-	if [ -z ${NOPULLAPPS} ]; then
-		for value in $ABCDESKTOP_APPLICATIONS
-		do
-			ctr -n k8s.io images pull $value
-		done
-	fi
-else
-	echo 'ctr command line not found, skipping prefetch images'
-fi
+# if which ctr >/dev/null; then
+#	echo "pulling applications"
+#        echo $ABCDESKTOP_APPLICATIONS
+#	if [ -z ${NOPULLAPPS} ]; then
+#		for value in $ABCDESKTOP_APPLICATIONS
+#		do
+#			ctr -n k8s.io images pull $value
+#		done
+#	fi
+# else
+#	echo 'ctr command line not found, skipping prefetch images'
+# fi
 
 echo "checking for applications"
 PYOS_CLUSTERIP=$(kubectl get service pyos -n abcdesktop -o jsonpath='{.spec.clusterIP}')
@@ -174,7 +174,7 @@ if [ $EXIT_CODE -eq 0 ]; then
   for d in $pods;
   do
         echo "waiting for pod/$d available";
-        kubectl -n abcdesktop wait pod/$d --for=condition=available --timeout=-1s;
+        kubectl -n abcdesktop wait pod/$d --for=condition=Ready --timeout=-1s;
   done
 else
   echo "pyos is not ready"	
