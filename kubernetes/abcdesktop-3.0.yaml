@@ -234,7 +234,7 @@ spec:
       containers:
       - name: nginx
         imagePullPolicy: Always
-        image: abcdesktopio/oc.nginx:dev
+        image: abcdesktopio/oc.nginx:3.0
         command:
             - "/usr/sbin/nginx"
         volumeMounts:
