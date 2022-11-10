@@ -22,8 +22,9 @@
 # run curl -L https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/install.sh | sh -
 #
 
-# define ABCDESKTOP_YAML path
-ABCDESKTOP_YAML=abcdesktop.yaml 
+# define YAML path
+ABCDESKTOP_YAML=abcdesktop.yaml
+PODUSER_YAML=poduser.yaml
 
 # current release
 ABCDESKTOP_RELEASE=3.0
@@ -160,6 +161,16 @@ else
    curl https://raw.githubusercontent.com/abcdesktopio/conf/main/reference/od.config.3.0 --output od.config
 fi
 
+
+echo "Downloading file poduser.yaml if need"
+# create poduser.yaml file
+if [ -f poduser.yaml ]; then
+   echo "kubernetes use local directory poduser.yaml file"
+   PODUSER_YAML=poduser.yaml
+else
+   curl https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/poduser.yaml --output poduser.yaml
+fi
+
 echo "kubectl create configmap abcdesktop-config --from-file=od.config -n abcdesktop"
 kubectl create configmap abcdesktop-config --from-file=od.config -n abcdesktop
 
@@ -172,23 +183,22 @@ else
         exit $?
 fi
 
-# ctr pull image core images
-if which ctr >/dev/null; then
-	# graphical container
-	echo "pulling images for pod user"
-	echo $ABCDESKTOP_POD_IMAGES
-	for value in $ABCDESKTOP_POD_IMAGES
-	do 
-		ctr -n k8s.io images pull $value
-	done
+echo "create a sample pod user for images pulling"
+kubectl create -f $PODUSER_YAML
+EXIT_CODE=$?
+if [ $EXIT_CODE -eq 0 ]
+then
+  	echo "kubectl create -f $PODUSER_YAML command was successful"
 else
-	echo 'ctr command line not found, skipping prefetch images'
+        echo "kubectl create -f $PODUSER_YAML failed"
+        exit $?
 fi
-
+echo "waiting for pod/anonymous-74bea267-8197-4b1d-acff-019b24e778c5 Ready"
+kubectl wait --for=condition=Ready pod/anonymous-74bea267-8197-4b1d-acff-019b24e778c5  -n abcdesktop --timeout=-1s
+kubectl delete -f $PODUSER_YAML
 
 echo "kubectl create -f $ABCDESKTOP_YAML"
 kubectl create -f $ABCDESKTOP_YAML
-
 EXIT_CODE=$?
 if [ $EXIT_CODE -eq 0 ]; then
         echo "kubectl create -f $ABCDESKTOP_YAML command was successful"
