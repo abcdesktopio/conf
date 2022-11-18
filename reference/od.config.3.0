@@ -415,7 +415,7 @@ desktop.pod : {
                     'acl':   { 'permit': [ 'all' ] },
                     'resources': { 'requests': { 'memory': "32Mi",    'cpu': "100m" },  'limits'  : { 'memory': "128Mi",  'cpu': "250m"  } }
     },
-    'sound':      { 'image': 'abcdesktopio/oc.pulseaudio.18.04:3.0',
+    'sound':      { 'image': 'abcdesktopio/oc.pulseaudio.22.04:3.0',
                     'imagePullPolicy': 'IfNotPresent',
                     'enable': False,
                     'tcpport': 4714,
