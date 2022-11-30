@@ -1,4 +1,6 @@
-echo "starting abcdesktop uninstall commands"
+#!/bin/bash
+START=$EPOCHSECONDS
+echo "starting abcdesktop uninstall commands start at $START epoch seconds"
 echo "stop and remove abcdesktop user pods"
 kubectl delete pods --selector="type=x11server" -n abcdesktop
 echo "remove all services, pods"
@@ -13,4 +15,5 @@ echo "remove all pv"
 kubectl delete pv --all -n abcdesktop  2>/dev/null
 echo "remove namespace"
 kubectl delete namespace abcdesktop
-echo "abcdesktop is uninstalled"
+TIMEDIFF=$(($EPOCHSECONDS - $START))
+echo "abcdesktop is uninstalled, in $TIMEDIFF seconds"
