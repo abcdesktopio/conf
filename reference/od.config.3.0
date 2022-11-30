@@ -489,15 +489,6 @@ desktop.application_config : {
   'cpu_period'    : 200000,
   'cpu_quota'     : 200000 }
 
-desktop.host_config : { 
-  'auto_remove'   : True,
-  'pid_mode'      : True,
-  'network_mode'  : 'container',
-  'mem_limit'     : '8G',
-  'secrets_requirement' : [ 'abcdesktop/vnc', 'abcdesktop/kerberos' ]
-}
-
-
 #
 # desktop.defaultbackgroundcolors
 # list of string color 
