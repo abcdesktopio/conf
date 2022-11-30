@@ -83,9 +83,9 @@ server.default.ipaddr: '127.0.0.1'
 # JWT Token for /API URL
 # exp : time in seconds, None for unlimited
 jwt_token_user : {
-      'exp': 360,
-      'jwtuserprivatekeyfile': '/config.usersigning/abcdesktop_jwt_user_signing_private_key.pem',
-      'jwtuserpublickeyfile' : '/config.usersigning/abcdesktop_jwt_user_signing_public_key.pem' }
+  'exp': 360,
+  'jwtuserprivatekeyfile': '/config.usersigning/abcdesktop_jwt_user_signing_private_key.pem',
+  'jwtuserpublickeyfile' : '/config.usersigning/abcdesktop_jwt_user_signing_public_key.pem' }
 
 
 #
@@ -108,10 +108,10 @@ jwt_token_user : {
 # ! you have to copy the key file to nginx container image
 #
 jwt_token_desktop : {
-      'exp': 420,
-      'jwtdesktopprivatekeyfile':     '/config.signing/abcdesktop_jwt_desktop_signing_private_key.pem',
-      'jwtdesktoppublickeyfile' :     '/config.signing/abcdesktop_jwt_desktop_signing_public_key.pem',
-      'payloaddesktoppublickeyfile' : '/config.payload/abcdesktop_jwt_desktop_payload_public_key.pem' }
+  'exp': 420,
+  'jwtdesktopprivatekeyfile':     '/config.signing/abcdesktop_jwt_desktop_signing_private_key.pem',
+  'jwtdesktoppublickeyfile' :     '/config.signing/abcdesktop_jwt_desktop_signing_public_key.pem',
+  'payloaddesktoppublickeyfile' : '/config.payload/abcdesktop_jwt_desktop_payload_public_key.pem' }
 
 # END OF JWT SECTION #
 
@@ -355,99 +355,110 @@ webrtc.enable : False
 desktop.release : '3.0'
 
 desktop.pod : { 
-    'graphical' : { 'image': { 'default': 'abcdesktopio/oc.user.kubernetes.18.04:3.0' },
-                    'imagePullPolicy':  'IfNotPresent',
-                    'enable': True,
-                    'acl':  { 'permit': [ 'all' ] },
-                    'waitportbin' : '/composer/node/wait-port/node_modules/.bin/wait-port',
-                    'resources': { 
-			'requests': { 'memory': "320Mi", 'cpu': "250m"  }, 
-			'limits'  : { 'memory': "1Gi",   'cpu': "1000m" } },
-                    'securityContext': { 
-			'readOnlyRootFilesystem':   True, 
-			'allowPrivilegeEscalation': True, 
-			'runAsUser':  		    '{{ uidNumber }}',
-			'runAsGroup': 		    '{{ gidNumber }}' },
-                    'shareProcessNamespace': True,
-                    'tcpport': 6081,
-                    'secrets_requirement' : [ 'abcdesktop/vnc', 'abcdesktop/kerberos']
+  'spec' : {
+    'shareProcessNamespace': True,
+    'shareProcessMemory': True,
+    'shareProcessMemorySize': '256Mi',
+    'securityContext': { 
+      'supplementalGroups': '{{ supplementalGroups }}',
+      'runAsUser': '{{ uidNumber }}',
+      'runAsGroup': '{{ gidNumber }}',
+      'readOnlyRootFilesystem': False, 
+      'allowPrivilegeEscalation': True
+    }
+  },  
+  'graphical' : { 
+    'image': { 'default': 'abcdesktopio/oc.user.kubernetes.18.04:3.0' },
+    'imagePullPolicy':  'IfNotPresent',
+    'enable': True,
+    'acl':  { 'permit': [ 'all' ] },
+    'waitportbin' : '/composer/node/wait-port/node_modules/.bin/wait-port',
+    'resources': { 
+      'requests': { 'memory': "320Mi", 'cpu': "250m"  },
+      'limits'  : { 'memory': "1Gi",   'cpu': "1000m" } 
     },
-    'spawner' :    { 'enable': True,
-                     'tcpport': 29786,
-                     'waitportbin' : '/composer/node/wait-port/node_modules/.bin/wait-port',
-                     'acl':  { 'permit': [ 'all' ] } 
+    'shareProcessNamespace': True,
+    'tcpport': 6081,
+    'secrets_requirement' : [ 'abcdesktop/vnc', 'abcdesktop/kerberos']
+  },
+  'spawner' : { 
+    'enable': True,
+    'tcpport': 29786,
+    'waitportbin' : '/composer/node/wait-port/node_modules/.bin/wait-port',
+    'acl':  { 'permit': [ 'all' ] } 
+  },
+  'broadcast' : { 
+    'enable': True,
+    'tcpport': 29784,
+    'acl':  { 'permit': [ 'all' ] } 
+  },
+  'webshell' : { 
+    'enable': True,
+    'tcpport': 29781,
+    'acl':  { 'permit': [ 'all' ] } 
+  },
+  'printer' : { 
+    'image': 'abcdesktopio/oc.cupsd.18.04:3.0',
+    'imagePullPolicy': 'IfNotPresent',
+    'enable': True,
+    'tcpport': 681,
+    'securityContext': { 'runAsUser': 0 },
+    'resources': { 
+      'requests': { 'memory': "64Mi", 'cpu': "125m" },  
+      'limits'  : { 'memory': "512Mi",  'cpu': "500m" } 
     },
-    'broadcast' :  { 'enable': True,
-                     'tcpport': 29784,
-                     'acl':  { 'permit': [ 'all' ] } 
+    'acl':  { 'permit': [ 'all' ] } 
+  },
+  'printerfile' : { 
+    'enable': True,
+    'tcpport': 29782,
+    'acl':  { 'permit': [ 'all' ] } 
+  },
+  'filer' : { 
+    'image': 'abcdesktopio/oc.filer:3.0',
+    'imagePullPolicy':  'IfNotPresent',
+    'enable': True,
+    'tcpport': 29783,
+    'acl':  { 'permit': [ 'all' ] } 
     },
-    'webshell' :   { 'enable': True,
-                     'tcpport': 29781,
-                     'acl':  { 'permit': [ 'all' ] } 
-    },
-    'printer' :   { 'image': 'abcdesktopio/oc.cupsd.18.04:3.0',
-                    'imagePullPolicy': 'IfNotPresent',
-                    'enable': True,
-                    'tcpport': 681,
-                    'securityContext': { 'runAsUser': 0 },
-                    'resources': { 'requests': { 'memory': "64Mi",    'cpu': "125m" },  'limits'  : { 'memory': "512Mi",  'cpu': "500m"  } },
-                    'acl':  { 'permit': [ 'all' ] } 
-    },
-    'printerfile' :{ 'enable': True,
-                     'tcpport': 29782,
-                     'acl':  { 'permit': [ 'all' ] } 
-    },
-    'filer' :     { 'image': 'abcdesktopio/oc.filer:3.0',
-                    'imagePullPolicy':  'IfNotPresent',
-                    'enable': True,
-                    'tcpport': 29783,
-                    'securityContext': { 
-			'runAsUser':   '{{ uidNumber }}',
-                        'runAsGroup':  '{{ gidNumber }}' },
-                    'acl':  { 'permit': [ 'all' ] } 
-    },
-    'storage' :   { 'image': 'k8s.gcr.io/pause:3.8',
-                    'imagePullPolicy':  'IfNotPresent',
-                    'enable': True,
-                    'securityContext': {  
-			'runAsUser': 	'{{ uidNumber }}',
-                        'runAsGroup':	'{{ gidNumber }}' },
-                    'acl':   { 'permit': [ 'all' ] },
-                    'resources': { 'requests': { 'memory': "32Mi",    'cpu': "100m" },  'limits'  : { 'memory': "128Mi",  'cpu': "250m"  } }
-    },
-    'sound':      { 'image': 'abcdesktopio/oc.pulseaudio.22.04:3.0',
-                    'imagePullPolicy': 'IfNotPresent',
-                    'enable': False,
-                    'tcpport': 4714,
-                    'securityContext': {  
-			'runAsUser': 	'{{ uidNumber }}',
-                        'runAsGroup':	'{{ gidNumber }}' },
-                    'acl':  { 'permit': [ 'all' ] },
-                    'resources': { 'requests': { 'memory': "8Mi",     'cpu': "50m"  },  'limits'  : { 'memory': "64Mi",   'cpu': "250m"  } } 
-    },
-    'init':       { 'image': 'busybox',
-                    'enable': True,
-                    'imagePullPolicy':  'IfNotPresent',
-                    'securityContext': {  'runAsUser': 0 },
-                    'acl':  { 'permit': [ 'all' ] },
-                    'command':  [ 'sh', '-c',  'chown {{ uidNumber }}:{{ gidNumber }} /home/balloon' ] 
-    },
-    'ephemeral_container': {
-                    'enable': True,
-                    'securityContext': { 
-                        'runAsUser':   '{{ uidNumber }}', 
-                        'runAsGroup':  '{{ gidNumber }}' 
-                    },
-                    'acl':  { 'permit': [ 'all' ] }
-    },
-    'pod_application' : {
-                    'enable': True,
-                    # 'imagePullSecrets': [ { 'name': name_of_secret } ]
-                    'securityContext': {
-                        'runAsUser':   '{{ uidNumber }}',
-                        'runAsGroup':  '{{ gidNumber }}'
-                    },
-                    'acl':  { 'permit': [ 'all' ] } } }
+  'storage' : { 
+    'image': 'k8s.gcr.io/pause:3.8',
+    'imagePullPolicy':  'IfNotPresent',
+    'enable': True,
+    'acl': { 'permit': [ 'all' ] },
+    'resources': { 
+      'requests': { 'memory': "32Mi",  'cpu': "100m" },  
+      'limits'  : { 'memory': "128Mi", 'cpu': "250m" } 
+    }
+  },
+  'sound': { 
+    'image': 'abcdesktopio/oc.pulseaudio.22.04:3.0',
+    'imagePullPolicy': 'IfNotPresent',
+    'enable': False,
+    'tcpport': 4714,
+    'acl':  { 'permit': [ 'all' ] },
+    'resources': { 
+      'requests': { 'memory': "8Mi",  'cpu': "50m"  },  
+      'limits'  : { 'memory': "64Mi", 'cpu': "250m" } 
+    } 
+  },
+  'init': { 
+    'image': 'busybox',
+    'enable': True,
+    # 'imagePullSecrets': [ { 'name': name_of_secret } ]
+    'imagePullPolicy': 'IfNotPresent',
+    'securityContext': { 'runAsUser': 0 },
+    'acl':  { 'permit': [ 'all' ] },
+    'command':  [ 'sh', '-c',  'chmod 750 ~ && chown {{ uidNumber }}:{{ gidNumber }} ~' ] 
+  },
+  'ephemeral_container': {
+    'enable': True,
+    'acl':  { 'permit': [ 'all' ] }
+  },
+  'pod_application' : {
+    'enable': True,
+    # 'imagePullSecrets': [ { 'name': name_of_secret } ]
+    'acl':  { 'permit': [ 'all' ] } } }
 
 desktop.policies: { 'rules': { } }
 
@@ -471,19 +482,20 @@ desktop.hostPathRoot: '/tmp'
 #    128974848, 129e6, 129M, 123Mi
 
 desktop.application_config : {      
-                        'auto_remove'   : False,
-                        'network_mode'  : 'container',
-                        'shm_size'      : '2g',
-                        'mem_limit'     : '2g',
-                        'cpu_period'    : 200000,
-                        'cpu_quota'     : 200000 }
+  'auto_remove'   : False,
+  'network_mode'  : 'container',
+  'shm_size'      : '2g',
+  'mem_limit'     : '2g',
+  'cpu_period'    : 200000,
+  'cpu_quota'     : 200000 }
 
-desktop.host_config : { 'auto_remove'   : True,
-                        'pid_mode'      : True,
-                        'network_mode'  : 'container',
-                        'mem_limit'     : '8G',
-                        'secrets_requirement' : [ 'abcdesktop/vnc', 'abcdesktop/kerberos' ]
-                      }
+desktop.host_config : { 
+  'auto_remove'   : True,
+  'pid_mode'      : True,
+  'network_mode'  : 'container',
+  'mem_limit'     : '8G',
+  'secrets_requirement' : [ 'abcdesktop/vnc', 'abcdesktop/kerberos' ]
+}
 
 
 #
@@ -549,28 +561,30 @@ desktop.userhomedirectory : '/home/balloon'
 # 'webshell'    :  HTML 5, terminal application based on xterm.js
 # The values are parsed by javascript front  
 # 
-dock : {  'terminal': { 'args': '',
-                        'acl': { 'permit': [ 'all' ] },
-                        'name': u'TerminalBuiltin',
-                        'keyword': u'terminal,shell,bash,builtin,pantheon',
-                        'launch': u'qterminal.qterminal',
-                        'displayname': u'Terminal Builtin',
-                        'execmode': u'builtin',
-                        'cat': u'utilities,development',
-                        'id': u'terminalbuiltin.d',
-                        'hideindock': True,
-                        'icon': u'pantheon-terminal-builtin-icons.svg' 
-          },
-          'webshell': { 'name': u'WebShell',
-                        'acl': { 'permit': [ 'all' ] },
-                        'keyword': u'terminal,shell,webshell,bash,cmd',
-                        'launch': u'frontendjs.webshell',
-                        'displayname': u'Web Shell',
-                        'execmode': u'frontendjs',
-                        'cat': u'utilities,development',
-                        'id': u'webshell.d',
-                        'icon': u'webshell.svg'
-           } }
+dock : {  
+  'terminal': { 
+    'args': '',
+    'acl': { 'permit': [ 'all' ] },
+    'name': u'TerminalBuiltin',
+    'keyword': u'terminal,shell,bash,builtin,pantheon',
+    'launch': u'qterminal.qterminal',
+    'displayname': u'Terminal Builtin',
+    'execmode': u'builtin',
+    'cat': u'utilities,development',
+    'id': u'terminalbuiltin.d',
+    'hideindock': True,
+    'icon': u'pantheon-terminal-builtin-icons.svg' 
+  },
+  'webshell': { 
+    'name': u'WebShell',
+    'acl': { 'permit': [ 'all' ] },
+    'keyword': u'terminal,shell,webshell,bash,cmd',
+    'launch': u'frontendjs.webshell',
+    'displayname': u'Web Shell',
+    'execmode': u'frontendjs',
+    'cat': u'utilities,development',
+    'id': u'webshell.d',
+    'icon': u'webshell.svg' } }
 
 
 
