@@ -360,7 +360,7 @@ desktop.pod : {
     'shareProcessMemory': True,
     'shareProcessMemorySize': '256Mi',
     'securityContext': { 
-      'supplementalGroups': '{{ supplementalGroups }}',
+      'supplementalGroups': [ '{{ supplementalGroups }}' ] ,
       'runAsUser': '{{ uidNumber }}',
       'runAsGroup': '{{ gidNumber }}',
       'readOnlyRootFilesystem': False, 
