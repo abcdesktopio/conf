@@ -359,8 +359,8 @@ desktop.pod : {
     'shareProcessNamespace': True,
     'shareProcessMemory': True,
     'shareProcessMemorySize': '256Mi',
-    'securityContext': { 
-      'supplementalGroups': '{{ supplementalGroups }}',
+    'securityContext': {
+      'supplementalGroups': [ '{{ supplementalGroups }}' ],
       'runAsUser': '{{ uidNumber }}',
       'runAsGroup': '{{ gidNumber }}',
       'readOnlyRootFilesystem': False, 
