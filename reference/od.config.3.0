@@ -373,10 +373,10 @@ desktop.pod : {
     'enable': True,
     'acl':  { 'permit': [ 'all' ] },
     'waitportbin' : '/composer/node/wait-port/node_modules/.bin/wait-port',
-    'resources': { 
-      'requests': { 'memory': "320Mi", 'cpu': "250m"  },
-      'limits'  : { 'memory': "1Gi",   'cpu': "1000m" } 
-    },
+    # 'resources': { 
+    #   'requests': { 'memory': "320Mi", 'cpu': "250m"  },
+    #   'limits'  : { 'memory': "1Gi",   'cpu': "1000m" } 
+    # },
     'shareProcessNamespace': True,
     'tcpport': 6081,
     'secrets_requirement' : [ 'abcdesktop/vnc', 'abcdesktop/kerberos']
@@ -453,11 +453,25 @@ desktop.pod : {
   },
   'ephemeral_container': {
     'enable': True,
-    'acl':  { 'permit': [ 'all' ] }
+    'acl':  { 'permit': [ 'all' ] },
+    'securityContext': { 
+        'supplementalGroups': [ '{{ supplementalGroups }}' ] ,
+        'readOnlyRootFilesystem': False, 
+        'allowPrivilegeEscalation': True, 
+        'runAsUser':                '{{ uidNumber }}',
+        'runAsGroup':               '{{ gidNumber }}'
+    }
   },
   'pod_application' : {
     'enable': True,
     # 'imagePullSecrets': [ { 'name': name_of_secret } ]
+    'securityContext': {
+        'supplementalGroups': [ '{{ supplementalGroups }}' ] ,
+        'readOnlyRootFilesystem': False,
+        'allowPrivilegeEscalation': True,
+        'runAsUser':                '{{ uidNumber }}',
+        'runAsGroup':               '{{ gidNumber }}'
+    },
     'acl':  { 'permit': [ 'all' ] } } }
 
 desktop.policies: { 'rules': { } }
