@@ -4,7 +4,9 @@
         "RepoTags": [
             "abcdesktopio/elementary.terminal.d:3.0"
         ],
-        "RepoDigests": [],
+        "RepoDigests": [
+            "abcdesktopio/elementary.terminal.d@sha256:8925b9dad2b0bca9b4bd26de2ede2ed1bc8ecb59a67b4db9cdbe9286619bc5aa"
+        ],
         "Parent": "sha256:6145baa7fa286e1a7a72c8a58e9eb2900a4dccf7d9cf5f313c00ebc8f7b2e648",
         "Comment": "",
         "Created": "2022-11-09T09:50:21.71149456Z",

@@ -4,7 +4,9 @@
         "RepoTags": [
             "abcdesktopio/pinta.d:3.0"
         ],
-        "RepoDigests": [],
+        "RepoDigests": [
+            "abcdesktopio/pinta.d@sha256:faf03e81a9755b5f5c3ee38cdb15d13da88aace51a2543dd268db1266a7d2a22"
+        ],
         "Parent": "sha256:fe3b0ca945566dbb3436b89190eb52d03a259da7d0c4c6de54d9b24406fad497",
         "Comment": "",
         "Created": "2022-11-09T18:22:50.040242328Z",
@@ -148,7 +150,7 @@
             ]
         },
         "Metadata": {
-            "LastTagTime": "2022-11-09T19:22:50.375995065+01:00"
+            "LastTagTime": "2022-11-10T18:07:53.953790427+01:00"
         }
     }
 ]

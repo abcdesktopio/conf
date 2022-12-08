@@ -4,7 +4,9 @@
         "RepoTags": [
             "abcdesktopio/mines.d:3.0"
         ],
-        "RepoDigests": [],
+        "RepoDigests": [
+            "abcdesktopio/mines.d@sha256:477fd63b123c67158acdb8509d5bbd4eb97e7d08d46cc76af487a500988616f9"
+        ],
         "Parent": "sha256:4808da8f9fb6ffd68e6bcc579cde8f08c9b5998187d4d8c777685360d59254af",
         "Comment": "",
         "Created": "2022-11-09T18:13:10.394762339Z",
@@ -134,7 +136,7 @@
             ]
         },
         "Metadata": {
-            "LastTagTime": "2022-11-09T19:13:10.741997196+01:00"
+            "LastTagTime": "2022-11-10T18:03:52.508218731+01:00"
         }
     }
 ]

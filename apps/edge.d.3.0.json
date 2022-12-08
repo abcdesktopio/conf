@@ -4,7 +4,9 @@
         "RepoTags": [
             "abcdesktopio/edge.d:3.0"
         ],
-        "RepoDigests": [],
+        "RepoDigests": [
+            "abcdesktopio/edge.d@sha256:072a809c2c418fcaeacaaae31b2cef84fd2c800ca00de5d152ef1aa98739c3ff"
+        ],
         "Parent": "sha256:2c4152d48bec67ba7091a5beee6808a1c7a0578d16e718bf45c1c54a9667053e",
         "Comment": "",
         "Created": "2022-11-09T09:49:24.503944885Z",

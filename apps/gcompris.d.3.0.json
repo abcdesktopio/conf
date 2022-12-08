@@ -4,7 +4,9 @@
         "RepoTags": [
             "abcdesktopio/gcompris.d:3.0"
         ],
-        "RepoDigests": [],
+        "RepoDigests": [
+            "abcdesktopio/gcompris.d@sha256:0158b2fc1f8f857777bd255b1d0943b2a8a0b6fa0909db1338296ce04216e14e"
+        ],
         "Parent": "sha256:198bffe9eb3bc1fdfd7c4257c28155df877c27e1c0832d1f2131a7a2c76ba6a9",
         "Comment": "",
         "Created": "2022-11-09T10:02:42.989199968Z",

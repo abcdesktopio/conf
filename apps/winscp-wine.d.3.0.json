@@ -4,7 +4,9 @@
         "RepoTags": [
             "abcdesktopio/winscp-wine.d:3.0"
         ],
-        "RepoDigests": [],
+        "RepoDigests": [
+            "abcdesktopio/winscp-wine.d@sha256:c073bdfc3701458bea042a2931b163b3f86686cf39b0031ebbd63fffcf93b38b"
+        ],
         "Parent": "sha256:c5b6cf2d2159286910f6357c807142513ba5ee006fda3ed31253a9eaad4f1f00",
         "Comment": "",
         "Created": "2022-11-09T19:01:30.825124223Z",
@@ -167,7 +169,7 @@
             ]
         },
         "Metadata": {
-            "LastTagTime": "2022-11-09T20:01:31.175802534+01:00"
+            "LastTagTime": "2022-11-10T18:16:22.533905177+01:00"
         }
     }
 ]

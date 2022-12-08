@@ -4,7 +4,9 @@
         "RepoTags": [
             "abcdesktopio/cloudfoundry.d:3.0"
         ],
-        "RepoDigests": [],
+        "RepoDigests": [
+            "abcdesktopio/cloudfoundry.d@sha256:1349df569798f24b41d8c2b5697100e62dde3c3ac090a50d5cac3b7388452ab4"
+        ],
         "Parent": "sha256:05afcf17bbf162e426c982fd224d3908a52f86807744634703ecfbf6476a6f84",
         "Comment": "",
         "Created": "2022-11-08T17:20:30.430894881Z",
@@ -157,7 +159,7 @@
             ]
         },
         "Metadata": {
-            "LastTagTime": "2022-11-09T18:46:31.652362696+01:00"
+            "LastTagTime": "2022-11-14T15:54:50.305216668+01:00"
         }
     }
 ]

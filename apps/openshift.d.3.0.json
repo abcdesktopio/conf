@@ -4,7 +4,9 @@
         "RepoTags": [
             "abcdesktopio/openshift.d:3.0"
         ],
-        "RepoDigests": [],
+        "RepoDigests": [
+            "abcdesktopio/openshift.d@sha256:83e142e2c2f5e3be182bf44ad73b7f9aafb839c26ab67ce0669a213b16ea4b48"
+        ],
         "Parent": "sha256:a2fe3b1bdb8f174602c6de9bc2689e9ae7c42560e28fca3a9c06703897c507e6",
         "Comment": "",
         "Created": "2022-11-08T17:28:55.811736819Z",
@@ -159,7 +161,7 @@
             ]
         },
         "Metadata": {
-            "LastTagTime": "2022-11-09T19:21:04.78075934+01:00"
+            "LastTagTime": "2022-11-10T18:07:49.328873451+01:00"
         }
     }
 ]

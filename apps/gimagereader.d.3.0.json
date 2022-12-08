@@ -4,7 +4,9 @@
         "RepoTags": [
             "abcdesktopio/gimagereader.d:3.0"
         ],
-        "RepoDigests": [],
+        "RepoDigests": [
+            "abcdesktopio/gimagereader.d@sha256:21f31944ef89b0d2c9feb413f9f2e4a3cf5da1eaa74907975795bf1d4580443b"
+        ],
         "Parent": "sha256:50bf23528ac94d7e5d90c4c0fcc1abf3a57773bb70dadf66e9104c53da39c8bd",
         "Comment": "",
         "Created": "2022-11-08T17:24:27.00951373Z",
@@ -159,7 +161,7 @@
             ]
         },
         "Metadata": {
-            "LastTagTime": "2022-11-09T18:52:24.570166628+01:00"
+            "LastTagTime": "2022-11-14T15:56:40.648211501+01:00"
         }
     }
 ]

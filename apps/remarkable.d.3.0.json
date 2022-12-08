@@ -4,7 +4,9 @@
         "RepoTags": [
             "abcdesktopio/remarkable.d:3.0"
         ],
-        "RepoDigests": [],
+        "RepoDigests": [
+            "abcdesktopio/remarkable.d@sha256:d791742d20594a797d666ce272e95704fd90ab2061c202b12b973a1c68e0a290"
+        ],
         "Parent": "sha256:d9c65bdb1774337bb8af71986a00e5c47e4683eb90f199df30924394b175c62a",
         "Comment": "",
         "Created": "2022-11-09T10:45:21.999513124Z",
