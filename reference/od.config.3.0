@@ -529,7 +529,7 @@ desktop.defaultbackgroundcolors : [ '#6EC6F0', '#333333', '#666666', '#CD3C14', 
 # desktop.envlocal contains a (key,value) added by default as environment variables to oc.user.
 # Only static variables are defined here.
 # Dynamics values are set by python code 
-desktop.envlocal: { 'DISPLAY': ':0.0', 'SET_DEFAULT_WALLPAPER': 'welcometoabcdesktop.png' }
+desktop.envlocal: { 'DISPLAY': ':0.0', 'SET_DEFAULT_WALLPAPER':'welcometoabcdesktop.png', 'LIBOVERLAY_SCROLLBAR':'0', 'UBUNTU_MENUPROXY':'0', 'X11LISTEN':'tcp' }
 
 desktop.removehomedirectory : False
 
