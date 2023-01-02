@@ -171,7 +171,8 @@ if [ $EXIT_CODE -eq 0 ]; then
   echo 'Please wait for pull-* pod ready'
   kubectl get pods -n abcdesktop
   pods=$(kubectl -n abcdesktop get pods --selector=type=pod_application_pull --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-  echo "list of created pods for pulling is \n$pods"
+  echo "list of created pods for pulling is: "
+  echo "$pods"
   echo "waiting for all pods condition Ready. timeout=-1s (it will take a while)"
   kubectl wait --for=condition=Ready pods --selector=type=pod_application_pull --timeout=-1s -n abcdesktop
 else
