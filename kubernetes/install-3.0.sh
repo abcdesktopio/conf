@@ -226,4 +226,6 @@ kubectl get pods --namespace=abcdesktop
 echo "Setup done"
 
 echo "Open your navigator to http://[your-ip-hostname]:30443/"
-echo "For example http://localhost:30443"
+ABCDESKTOP_SRV=$(hostname -I | cut -d' ' -f1)
+echo "and replace [your-ip-hostname] by your default server ip address"
+echo "For example http://$ABCDESKTOP_SRV:30443"
