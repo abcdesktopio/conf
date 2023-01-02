@@ -48,7 +48,7 @@ REGISTRY_DOCKERHUB="docker.io/abcdesktopio"
 URL_APPLICATION_CONF_SOURCE="https://raw.githubusercontent.com/abcdesktopio/conf/main/apps"
 # list of json default applications to prefetch
 ABCDESKTOP_JSON_APPLICATIONS="
-2048.d.$ABCDESKTOP_RELEASE.json
+2048-alpine.d.$ABCDESKTOP_RELEASE.json
 xterm.d.$ABCDESKTOP_RELEASE.json
 writer.d.$ABCDESKTOP_RELEASE.json
 calc.d.$ABCDESKTOP_RELEASE.json
