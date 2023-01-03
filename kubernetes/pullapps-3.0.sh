@@ -45,7 +45,7 @@ REGISTRY_DOCKERHUB="docker.io/abcdesktopio"
 # $REGISTRY_DOCKERHUB/firefox.d:$ABCDESKTOP_RELEASE 
 # $REGISTRY_DOCKERHUB/gimp.d:$ABCDESKTOP_RELEASE"
 
-URL_APPLICATION_CONF_SOURCE="https://raw.githubusercontent.com/abcdesktopio/conf/main/apps"
+URL_APPLICATION_CONF_SOURCE="https://raw.githubusercontent.com/abcdesktopio/oc.apps/main"
 # list of json default applications to prefetch
 ABCDESKTOP_JSON_APPLICATIONS="
 2048-alpine.d.$ABCDESKTOP_RELEASE.json
