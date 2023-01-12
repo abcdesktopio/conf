@@ -54,6 +54,7 @@ writer.d.$ABCDESKTOP_RELEASE.json
 firefox.d.$ABCDESKTOP_RELEASE.json
 gimp.d.$ABCDESKTOP_RELEASE.json
 nautilus.d.$ABCDESKTOP_RELEASE.json
+geany.d.$ABCDESKTOP_RELEASE.json
 "
 
 
