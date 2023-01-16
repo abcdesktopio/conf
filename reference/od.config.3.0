@@ -429,7 +429,7 @@ desktop.pod : {
     }
   },
   'sound': { 
-    'image': 'abcdesktopio/oc.pulseaudio.22.04:3.0',
+    'image': 'abcdesktopio/oc.pulseaudio.18.04:3.0',
     'imagePullPolicy': 'IfNotPresent',
     'enable': False,
     'tcpport': 4714,
