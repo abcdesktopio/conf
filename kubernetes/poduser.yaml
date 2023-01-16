@@ -293,7 +293,7 @@
     ],
     "containers": [
       {
-        "imagePullPolicy": "IfNotPresent",
+        "imagePullPolicy": "Always",
         "image": "abcdesktopio/oc.user.kubernetes.18.04:3.0",
         "name": "x-758b58db-7dcc-47d1-b95e-4f18bee61f68-74bea267-8197-4b1d-acff",
         "args": [],
@@ -519,7 +519,7 @@
       },
       {
         "name": "c-758b58db-7dcc-47d1-b95e-4f18bee61f68-74bea267-8197-4b1d-acff",
-        "imagePullPolicy": "IfNotPresent",
+        "imagePullPolicy": "Always",
         "image": "abcdesktopio/oc.cupsd.18.04:3.0",
         "env": [
           {
@@ -705,7 +705,7 @@
       },
       {
         "name": "f-758b58db-7dcc-47d1-b95e-4f18bee61f68-74bea267-8197-4b1d-acff",
-        "imagePullPolicy": "IfNotPresent",
+        "imagePullPolicy": "Always",
         "image": "abcdesktopio/oc.filer:3.0",
         "env": [
           {
