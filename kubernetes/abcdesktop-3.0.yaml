@@ -77,6 +77,78 @@ volumeBindingMode: Immediate
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  namespace: abcdesktop
+  name: configmap-mongodb-scripts
+data:
+  ensure-users.js: |
+    const targetDbList = cat('/etc/abcdesktop/MONGO_DBS_LIST');
+    const rootUser = cat('/etc/abcdesktop/admin/MONGO_ROOT_USERNAME');
+    const rootPass = cat('/etc/abcdesktop/admin/MONGO_ROOT_PASSWORD');
+    const usersStr = cat('/etc/abcdesktop/MONGO_USERS_LIST');
+
+    // auth against admin
+    const adminDb = db.getSiblingDB('admin');
+    adminDb.auth(rootUser, rootPass);
+    print('Successfully authenticated admin user');
+
+    print( 'List of database' );
+    print(targetDbList );
+    const targetDbs=targetDbList.split(',');
+
+    for (targetDbStr of targetDbs) {
+      print ( 'use ' + targetDbStr );
+      // we'll create the users here
+      const targetDb = db.getSiblingDB(targetDbStr);
+      // user-defined roles should be stored in the admin db
+      const customRoles = adminDb
+        .getRoles({rolesInfo: 1, showBuiltinRoles: false})
+        .map(role => role.role)
+        .filter(Boolean);
+
+      // parse the list of users, and create each user as needed
+      usersStr
+        .trim()
+        .split(';')
+        .map(s => s.split(':'))
+        .forEach(user => {
+          const username = user[0];
+          const rolesStr = user[1];
+          const password = user[2];
+
+          if (!rolesStr || !password) {
+            return;
+          }
+
+          const roles = rolesStr.split(',');
+          const userDoc = {
+            user: username,
+            pwd: password,
+          };
+
+          userDoc.roles = roles.map(role => {
+            if (!~customRoles.indexOf(role)) {
+              // is this a user defined role?
+              return role; // no, it is built-in, just use the role name
+            }
+            return {role: role, db: 'admin'}; // yes, user-defined, specify the long format
+          });
+
+          try {
+            targetDb.createUser(userDoc);
+          } catch (err) {
+            print( err );
+            if (!~err.message.toLowerCase().indexOf('duplicate')) {
+              // if not a duplicate user
+              throw err; // rethrow
+            }
+          }
+        }
+      );
+    }
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
   name: nginx-config
   namespace: abcdesktop
 data:
@@ -125,6 +197,85 @@ data:
         include route.conf;
     }
 ---
+apiVersion: v1
+kind: Secret
+metadata:
+  namespace: abcdesktop
+  name: secret-mongodb
+type: Opaque
+stringData:
+  MONGO_ROOT_USERNAME: 'root'
+  MONGO_ROOT_PASSWORD: 'Oge5iQw9dGBvRDd'
+  MONGO_USERNAME: 'pyos'
+  MONGO_PASSWORD: 'Az4MeYWUjZDg4Zjhk'
+  MONGO_USERS_LIST: 'pyos:readWrite:Az4MeYWUjZDg4Zjhk'
+  MONGO_DBS_LIST: 'image,fail2ban,loginHistory,applications'
+  MONGODB_URL: 'mongodb://pyos:Az4MeYWUjZDg4Zjhk@mongodb.abcdesktop.svc.cluster.local'
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb-od
+  namespace: abcdesktop
+  labels:
+    run: mongodb-od
+    type: database
+spec:
+  selector:
+    matchLabels:
+      run: mongodb-od
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: mongodb-od
+        type: database
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo:4.4
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME_FILE
+          value: /etc/abcdesktop/admin/MONGO_ROOT_USERNAME
+        - name: MONGO_INITDB_ROOT_PASSWORD_FILE
+          value: /etc/abcdesktop/admin/MONGO_ROOT_PASSWORD
+        volumeMounts:
+        - name: abcdesktop
+          mountPath: /etc/abcdesktop
+          readOnly: true
+        - name: mongodb-scripts
+          mountPath: /docker-entrypoint-initdb.d
+          readOnly: true
+      volumes:
+         - name: abcdesktop
+           secret:
+             secretName: secret-mongodb
+             items:
+             - key: MONGO_ROOT_USERNAME
+               path: admin/MONGO_ROOT_USERNAME
+               mode: 0444
+             - key: MONGO_ROOT_PASSWORD
+               path: admin/MONGO_ROOT_PASSWORD
+               mode: 0444
+             - key: MONGO_USERNAME
+               path: MONGO_USERNAME
+               mode: 0444
+             - key: MONGO_PASSWORD
+               path: MONGO_PASSWORD
+               mode: 0444
+             - key: MONGO_USERS_LIST
+               path: MONGO_USERS_LIST
+               mode: 0444
+             - key: MONGO_DBS_LIST
+               path: MONGO_DBS_LIST
+               mode: 0444
+         - name: mongodb-scripts
+           configMap:
+             name: configmap-mongodb-scripts 
+             items:
+             - key: ensure-users.js
+               path: ensure-users.js
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -146,64 +297,6 @@ spec:
         image: memcached 
         ports:
           - containerPort: 11211
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: mongodb-secret
-  namespace: abcdesktop
-type: Opaque
-stringData:
-  mongo_initdb_root_username: 'root'
-  mongo_initdb_root_password: 'Oge5iQw9dGBvRDd'
-  mongo_pyos_username: 'pyos'
-  mongo_pyos_password: 'Az4MeYWUjZDg4Zjhk'
-  mongodb_url: 'mongodb://pyos:Az4MeYWUjZDg4Zjhk@mongodb.abcdesktop.svc.cluster.local:27017/?authSource=admin'
-
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: mongodb-od
-  namespace: abcdesktop
-spec:
-  selector:
-    matchLabels:
-      run: mongodb-od
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        run: mongodb-od
-        type: database
-    spec:
-      containers:
-      - name: mongodb
-        image: abcdesktopio/oc.mongo:3.preview
-        ports:
-         - containerPort: 27017   
-        env:
-          # provide your credentials here
-          - name: MONGO_INITDB_ROOT_USERNAME
-            valueFrom:
-              secretKeyRef:
-                name: mongodb-secret
-                key: mongo_initdb_root_username
-          - name: MONGO_INITDB_ROOT_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: mongodb-secret
-                key: mongo_initdb_root_password
-          - name: MONGO_PYOS_USERNAME
-            valueFrom:
-              secretKeyRef:
-                name: mongodb-secret
-                key: mongo_pyos_username
-          - name: MONGO_PYOS_PASSWORD 
-            valueFrom:
-              secretKeyRef:
-                name: mongodb-secret
-                key: mongo_pyos_password
 ---
 apiVersion: apps/v1
 kind: DaemonSet
@@ -323,7 +416,7 @@ spec:
     spec:
       containers:
       - name: speedtest
-        image: abcdesktopio/oc.speedtest:3.preview
+        image: abcdesktopio/oc.speedtest:3.0
         ports:
           - containerPort: 80
 ---
@@ -417,8 +510,8 @@ spec:
           - name: MONGODB_URL
             valueFrom:
               secretKeyRef:
-                name: mongodb-secret
-                key: mongodb_url
+                name: secret-mongodb
+                key: MONGODB_URL
       volumes:
         - name: jwtusersigningkeys
           secret:
