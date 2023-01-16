@@ -327,12 +327,9 @@ ldapconfig : {
 #     in kubernetes mode the build value is 'mongodb://mongodb.abcdesktop.svc.cluster.local:27017'
 # change it if you need or if you have to run od.py in developer env 
 # mongodburl: None
-#mongodburl: 'mongodb://localhost:27017'
+# mongodburl: 'mongodb://localhost:27017'
 # mongodburl: 'mongodb://pyos:Az4MeYWUjZDg4Zjhk@mongodb.abcdesktop.svc.cluster.local:32017'
-mongodburl: 'mongodb://mongodb.abcdesktop.svc.cluster.local:32017'
-# mongodburl: 'mongodb://mongodb:27017'
-# mongodburl: 'mongodb://mongodb:27017'
-# mongodburl: 'mongodb://mongodb.abcdesktop.svc.cluster.local:27017'
+# mongodburl: 'mongodb://mongodb.abcdesktop.svc.cluster.local:32017'
 # END OF MONGO SECTION
 
 
