@@ -151,21 +151,23 @@ PYOS_CLUSTERIP=$(kubectl get service pyos -n abcdesktop -o jsonpath='{.spec.clus
 echo "PYOS_CLUSTERIP=$PYOS_CLUSTERIP"
 
 # define service URL
-PYOS_MANAGEMENT_SERVICE_URL="http://$PYOS_CLUSTERIP:8000/API/manager/image"
-PYOS_HEALTZ_SERVICE_URL="http://$PYOS_CLUSTERIP:8000/healtz"
+PYOS_MANAGEMENT_SERVICE_URL=":30443/API/manager/image"
+ABCDESKTOP_SERVICES=$(kubectl get pods --selector=name=daemonset-nginxpods -o jsonpath={.items..status.hostIP} -n abcdesktop)
 
 # call HEALTZ
-echo "query to curl $PYOS_HEALTZ_SERVICE_URL"
-curl $PYOS_HEALTZ_SERVICE_URL
 EXIT_CODE=$?
 if [ $EXIT_CODE -eq 0 ]; then
   echo "pyos is ready"
   echo "adding some applications to pyos repo" 
   for app in $ABCDESKTOP_JSON_APPLICATIONS
   do
-	echo "Downloading $URL_APPLICATION_CONF_SOURCE/$app"
-	echo "to register it in $PYOS_SERVICE_URL"
-	curl $URL_APPLICATION_CONF_SOURCE/$app | curl -X PUT -H 'Content-Type: text/javascript' $PYOS_MANAGEMENT_SERVICE_URL  -d @-
+        for srv in $ABCDESKTOP_SERVICES
+        do
+                URL=http://$srv$PYOS_MANAGEMENT_SERVICE_URL
+                echo "Downloading $URL_APPLICATION_CONF_SOURCE/$app to register it in $URL"
+                curl $URL_APPLICATION_CONF_SOURCE/$app | curl -X PUT -H 'Content-Type: text/javascript' $URL  -d @-
+                break
+        done
   done
   echo 'Please wait for pull-* pod ready'
   kubectl get pods -n abcdesktop
