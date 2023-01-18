@@ -525,10 +525,6 @@ spec:
         - name: volume-abcdesktop-config
           configMap:
             name: abcdesktop-config
-        - name: volumesock
-          hostPath:
-            type: Socket
-            path: /var/run/docker.sock
       dnsPolicy: ClusterFirst
 ---
 kind: Endpoints
