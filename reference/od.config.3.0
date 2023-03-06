@@ -8,7 +8,10 @@
 # To create your own config file :
 # update this file, then
 # run the kubectl create configmap command :
-# kubectl create configmap abcdesktop-config --from-file=od.config
+# to delete previous abcdesktop-config configmap
+# $ kubectl delete configmap abcdesktop-config -n abcdesktop
+# to create a abcdesktop-config configmap
+# kubectl create configmap abcdesktop-config --from-file=od.config -n abcdesktop
 #
 #######
 
