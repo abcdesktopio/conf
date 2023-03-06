@@ -365,7 +365,7 @@ desktop.pod : {
     }
   },  
   'graphical' : { 
-    'image': { 'default': 'abcdesktopio/oc.user.kubernetes.18.04:3.0' },
+    'image': { 'default': 'abcdesktopio/oc.user.ubuntu:3.0' },
     'imagePullPolicy':  'IfNotPresent',
     'enable': True,
     'acl':  { 'permit': [ 'all' ] },
@@ -395,7 +395,7 @@ desktop.pod : {
     'acl':  { 'permit': [ 'all' ] } 
   },
   'printer' : { 
-    'image': 'abcdesktopio/oc.cupsd.18.04:3.0',
+    'image': 'abcdesktopio/oc.cupsd:3.0',
     'imagePullPolicy': 'IfNotPresent',
     'enable': True,
     'tcpport': 681,
