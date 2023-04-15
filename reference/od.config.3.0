@@ -348,6 +348,38 @@ language : [  'af_ZA', 'am_ET', 'an_ES', 'ar_AE', 'ar_BH', 'ar_DZ', 'ar_EG', 'ar
 #
 webrtc.enable : False
 
+
+
+# Application execute class defined
+executeclasses : {
+  'default':{
+    'nodeSelector':None,
+    'resources':{
+      'requests':{'memory':"64Mi",'cpu':"100m"},       
+      'limits':  {'memory':"1Gi",'cpu':"1000m"}
+    }
+  },
+  'bronze':{
+    'nodeSelector':None,
+    'resources':{
+      'requests':{'memory':"64Mi",'cpu':"100m"},       
+      'limits':  {'memory':"512Mi",'cpu':"500m"}
+    }
+  },
+  'silver':{
+    'nodeSelector':None,
+    'resources':{
+      'requests':{'memory':"64Mi",'cpu':"100m"},       
+      'limits':  {'memory':"4Gi",'cpu':"1000m"}
+    }
+  },
+  'gold':{
+    'nodeSelector':None,
+    'resources':{
+      'requests':{'memory':"128Mi",'cpu':"100m"},       
+      'limits':{'memory':"8Gi",'cpu':"1000m"} } } }
+
+
 # DESKTOP OPTIONS
 # describe how the user container is created
 # desktop options
