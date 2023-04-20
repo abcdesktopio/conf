@@ -209,7 +209,7 @@ stringData:
   MONGO_USERNAME: 'pyos'
   MONGO_PASSWORD: 'Az4MeYWUjZDg4Zjhk'
   MONGO_USERS_LIST: 'pyos:readWrite:Az4MeYWUjZDg4Zjhk'
-  MONGO_DBS_LIST: 'image,fail2ban,loginHistory,applications'
+  MONGO_DBS_LIST: 'image,fail2ban,loginHistory,applications,profiles'
   MONGODB_URL: 'mongodb://pyos:Az4MeYWUjZDg4Zjhk@mongodb.abcdesktop.svc.cluster.local'
 ---
 apiVersion: apps/v1
