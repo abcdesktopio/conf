@@ -3,17 +3,28 @@
 #
 # This file is a cherrypy config file
 # Global config is stored in the cherrypy.config dict
-# Syntax must be Python builtin ConfigParser 
+# Syntax must be Python builtin ConfigParser
 #
 # To create your own config file :
 # update this file, then
 # run the kubectl create configmap command :
+#
 # to delete previous abcdesktop-config configmap
-# $ kubectl delete configmap abcdesktop-config -n abcdesktop
+# kubectl delete configmap abcdesktop-config -n abcdesktop
+#
 # to create a abcdesktop-config configmap
 # kubectl create configmap abcdesktop-config --from-file=od.config -n abcdesktop
 #
+# same commands in one line
+# kubectl create -n abcdesktop configmap abcdesktop-config --from-file=od.config -o yaml --dry-run=client | kubectl replace -n abcdesktop -f -
+#
+# to restart pyos
+# kubectl delete pods -l run=pyos-od -n abcdesktop
+#
+# to detect non-ASCII characters in file 
+# perl -ne 'if (/[^[:ascii:]]/) { print $. . ": " . $_ }' od.config
 #######
+
 
 # data 
 [global]
