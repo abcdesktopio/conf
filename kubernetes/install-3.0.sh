@@ -226,7 +226,7 @@ kubectl get pods --namespace=abcdesktop
 echo "Setup done"
 
 echo "Open your navigator to http://[your-ip-hostname]:30443/"
-ABCDESKTOP_SERVICES=$(kubectl get pods --selector=name=daemonset-nginxpods -o jsonpath={.items..status.hostIP} -n abcdesktop)
+ABCDESKTOP_SERVICES=$(kubectl get pods --selector=name=nginx-od -o jsonpath={.items..status.hostIP} -n abcdesktop)
 echo "and replace [your-ip-hostname] by your default server ip address"
 echo "The abcdesktop url should be:"
 for srv in $ABCDESKTOP_SERVICES

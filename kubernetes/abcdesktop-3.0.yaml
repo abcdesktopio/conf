@@ -69,17 +69,6 @@ metadata:
   name: pyos-serviceaccount
   namespace: abcdesktop
 ---
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: storage-local-abcdesktop
-provisioner: kubernetes.io/no-provisioner
-parameters:
-  type: local
-reclaimPolicy: Retain
-allowVolumeExpansion: true
-volumeBindingMode: Immediate
----
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -305,23 +294,20 @@ spec:
           - containerPort: 11211
 ---
 apiVersion: apps/v1
-kind: DaemonSet
+kind: Deployment 
 metadata:
   namespace: abcdesktop
-  name: daemonset-nginx
+  name: nginx-od
 spec:
-  updateStrategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 1
+  replicas: 1
   selector:
     matchLabels:
-      name: daemonset-nginxpods
+      name: nginx-od
   template:
     metadata:
       namespace: abcdesktop
       labels:
-        name: daemonset-nginxpods
+        name: nginx-od
         run: nginx-od
         type: frontend
         netpol/speedtest: 'true'
@@ -427,23 +413,20 @@ spec:
           - containerPort: 80
 ---
 apiVersion: apps/v1
-kind: DaemonSet
+kind: Deployment
 metadata:
   namespace: abcdesktop
-  name: daemonset-pyos
+  name: pyos-od
 spec:
-  updateStrategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 1
+  replicas: 1
   selector:
     matchLabels:
-      name: daemonset-pyospods
+      name: pyos-od
   template:
     metadata:
       namespace: abcdesktop
       labels:
-        name: daemonset-pyospods
+        name: pyos-od
         run: pyos-od
         netpol/https: 'true'
         netpol/ldaps: 'true'
