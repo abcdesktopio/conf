@@ -152,7 +152,7 @@ echo "PYOS_CLUSTERIP=$PYOS_CLUSTERIP"
 
 # define service URL
 PYOS_MANAGEMENT_SERVICE_URL=":30443/API/manager/image"
-ABCDESKTOP_SERVICES=$(kubectl get pods --selector=name=daemonset-nginxpods -o jsonpath={.items..status.hostIP} -n abcdesktop)
+ABCDESKTOP_SERVICES=$(kubectl get pods -l run=nginx-od -o jsonpath={.items..status.hostIP} -n abcdesktop)
 
 # call HEALTZ
 EXIT_CODE=$?
@@ -179,7 +179,7 @@ if [ $EXIT_CODE -eq 0 ]; then
 else
   echo "pyos is not ready"	
   echo "Something wrong with $PYOS_HEALTZ_SERVICE_URL"
-  PYOS_POD_NAME=$(kubectl get pods --selector=name=daemonset-pyospods -o jsonpath={.items..metadata.name} -n abcdesktop)
-  echo "Look at pod $PYOS_POD_NAME log"
+  PYOS_POD_NAME=$(kubectl get pods -l run=pyos-od -o jsonpath={.items..metadata.name} -n abcdesktop)
+  echo "Somethings goes wrong with this pod $PYOS_POD_NAME"
   kubectl logs $PYOS_POD_NAME -n abcdesktop
 fi
