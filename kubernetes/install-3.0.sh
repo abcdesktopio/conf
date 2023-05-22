@@ -16,10 +16,10 @@
 # limitations under the License.
 
 #
-# This file will be fetched as: curl -L https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/install.sh | sh -
+# This file will be fetched as: curl -L https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/install-3.0.sh | sh -
 # so it should be pure bourne shell
 #
-# run curl -L https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/install.sh | sh -
+# run curl -L https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/install-3.0.sh | sh -
 #
 
 # define YAML path
@@ -86,7 +86,7 @@ if [ $EXIT_CODE -eq 0 ]
 then 
 	echo "'kubectl version' command was successful"
 else
-	echo "'kubectl version' failed"
+	echo "command 'kubectl version' failed"
 	echo "Please install kubectl command first"
 	exit $?
 fi
@@ -99,7 +99,7 @@ if [ $EXIT_CODE -eq 0 ]
 then
         echo "'openssl version' command was successful"
 else
-        echo "'openssl version' failed"
+        echo "command 'openssl version' failed"
         echo "Please install openssl command first"
         exit $?
 fi
