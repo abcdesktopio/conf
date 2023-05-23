@@ -33,12 +33,12 @@ ABCDESKTOP_RELEASE=3.0
 REGISTRY_DOCKERHUB="docker.io/abcdesktopio"
 
 # list of pod container image to prefetch
-ABCDESKTOP_POD_IMAGES="
-$REGISTRY_DOCKERHUB/oc.user.kubernetes.18.04:$ABCDESKTOP_RELEASE 
-$REGISTRY_DOCKERHUB/oc.pulseaudio.18.04:$ABCDESKTOP_RELEASE 
-$REGISTRY_DOCKERHUB/oc.cupsd.18.04:$ABCDESKTOP_RELEASE 
-docker.io/library/busybox:latest
-k8s.gcr.io/pause:3.8"
+# ABCDESKTOP_POD_IMAGES="
+# $REGISTRY_DOCKERHUB/oc.user.ubuntu:$ABCDESKTOP_RELEASE 
+# $REGISTRY_DOCKERHUB/oc.pulseaudio:$ABCDESKTOP_RELEASE 
+# $REGISTRY_DOCKERHUB/oc.cupsd:$ABCDESKTOP_RELEASE 
+# docker.io/library/busybox:latest
+# k8s.gcr.io/pause:3.8"
 
 # Determines the operating system.
 OS="$(uname)"
