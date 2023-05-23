@@ -430,6 +430,7 @@ spec:
         run: pyos-od
         netpol/https: 'true'
         netpol/ldaps: 'true'
+        netpol/auth: 'true'
         netpol/cifs: 'true'
         netpol/api: 'true'
         netpol/dns: 'true'
@@ -613,7 +614,8 @@ spec:
     metadata:
       namespace: abcdesktop
       labels:
-        run: openldap-od 
+        run: openldap-od
+        netpol/dns: 'true'
     spec:
       containers:
       - name: openldap
