@@ -512,32 +512,32 @@ desktop.pod : {
 
 desktop.policies: { 'rules': { } }
 
-# persistentVolumeClaim is not supported in relase 3.0
+# 
 # desktop.homedirectorytype: 'persistentVolumeClaim' 
-# desktop.homedirectorytype: 'hostPath' MUST BE SET TO 'hostPath'
+# desktop.homedirectorytype: 'hostPath'
 desktop.homedirectorytype: 'hostPath'
-
-# where user home dir are located
+#
+# read https://www.abcdesktop.io/3.0/config/volumes
+#
+# where user home dir are located if desktop.homedirectorytype is 'hostPath'
 # this can be /tmp for example
 # in production the recommanded value is a mount point (like nfs) 
 # set :
 # desktop.hostPathRoot: '/mnt/abcdesktop'
 desktop.hostPathRoot: '/tmp'
+# if desktop.homedirectorytype is set to persistentVolumeClaim
+# replace mystorageclass by your own storageClassName
+# 
+# desktop.homedirectorytype: 'persistentVolumeClaim'
+# desktop.persistentvolumespec: None
+# desktop.persistentvolumeclaimspec: {
+#   'storageClassName': 'mystorageclass',
+#   'resources': { 
+#.     'requests': { 'storage': '1Gi' } 
+#   },
+#   'accessModes': [ 'ReadWriteOnce' ] }
+#
 
-# for docker 
-#    Most of these options take a positive integer, followed by a suffix of b, k, m, g, to indicate bytes, kilobytes, megabytes, or gigabytes.
-# for kube
-#    You can express memory as a plain integer or as a fixed-point number using one of these suffixes: E, P, T, G, M, K. 
-#    You can also use the power-of-two equivalents: Ei, Pi, Ti, Gi, Mi, Ki. For example, the following represent roughly the same value:
-#    128974848, 129e6, 129M, 123Mi
-
-desktop.application_config : {      
-  'auto_remove'   : False,
-  'network_mode'  : 'container',
-  'shm_size'      : '2g',
-  'mem_limit'     : '2g',
-  'cpu_period'    : 200000,
-  'cpu_quota'     : 200000 }
 
 #
 # desktop.defaultbackgroundcolors
@@ -549,7 +549,7 @@ desktop.application_config : {
 # The desktop.defaultbackgroundcolors length can contain up to 8 entries. 
 desktop.defaultbackgroundcolors : [ '#6EC6F0', '#333333', '#666666', '#CD3C14', '#4BB4E6', '#50BE87', '#A885D8', '#FFB4E6' ]
 
-
+#
 # desktop.nodeselector
 # Value None or dict 
 # This option permits to assign user pods to nodes
@@ -557,8 +557,10 @@ desktop.defaultbackgroundcolors : [ '#6EC6F0', '#333333', '#666666', '#CD3C14', 
 # For the pod to be eligible to run on a node, 
 # the node must have each of the indicated key-value pairs as labels (it can have additional labels as well). 
 # The most common usage is one key-value pair.
-# { 'disktype': 'ssd' }
-# desktop.nodeselector: None
+# in cluster set label to node 
+# kubectl label node YOURNODE abcdesktoprole=worker
+# desktop.nodeselector : { 'abcdesktoprole': 'worker' }
+desktop.nodeselector: None
 
 # Add default environment vars 
 # desktop.envlocal is a dictionary. 
@@ -567,6 +569,11 @@ desktop.defaultbackgroundcolors : [ '#6EC6F0', '#333333', '#666666', '#CD3C14', 
 # Dynamics values are set by python code 
 desktop.envlocal: { 'DISPLAY': ':0.0', 'SET_DEFAULT_WALLPAPER':'welcometoabcdesktop.png', 'LIBOVERLAY_SCROLLBAR':'0', 'UBUNTU_MENUPROXY':'0', 'X11LISTEN':'tcp' }
 
+# 
+# for demo or kiosk mode
+# remove all files in user's home directory
+# add ['lifecycle'] = {   'preStop': { 'exec': { 'command': [ "/bin/bash", "-c", "rm -rf ~/{*,.*}" ] } } 
+# to the graphical container
 desktop.removehomedirectory : False
 
 #
