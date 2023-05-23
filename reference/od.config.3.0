@@ -84,14 +84,6 @@ server.socket_port: 8000
 server.default.ipaddr: '127.0.0.1'
 # END OF EXTERNAL IP ADDRESS SECTION
 
-
-# fakedns : { 'interfacename': 'eth0' } 
-
-# jira : { 'url': 'https://project.atlassian.net/',
-#         'project_id': 'projectid',
-#         'username': 'username@domain.com',
-#         'apikey' : 'apikey' } 
-
 # JWT SECTION #
 #
 # JWT Token for /API URL
@@ -405,9 +397,7 @@ desktop.pod : {
     'securityContext': {
       'supplementalGroups': [ '{{ supplementalGroups }}' ],
       'runAsUser': '{{ uidNumber }}',
-      'runAsGroup': '{{ gidNumber }}',
-      'readOnlyRootFilesystem': False, 
-      'allowPrivilegeEscalation': True
+      'runAsGroup': '{{ gidNumber }}'
     }
   },  
   'graphical' : { 
@@ -420,7 +410,10 @@ desktop.pod : {
     #   'requests': { 'memory': "320Mi", 'cpu': "250m"  },
     #   'limits'  : { 'memory': "1Gi",   'cpu': "1000m" } 
     # },
-    'shareProcessNamespace': True,
+    'securityContext': {
+      'readOnlyRootFilesystem': False, 
+      'allowPrivilegeEscalation': True
+     },
     'tcpport': 6081,
     'secrets_requirement' : [ 'abcdesktop/vnc', 'abcdesktop/kerberos']
   },
