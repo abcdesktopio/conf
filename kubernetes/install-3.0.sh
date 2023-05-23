@@ -142,8 +142,6 @@ kubectl create secret generic abcdesktopjwtdesktoppayload --from-file=abcdesktop
 kubectl create secret generic abcdesktopjwtdesktopsigning --from-file=abcdesktop_jwt_desktop_signing_private_key.pem --from-file=abcdesktop_jwt_desktop_signing_public_key.pem --namespace=abcdesktop
 kubectl create secret generic abcdesktopjwtusersigning    --from-file=abcdesktop_jwt_user_signing_private_key.pem    --from-file=abcdesktop_jwt_user_signing_public_key.pem    --namespace=abcdesktop
 
-
-
 echo "Downloading file abcdesktop.yaml if need" 
 # create abcdesktop.yaml file
 if [ -f abcdesktop.yaml ]; then
@@ -180,7 +178,6 @@ then
         echo "kubectl create configmap abcdesktop-config command was successful"
 else
         echo "kubectl create configmap abcdesktop-config failed"
-        exit $?
 fi
 
 echo "create a sample pod user for images pulling"
