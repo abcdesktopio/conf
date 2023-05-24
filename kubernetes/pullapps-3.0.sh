@@ -58,11 +58,10 @@ geany.d.$ABCDESKTOP_RELEASE.json
 "
 
 # define BASE_PORT
-BASE_PORT=16998
+BASE_PORT=30443
 INCREMENT=1
 port=$BASE_PORT
 isfree=$(netstat -taln | grep $port)
-
 while [[ -n "$isfree" ]]; do
     port=$[port+INCREMENT]
     isfree=$(netstat -taln | grep $port)
