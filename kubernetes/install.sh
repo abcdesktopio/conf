@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 #
 # Install script kubernetes for abcdesktopio
@@ -16,63 +16,37 @@
 # limitations under the License.
 
 #
-# This file will be fetched as: curl -L https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/install.sh | sh -
+# This file will be fetched as: curl -L https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/install-3.0.sh | sh -
 # so it should be pure bourne shell
 #
-# run curl -L https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/install.sh | sh -
+# run curl -L https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/install-3.0.sh | sh -
 #
 
-# define ABCDESKTOP_YAML path
-ABCDESKTOP_YAML=https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/abcdesktop.yaml 
+# define YAML path
+ABCDESKTOP_YAML=abcdesktop.yaml
+PODUSER_YAML=poduser.yaml
 
+# current release
+ABCDESKTOP_RELEASE=3.0
 
-# Determines the operating system.
-OS="$(uname)"
-if [ "x${OS}" = "xDarwin" ] ; then
-  OSEXT="osx"
-else
-  OSEXT="linux"
-fi
+# docker hub prefix
+REGISTRY_DOCKERHUB="docker.io/abcdesktopio"
 
-LOCAL_ARCH=$(uname -m)
-if [ "${TARGET_ARCH}" ]; then
-    LOCAL_ARCH=${TARGET_ARCH}
-fi
-
-case "${LOCAL_ARCH}" in 
-  x86_64)
-    ABCDESKTOPIO_ARCH=amd64
-    ;;
-  # armv8*)
-  #  ABCDESKTOPIO_ARCH=arm64
-  #  ;;
-  # aarch64*)
-  #  ABCDESKTOPIO_ARCH=arm64
-  #  ;;
-  # armv*)
-  #  ABCDESKTOPIO_ARCH=armv7
-  #  ;;
-  amd64|arm64)
-    ABCDESKTOPIO_ARCH=${LOCAL_ARCH}
-    ;;
-  *)
-    echo "This system's architecture, ${LOCAL_ARCH}, isn't supported"
-    exit 1
-    ;;
-esac
-
-echo "This system's architecture is ${ABCDESKTOPIO_ARCH}"
+# list of pod container image to prefetch
+# ABCDESKTOP_POD_IMAGES="
+# $REGISTRY_DOCKERHUB/oc.user.ubuntu:$ABCDESKTOP_RELEASE 
+# $REGISTRY_DOCKERHUB/oc.pulseaudio:$ABCDESKTOP_RELEASE 
+# $REGISTRY_DOCKERHUB/oc.cupsd:$ABCDESKTOP_RELEASE 
+# docker.io/library/busybox:latest
+# k8s.gcr.io/pause:3.8"
 
 
 # Check if kubectl command is supported
 # run command kubectl version
-KUBE_VERSION=$(kubectl version)
+KUBE_VERSION=$(kubectl version --output=yaml)
 EXIT_CODE=$?
-if [ $EXIT_CODE -eq 0 ] 
-then 
-	echo "'kubectl version' command was successful"
-else
-	echo "'kubectl version' failed"
+if [ $EXIT_CODE -ne 0 ]; then
+	echo "command 'kubectl version' failed"
 	echo "Please install kubectl command first"
 	exit $?
 fi
@@ -81,11 +55,8 @@ fi
 # run command kubectl version
 OPENSSL_VERSION=$(openssl version)
 EXIT_CODE=$?
-if [ $EXIT_CODE -eq 0 ] 
-then
-        echo "'openssl version' command was successful"
-else
-        echo "'openssl version' failed"
+if [ $EXIT_CODE -ne 0 ]; then
+        echo "command 'openssl version' failed"
         echo "Please install openssl command first"
         exit $?
 fi
@@ -93,32 +64,28 @@ fi
 # First create the abcdesktop namespace
 kubectl create namespace abcdesktop
 EXIT_CODE=$?
-if [ $EXIT_CODE -eq 0 ] 
-then
-        echo "'kubectl create namespace abcdesktop' command was successful"
+if [ $EXIT_CODE -eq 0 ]; then
+        echo "abcdesktop namespace created"
 fi
 
 
 # RSA keys
 # build rsa kay pairs for jwt payload 
 # 1024 bits is a smallest value, change here if need but use more than 1024
-if [ ! -f abcdesktop_jwt_desktop_payload_private_key.pem ]
-then
+if [ ! -f abcdesktop_jwt_desktop_payload_private_key.pem ]; then
 	openssl genrsa -out abcdesktop_jwt_desktop_payload_private_key.pem 1024
 	openssl rsa    -in  abcdesktop_jwt_desktop_payload_private_key.pem -outform PEM -pubout -out  _abcdesktop_jwt_desktop_payload_public_key.pem
 	openssl rsa    -pubin -in _abcdesktop_jwt_desktop_payload_public_key.pem -RSAPublicKey_out -out abcdesktop_jwt_desktop_payload_public_key.pem
 fi
 
 # build rsa kay pairs for the desktop jwt signing
-if [ ! -f abcdesktop_jwt_desktop_signing_private_key.pem ]
-then
+if [ ! -f abcdesktop_jwt_desktop_signing_private_key.pem ]; then
 	openssl genrsa -out abcdesktop_jwt_desktop_signing_private_key.pem 1024
 	openssl rsa    -in  abcdesktop_jwt_desktop_signing_private_key.pem -outform PEM -pubout -out abcdesktop_jwt_desktop_signing_public_key.pem
 fi
 
 # build rsa kay pairs for the user jwt signing 
-if [ ! -f abcdesktop_jwt_user_signing_private_key.pem ]
-then
+if [ ! -f abcdesktop_jwt_user_signing_private_key.pem ]; then
 	openssl genrsa -out abcdesktop_jwt_user_signing_private_key.pem 1024
 	openssl rsa    -in  abcdesktop_jwt_user_signing_private_key.pem -outform PEM -pubout -out abcdesktop_jwt_user_signing_public_key.pem
 fi
@@ -127,77 +94,67 @@ fi
 kubectl create secret generic abcdesktopjwtdesktoppayload --from-file=abcdesktop_jwt_desktop_payload_private_key.pem --from-file=abcdesktop_jwt_desktop_payload_public_key.pem --namespace=abcdesktop
 kubectl create secret generic abcdesktopjwtdesktopsigning --from-file=abcdesktop_jwt_desktop_signing_private_key.pem --from-file=abcdesktop_jwt_desktop_signing_public_key.pem --namespace=abcdesktop
 kubectl create secret generic abcdesktopjwtusersigning    --from-file=abcdesktop_jwt_user_signing_private_key.pem    --from-file=abcdesktop_jwt_user_signing_public_key.pem    --namespace=abcdesktop
-
-
-echo "####################################################################"
-echo "#"
-echo "# This script is pulling container images from docker registry"
-echo "# It's a good time for a coffee break..."
-echo "#"
-echo "####################################################################"
-
-
-
-# check if TAG env is set
-if [ -z ${TAG} ]; then
-        echo "pulling tagged image not set, use default latest"
-        TAG=1.0
-else
-        echo "pulling tagged image ${TAG}"
-fi
-
-echo "Start pulling images with tag:$TAG"
-
-# docker pull image core images
-REGISTRY_DOCKERHUB="abcdesktopio"
-# graphical container
-echo "pulling graphical container image"
-abcdesktopocuser=${OCUSERIMAGE:-oc.user.18.04:${TAG}}
-docker pull $REGISTRY_DOCKERHUB/$abcdesktopocuser
-docker tag  $REGISTRY_DOCKERHUB/$abcdesktopocuser $REGISTRY_DOCKERHUB/oc.user.18.04
-
-# printer container
-echo "pulling printer container image"
-docker pull $REGISTRY_DOCKERHUB/oc.cupsd.18.04:${TAG}
-docker tag  $REGISTRY_DOCKERHUB/oc.cupsd.18.04:${TAG} 	$REGISTRY_DOCKERHUB/oc.cupsd.18.04
-# sound container
-echo "pulling sound container image"
-docker pull $REGISTRY_DOCKERHUB/oc.pulseaudio.18.04:${TAG}
-docker tag  $REGISTRY_DOCKERHUB/oc.pulseaudio.18.04:${TAG} $REGISTRY_DOCKERHUB/oc.pulseaudio.18.04
-
-if [ -z ${NOPULLAPPS} ]; then
-	# docker pull sample applications images
-	docker pull $REGISTRY_DOCKERHUB/writer.d:${TAG}
-	docker pull $REGISTRY_DOCKERHUB/calc.d:${TAG}
-	docker pull $REGISTRY_DOCKERHUB/impress.d:${TAG}
-	docker pull $REGISTRY_DOCKERHUB/firefox.d:${TAG}
-	docker pull $REGISTRY_DOCKERHUB/gimp.d:${TAG}
-else
-	echo "do not pull images option detected"
-	echo "skipping image $REGISTRY_DOCKERHUB/writer.d:${TAG}"
-	echo "skipping image $REGISTRY_DOCKERHUB/calc.d:${TAG}"
-	echo "skipping image $REGISTRY_DOCKERHUB/impress.d:${TAG}"
-	echo "skipping image $REGISTRY_DOCKERHUB/firefox.d:${TAG}"
-	echo "skipping image $REGISTRY_DOCKERHUB/gimp.d:${TAG}"
-fi
-
-if [ "$TAG" = "dev" ]; then
-	echo 'Use TAG=dev for abcdesktop'
-	ABCDESKTOP_YAML=${ABCDESKTOP_YAML:-https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/abcdesktop-dev.yaml} 
-fi
-
-# create abcdesktop
+kubectl label  secret abcdesktopjwtdesktoppayload abcdesktop/role=desktop.payloadkeys -n abcdesktop
+kubectl label  secret abcdesktopjwtdesktopsigning abcdesktop/role=desktop.signingkeys -n abcdesktop
+kubectl label  secret abcdesktopjwtusersigning    abcdesktop/role=user.signingkeys    -n abcdesktop
+ 
+echo "Downloading file abcdesktop.yaml if need" 
+# create abcdesktop.yaml file
 if [ -f abcdesktop.yaml ]; then
    echo "kubernetes use local directory abcdesktop.yaml file"
    ABCDESKTOP_YAML=abcdesktop.yaml
+else
+   curl https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/abcdesktop-3.0.yaml --output abcdesktop.yaml
 fi
+
+echo "Downloading file od.config if need" 
+# create od.config file
+if [ -f od.config ]; then
+   echo "abcdesktop use local directory od.config file"
+else
+   curl https://raw.githubusercontent.com/abcdesktopio/conf/main/reference/od.config.3.0 --output od.config
+fi
+
+
+echo "Downloading file poduser.yaml if need"
+# create poduser.yaml file
+if [ -f poduser.yaml ]; then
+   echo "kubernetes use local directory poduser.yaml file"
+   PODUSER_YAML=poduser.yaml
+else
+   curl https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/poduser.yaml --output poduser.yaml
+fi
+
+echo "kubectl create configmap abcdesktop-config --from-file=od.config -n abcdesktop"
+kubectl create configmap abcdesktop-config --from-file=od.config -n abcdesktop
+
+EXIT_CODE=$?
+if [ $EXIT_CODE -eq 0 ]
+then
+	kubectl label configmap abcdesktop-config abcdesktop/role=pyos.config -n abcdesktop
+        echo "kubectl create configmap abcdesktop-config command was successful"
+else
+        echo "kubectl create configmap abcdesktop-config failed"
+fi
+
+echo "create a sample pod user for images pulling"
+kubectl create -f $PODUSER_YAML
+EXIT_CODE=$?
+if [ $EXIT_CODE -eq 0 ]
+then
+  	echo "kubectl create -f $PODUSER_YAML command was successful"
+else
+        echo "kubectl create -f $PODUSER_YAML failed"
+        exit $?
+fi
+echo "waiting for pod/anonymous-74bea267-8197-4b1d-acff-019b24e778c5 Ready"
+kubectl wait --for=condition=Ready pod/anonymous-74bea267-8197-4b1d-acff-019b24e778c5  -n abcdesktop --timeout=-1s
+kubectl delete -f $PODUSER_YAML
 
 echo "kubectl create -f $ABCDESKTOP_YAML"
 kubectl create -f $ABCDESKTOP_YAML
-
 EXIT_CODE=$?
-if [ $EXIT_CODE -eq 0 ] 
-then
+if [ $EXIT_CODE -eq 0 ]; then
         echo "kubectl create -f $ABCDESKTOP_YAML command was successful"
 else
         echo "kubectl create -f $ABCDESKTOP_YAML failed"
@@ -220,7 +177,15 @@ done
 
 # list all pods 
 kubectl get pods --namespace=abcdesktop
-
 echo "Setup done"
+
 echo "Open your navigator to http://[your-ip-hostname]:30443/"
-echo "For example http://localhost:30443"
+ABCDESKTOP_SERVICES=$(kubectl get pods --selector=name=nginx-od -o jsonpath={.items..status.hostIP} -n abcdesktop)
+echo "and replace [your-ip-hostname] by your default server ip address"
+echo "The abcdesktop url should be:"
+for srv in $ABCDESKTOP_SERVICES
+do
+   URL=http://$srv:30443/
+   echo "$URL"
+done
+
