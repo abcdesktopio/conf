@@ -40,52 +40,12 @@ REGISTRY_DOCKERHUB="docker.io/abcdesktopio"
 # docker.io/library/busybox:latest
 # k8s.gcr.io/pause:3.8"
 
-# Determines the operating system.
-OS="$(uname)"
-if [ "x${OS}" = "xDarwin" ] ; then
-  OSEXT="osx"
-else
-  OSEXT="linux"
-fi
-
-LOCAL_ARCH=$(uname -m)
-if [ "${TARGET_ARCH}" ]; then
-    LOCAL_ARCH=${TARGET_ARCH}
-fi
-
-case "${LOCAL_ARCH}" in 
-  x86_64)
-    ABCDESKTOP_ARCH=amd64
-    ;;
-  # armv8*)
-  #  ABCDESKTOP_ARCH=arm64
-  #  ;;
-  # aarch64*)
-  #  ABCDESKTOP_ARCH=arm64
-  #  ;;
-  # armv*)
-  #  ABCDESKTOP_ARCH=armv7
-  #  ;;
-  amd64|arm64)
-    ABCDESKTOP_ARCH=${LOCAL_ARCH}
-    ;;
-  *)
-    echo "This system's architecture, ${LOCAL_ARCH}, isn't supported"
-    exit 1
-    ;;
-esac
-
-echo "This system's architecture is ${ABCDESKTOP_ARCH}"
-
 
 # Check if kubectl command is supported
 # run command kubectl version
 KUBE_VERSION=$(kubectl version --output=yaml)
 EXIT_CODE=$?
-if [ $EXIT_CODE -eq 0 ] 
-then 
-	echo "'kubectl version' command was successful"
-else
+if [ $EXIT_CODE -ne 0 ]; then
 	echo "command 'kubectl version' failed"
 	echo "Please install kubectl command first"
 	exit $?
@@ -95,10 +55,7 @@ fi
 # run command kubectl version
 OPENSSL_VERSION=$(openssl version)
 EXIT_CODE=$?
-if [ $EXIT_CODE -eq 0 ] 
-then
-        echo "'openssl version' command was successful"
-else
+if [ $EXIT_CODE -ne 0 ]; then
         echo "command 'openssl version' failed"
         echo "Please install openssl command first"
         exit $?
@@ -107,32 +64,28 @@ fi
 # First create the abcdesktop namespace
 kubectl create namespace abcdesktop
 EXIT_CODE=$?
-if [ $EXIT_CODE -eq 0 ] 
-then
-        echo "'kubectl create namespace abcdesktop' command was successful"
+if [ $EXIT_CODE -eq 0 ]; then
+        echo "abcdesktop namespace created"
 fi
 
 
 # RSA keys
 # build rsa kay pairs for jwt payload 
 # 1024 bits is a smallest value, change here if need but use more than 1024
-if [ ! -f abcdesktop_jwt_desktop_payload_private_key.pem ]
-then
+if [ ! -f abcdesktop_jwt_desktop_payload_private_key.pem ]; then
 	openssl genrsa -out abcdesktop_jwt_desktop_payload_private_key.pem 1024
 	openssl rsa    -in  abcdesktop_jwt_desktop_payload_private_key.pem -outform PEM -pubout -out  _abcdesktop_jwt_desktop_payload_public_key.pem
 	openssl rsa    -pubin -in _abcdesktop_jwt_desktop_payload_public_key.pem -RSAPublicKey_out -out abcdesktop_jwt_desktop_payload_public_key.pem
 fi
 
 # build rsa kay pairs for the desktop jwt signing
-if [ ! -f abcdesktop_jwt_desktop_signing_private_key.pem ]
-then
+if [ ! -f abcdesktop_jwt_desktop_signing_private_key.pem ]; then
 	openssl genrsa -out abcdesktop_jwt_desktop_signing_private_key.pem 1024
 	openssl rsa    -in  abcdesktop_jwt_desktop_signing_private_key.pem -outform PEM -pubout -out abcdesktop_jwt_desktop_signing_public_key.pem
 fi
 
 # build rsa kay pairs for the user jwt signing 
-if [ ! -f abcdesktop_jwt_user_signing_private_key.pem ]
-then
+if [ ! -f abcdesktop_jwt_user_signing_private_key.pem ]; then
 	openssl genrsa -out abcdesktop_jwt_user_signing_private_key.pem 1024
 	openssl rsa    -in  abcdesktop_jwt_user_signing_private_key.pem -outform PEM -pubout -out abcdesktop_jwt_user_signing_public_key.pem
 fi
@@ -141,7 +94,10 @@ fi
 kubectl create secret generic abcdesktopjwtdesktoppayload --from-file=abcdesktop_jwt_desktop_payload_private_key.pem --from-file=abcdesktop_jwt_desktop_payload_public_key.pem --namespace=abcdesktop
 kubectl create secret generic abcdesktopjwtdesktopsigning --from-file=abcdesktop_jwt_desktop_signing_private_key.pem --from-file=abcdesktop_jwt_desktop_signing_public_key.pem --namespace=abcdesktop
 kubectl create secret generic abcdesktopjwtusersigning    --from-file=abcdesktop_jwt_user_signing_private_key.pem    --from-file=abcdesktop_jwt_user_signing_public_key.pem    --namespace=abcdesktop
-
+kubectl label  secret abcdesktopjwtdesktoppayload abcdesktop/role=desktop.payloadkeys -n abcdesktop
+kubectl label  secret abcdesktopjwtdesktopsigning abcdesktop/role=desktop.signingkeys -n abcdesktop
+kubectl label  secret abcdesktopjwtusersigning    abcdesktop/role=user.signingkeys    -n abcdesktop
+ 
 echo "Downloading file abcdesktop.yaml if need" 
 # create abcdesktop.yaml file
 if [ -f abcdesktop.yaml ]; then
@@ -175,6 +131,7 @@ kubectl create configmap abcdesktop-config --from-file=od.config -n abcdesktop
 EXIT_CODE=$?
 if [ $EXIT_CODE -eq 0 ]
 then
+	kubectl label configmap abcdesktop-config abcdesktop/role=pyos.config -n abcdesktop
         echo "kubectl create configmap abcdesktop-config command was successful"
 else
         echo "kubectl create configmap abcdesktop-config failed"
