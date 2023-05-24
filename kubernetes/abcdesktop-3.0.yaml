@@ -74,6 +74,8 @@ kind: ConfigMap
 metadata:
   namespace: abcdesktop
   name: configmap-mongodb-scripts
+  labels:
+    abcdesktop/role: mongodb-config
 data:
   ensure-users.js: |
     const targetDbList = cat('/etc/abcdesktop/MONGO_DBS_LIST');
@@ -146,6 +148,8 @@ kind: ConfigMap
 metadata:
   name: nginx-config
   namespace: abcdesktop
+  labels:
+    abcdesktop/role: nginx-config
 data:
   default: | 
     lua_package_path "/usr/local/share/lua/5.1/?.lua;;";
@@ -197,6 +201,8 @@ kind: Secret
 metadata:
   namespace: abcdesktop
   name: secret-mongodb
+  labels:
+    abcdesktop/role: secret-mongodb
 type: Opaque
 stringData:
   MONGO_ROOT_USERNAME: 'root'
@@ -215,6 +221,7 @@ metadata:
   labels:
     run: mongodb-od
     type: database
+    abcdesktop/role: mongodb
 spec:
   selector:
     matchLabels:
@@ -276,6 +283,8 @@ kind: Deployment
 metadata:
   namespace: abcdesktop
   name: memcached-od 
+  labels:
+    abcdesktop/role: memcached
 spec:
   selector:
     matchLabels:
@@ -298,6 +307,8 @@ kind: Deployment
 metadata:
   namespace: abcdesktop
   name: nginx-od
+  labels:
+    abcdesktop/role: nginx
 spec:
   replicas: 1
   selector:
@@ -394,7 +405,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   namespace: abcdesktop
-  name: speedtest-od 
+  name: speedtest-od
+  labels:
+    abcdesktop/role: speedtest
 spec:
   selector:
     matchLabels:
@@ -417,6 +430,8 @@ kind: Deployment
 metadata:
   namespace: abcdesktop
   name: pyos-od
+  labels:
+    abcdesktop/role: pyos
 spec:
   replicas: 1
   selector:
@@ -442,7 +457,7 @@ spec:
       containers:
       - name : pyos
         imagePullPolicy: Always
-        image: abcdesktopio/oc.pyos:3.0
+        image: abcdesktopio/oc.pyos:dev3.0
         command:
             - "/var/pyos/od.py"
         volumeMounts:
@@ -527,6 +542,8 @@ kind: Service
 metadata: 
   name: desktop
   namespace: abcdesktop 
+  labels:
+    abcdesktop/role: desktop
 spec: 
   clusterIP: None
   selector:
@@ -537,6 +554,8 @@ apiVersion: v1
 metadata:
   name: memcached
   namespace: abcdesktop
+  labels:
+    abcdesktop/role: memcached
 spec:
   selector:
     run: memcached-od
@@ -550,6 +569,8 @@ apiVersion: v1
 metadata:
   name: mongodb
   namespace: abcdesktop
+  labels:
+    abcdesktop/role: mongodb
 spec:
   selector:
     run: mongodb-od 
@@ -563,6 +584,8 @@ apiVersion: v1
 metadata:
   name: speedtest
   namespace: abcdesktop
+  labels:
+    abcdesktop/role: speedtest
 spec:
   selector:
     run: speedtest-od
@@ -576,6 +599,8 @@ apiVersion: v1
 metadata:
   name: nginx
   namespace: abcdesktop
+  labels:
+    abcdesktop/role: nginx
 spec:
   type: NodePort
   selector:
@@ -592,6 +617,8 @@ apiVersion: v1
 metadata:
   name: pyos
   namespace: abcdesktop
+  labels:
+    abcdesktop/role: pyos
 spec:
   selector:
     run: pyos-od
@@ -605,6 +632,8 @@ kind: Deployment
 metadata:
   namespace: abcdesktop
   name: openldap-od 
+  labels:
+    abcdesktop/role: openldap
 spec:
   selector:
     matchLabels:
@@ -629,6 +658,8 @@ apiVersion: v1
 metadata:
   name: openldap
   namespace: abcdesktop
+  labels:
+    abcdesktop/role: openldap
 spec:
   selector:
     run: openldap-od
