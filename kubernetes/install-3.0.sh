@@ -189,3 +189,18 @@ do
    echo "$URL"
 done
 
+echo "Note: if you are using docker desktop, please run the following command to reach your local nginx webserver"
+BASE_PORT=30443
+INCREMENT=1
+port=$BASE_PORT
+isfree=$(netstat -taln | grep $port)
+while [[ -n "$isfree" ]]; do
+    port=$[port+INCREMENT]
+    isfree=$(netstat -taln | grep $port)
+done
+NGINX_POD_NAME=$(kubectl get pods -l run=nginx-od -o jsonpath={.items..metadata.name} -n abcdesktop)
+echo "kubectl port-forward $NGINX_POD_NAME $port:80 -n abcdesktop"
+echo "then connect to"
+echo "http://localhost:$port/"
+
+
