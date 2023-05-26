@@ -177,8 +177,9 @@ done
 
 # list all pods 
 kubectl get pods --namespace=abcdesktop
-echo "Setup done"
-
+echo ""
+echo "Setup done !"
+echo ""
 echo "Open your navigator to http://[your-ip-hostname]:30443/"
 ABCDESKTOP_SERVICES=$(kubectl get pods --selector=name=nginx-od -o jsonpath={.items..status.hostIP} -n abcdesktop)
 echo "and replace [your-ip-hostname] by your default server ip address"
@@ -189,7 +190,12 @@ do
    echo "$URL"
 done
 
-echo "Note: if you are using docker desktop, please run the following command to reach your local nginx webserver"
+
+echo ""
+echo "######"
+echo "# If you are using a cloud provider, without a LoadBalancer service"
+echo "# If you can't reach your the abcdesktop web server, using http://localhost:30443/"
+echo "# Please run the following command to reach the abcdesktop web serser"
 BASE_PORT=30443
 INCREMENT=1
 port=$BASE_PORT
@@ -199,8 +205,12 @@ while [[ -n "$isfree" ]]; do
     isfree=$(netstat -taln | grep $port)
 done
 NGINX_POD_NAME=$(kubectl get pods -l run=nginx-od -o jsonpath={.items..metadata.name} -n abcdesktop)
-echo "kubectl port-forward $NGINX_POD_NAME $port:80 -n abcdesktop"
-echo "then connect to"
-echo "http://localhost:$port/"
+echo "kubectl port-forward $NGINX_POD_NAME --address 0.0.0.0 $port:80 -n abcdesktop"
+echo "# then connect to"
+echo "# http://localhost:$port/"
+echo "######"
+
+
+
 
 
