@@ -203,11 +203,13 @@ port=$BASE_PORT
 if ! [ -x "$(command -v netstat)" ]; then
   echo "netstat is not installed. I'm using port=$port" >&2
 else
-  isfree=$(netstat -taln | grep $port)
-  while [[ -n "$isfree" ]]; do
-    port=$[port+INCREMENT]
-    isfree=$(netstat -taln | grep $port)
-  done
+  isfree=$(netstat -taln |grep $port)
+  if [ ! -z $isfree ]; then
+    while [[ -n "$isfree" ]]; do
+      port=$[port+INCREMENT]
+      isfree=$(netstat -taln |grep $port)
+    done
+  fi
 fi
 
 NGINX_POD_NAME=$(kubectl get pods -l run=nginx-od -o jsonpath={.items..metadata.name} -n abcdesktop)
