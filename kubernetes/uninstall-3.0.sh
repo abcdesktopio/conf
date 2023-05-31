@@ -15,5 +15,8 @@ kubectl delete pvc --all -n abcdesktop 2>/dev/null
 # kubectl delete pv --all -n abcdesktop  2>/dev/null
 echo "remove namespace"
 kubectl delete namespace abcdesktop
-TIMEDIFF=$(($EPOCHSECONDS - $START))
-echo "abcdesktop is uninstalled, in $TIMEDIFF seconds"
+if [ ! -z $START ]; then
+  TIMEDIFF=$(expr $EPOCHSECONDS - $START)
+  echo "the process takes $TIMEDIFF seconds to complete"
+fi
+echo "abcdesktop is uninstalled"
