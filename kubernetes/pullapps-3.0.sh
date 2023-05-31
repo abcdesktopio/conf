@@ -57,16 +57,21 @@ nautilus.d.$ABCDESKTOP_RELEASE.json
 geany.d.$ABCDESKTOP_RELEASE.json
 "
 
-# define BASE_PORT
 BASE_PORT=30443
 INCREMENT=1
 port=$BASE_PORT
-isfree=$(netstat -taln | grep $port)
-while [[ -n "$isfree" ]]; do
-    port=$[port+INCREMENT]
-    isfree=$(netstat -taln | grep $port)
-done
-echo "Usable free tcp port: $port"
+if ! [ -x "$(command -v netstat)" ]; then
+  echo "netstat is not installed. I'm using port=$port" >&2
+else
+  isfree=$(netstat -taln |grep $port)
+  if [ ! -z "$isfree" ]; then
+    while [[ -n "$isfree" ]]; do
+      port=$[port+INCREMENT]
+      isfree=$(netstat -taln |grep $port)
+    done
+  fi
+fi
+echo "Forwarding abcdesktop service for you on port=$port"
 
 
 
