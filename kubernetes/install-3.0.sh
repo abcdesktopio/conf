@@ -199,11 +199,17 @@ echo "# Please run the following command to reach the abcdesktop web serser"
 BASE_PORT=30443
 INCREMENT=1
 port=$BASE_PORT
-isfree=$(netstat -taln | grep $port)
-while [[ -n "$isfree" ]]; do
+
+if ! [ -x "$(command -v netstat)" ]; then
+  echo "netstat is not installed. I'm using port=$port" >&2
+else
+  isfree=$(netstat -taln | grep $port)
+  while [[ -n "$isfree" ]]; do
     port=$[port+INCREMENT]
     isfree=$(netstat -taln | grep $port)
-done
+  done
+fi
+
 NGINX_POD_NAME=$(kubectl get pods -l run=nginx-od -o jsonpath={.items..metadata.name} -n abcdesktop)
 echo "kubectl port-forward $NGINX_POD_NAME --address 0.0.0.0 $port:80 -n abcdesktop"
 echo "# then connect to"
