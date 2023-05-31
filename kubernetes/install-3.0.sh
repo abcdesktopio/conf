@@ -180,31 +180,41 @@ kubectl get pods --namespace=abcdesktop
 echo ""
 echo "Setup done !"
 echo ""
-echo "Open your navigator to http://[your-ip-hostname]:30443/"
-ABCDESKTOP_SERVICES=$(kubectl get pods --selector=name=nginx-od -o jsonpath={.items..status.hostIP} -n abcdesktop)
-echo "and replace [your-ip-hostname] by your default server ip address"
-echo "The abcdesktop url should be:"
-for srv in $ABCDESKTOP_SERVICES
-do
-   URL=http://$srv:30443/
-   echo "$URL"
-done
+# echo "Open your navigator to http://[your-ip-hostname]:30443/"
+# ABCDESKTOP_SERVICES=$(kubectl get pods --selector=name=nginx-od -o jsonpath={.items..status.hostIP} -n abcdesktop)
+# echo "and replace [your-ip-hostname] by your default server ip address"
+# echo "The abcdesktop url should be:"
+# for srv in $ABCDESKTOP_SERVICES
+# do
+#    URL=http://$srv:30443/
+#    echo "$URL"
+# done
 
 
-echo ""
-echo "######"
-echo "# If you are using a cloud provider, without a LoadBalancer service"
-echo "# If you can't reach your the abcdesktop web server, using http://localhost:30443/"
-echo "# Please run the following command to reach the abcdesktop web serser"
+#
+echo "Checking the service url on http://localhost:30443" 
+# GET the abcdesktop logo
+curl --max-time 3 http://localhost:30443/img/abcdesktop.svg 2>/dev/null 1>/dev/null 
+if [ $? -eq 0 ]; then
+  echo "service status is up"
+  echo ""
+  echo "Open your navigator to http://localhost:30443/"
+  echo ""
+  exit 0
+else
+  echo "service status is down"
+fi 
+
+
+
 BASE_PORT=30443
 INCREMENT=1
 port=$BASE_PORT
-
 if ! [ -x "$(command -v netstat)" ]; then
   echo "netstat is not installed. I'm using port=$port" >&2
 else
   isfree=$(netstat -taln |grep $port)
-  if [ ! -z $isfree ]; then
+  if [ ! -z "$isfree" ]; then
     while [[ -n "$isfree" ]]; do
       port=$[port+INCREMENT]
       isfree=$(netstat -taln |grep $port)
@@ -212,13 +222,22 @@ else
   fi
 fi
 
+
+echo "If you're using a cloud provider"
+echo "Forwarding abcdesktop service for you on port=$port"
+
 NGINX_POD_NAME=$(kubectl get pods -l run=nginx-od -o jsonpath={.items..metadata.name} -n abcdesktop)
-echo "kubectl port-forward $NGINX_POD_NAME --address 0.0.0.0 $port:80 -n abcdesktop"
-echo "# then connect to"
-echo "# http://localhost:$port/"
-echo "######"
+echo "Setup is running the command 'kubectl port-forward $NGINX_POD_NAME --address 0.0.0.0 $port:80 -n abcdesktop'"
+kubectl port-forward $NGINX_POD_NAME --address 0.0.0.0 $port:80 -n abcdesktop &
 
 
+MY_IP='localhost'
+HOST=$(hostname -I 2>/dev/null)
+if [ $? -eq 0 ]; then
+	MY_IP=$(echo "$HOST"|awk '{print $1}')
+fi
 
-
-
+echo "Please open your web browser and connect to"
+echo ""
+echo "http://$MY_IP:$port/"
+echo ""
