@@ -85,16 +85,6 @@ if [ $EXIT_CODE -ne 0 ]; then
 	exit $?
 fi
 
-# Check if kubectl command is supported
-# run command kubectl version
-OPENSSL_VERSION=$(openssl version)
-EXIT_CODE=$?
-if [ $EXIT_CODE -ne 0 ]; then
-        echo "Command 'openssl version' failed"
-        echo "Please install openssl command first"
-        exit $?
-fi
-
 echo "get the nginx pod name"
 NGINX_POD_NAME=$(kubectl get pods -l run=nginx-od -o jsonpath={.items..metadata.name} -n abcdesktop)
 EXIT_CODE=$?
@@ -105,8 +95,6 @@ if [ $EXIT_CODE -ne 0 ]; then
 fi
 
 echo "nginx pod name=$NGINX_POD_NAME"
-
-
 echo "starting port-forward on tcp port $port"
 echo kubectl port-forward $NGINX_POD_NAME --address 0.0.0.0 $port:80 -n abcdesktop 
 rm -f port_forward
@@ -126,7 +114,7 @@ URL="http://localhost:$port/API/manager/image"
 # call HEALTZ
 EXIT_CODE=$?
 if [ $EXIT_CODE -eq 0 ]; then
-  echo "adding some applications to pyos repo" 
+  echo "## this process wil take several minutes to complete ##"
   for app in $ABCDESKTOP_JSON_APPLICATIONS
   do
       echo "Downloading $URL_APPLICATION_CONF_SOURCE/$app"
