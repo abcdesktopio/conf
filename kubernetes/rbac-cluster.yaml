@@ -1,0 +1,61 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: pyos-role
+  namespace: abcdesktop
+rules:
+- apiGroups: ['']
+  resources: ['nodes']
+  verbs: ["get", "watch", "list"]
+- apiGroups: ['']
+  resources: ['pods']
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ['']
+  resources: ['events']
+  verbs: [ "get", "list", "watch" ]
+- apiGroups: ['']
+  resources: ['pods/exec']
+  verbs: ["create", "get", "list", "watch", "update", "patch", "delete"]
+- apiGroups: ['']
+  resources: ['pods/ephemeralcontainers']
+  verbs: ["create", "get", "list", "watch", "update", "patch", "delete"]
+- apiGroups: ['']
+  resources: ['secrets']
+  verbs:  ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ['']
+  resources: ['configmaps']
+  verbs:  ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: [""]
+  resources: ["endpoints"]
+  verbs: ["get", "list"]
+- apiGroups: ['']
+  resources: ['pods/log']
+  verbs: ['get', 'list', 'watch' ]
+- apiGroups: [""]
+  resources: ["persistentvolumes"]
+  verbs: ["get", "list", "create", "delete"]
+- apiGroups: [""]
+  resources: ["persistentvolumeclaims"]
+  verbs: ["get", "list", "update", "create", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: pyos-rbac
+  namespace: abcdesktop
+subjects:
+- kind: ServiceAccount
+  name: pyos-serviceaccount
+  namespace: abcdesktop
+roleRef:
+  kind: ClusterRole
+  name: pyos-role
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: pyos-serviceaccount
+  namespace: abcdesktop
+---
