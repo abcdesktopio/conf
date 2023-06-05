@@ -551,15 +551,38 @@ desktop.defaultbackgroundcolors : [ '#6EC6F0', '#333333', '#666666', '#CD3C14', 
 
 #
 # desktop.nodeselector
-# Value None or dict 
 # This option permits to assign user pods to nodes
-# It specifies a map of key-value pairs. 
-# For the pod to be eligible to run on a node, 
-# the node must have each of the indicated key-value pairs as labels (it can have additional labels as well). 
+# Value can be None or dict or list 
+#
+# - None: 
+# description: No node selector
+# all roles is are supported
+# for example 
+# desktop.nodeselector: None
+#
+# - list: 
+# a list of string (node name)  
+# each value is a name of node
+# only default role is supported
+# read https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/rbac-role.yaml
+# for example 
+# desktop.nodeselector: [ 'abc3ws01', 'abc3ws02', 'abc3ws03' ]
+#
+# - dict : 
+# description: It specifies a map of key-value pairs. 
+# For the pod to be eligible to run on a node, the node must have each of the indicated key-value pairs as labels 
+# (it can have additional labels as well). 
 # The most common usage is one key-value pair.
-# in cluster set label to node 
+# On the cluster set label to node 
 # kubectl label node YOURNODE abcdesktoprole=worker
+# for example 
 # desktop.nodeselector : { 'abcdesktoprole': 'worker' }
+#
+# only cluster role is supported. Permit pyos service account to list all cluster nodes
+# cluster role is 
+# read https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/rbac-cluster.yaml
+#
+# the default value is None
 desktop.nodeselector: None
 
 # Add default environment vars 
@@ -567,7 +590,7 @@ desktop.nodeselector: None
 # desktop.envlocal contains a (key,value) added by default as environment variables to oc.user.
 # Only static variables are defined here.
 # Dynamics values are set by python code 
-desktop.envlocal: { 'DISPLAY': ':0.0', 'SET_DEFAULT_WALLPAPER':'welcometoabcdesktop.png', 'LIBOVERLAY_SCROLLBAR':'0', 'UBUNTU_MENUPROXY':'0', 'X11LISTEN':'tcp' }
+desktop.envlocal: { 'LIBOVERLAY_SCROLLBAR':'0', 'UBUNTU_MENUPROXY':'0', 'X11LISTEN':'tcp' }
 
 # 
 # for demo or kiosk mode
