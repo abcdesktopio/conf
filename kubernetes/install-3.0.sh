@@ -65,7 +65,7 @@ fi
 kubectl create namespace abcdesktop
 EXIT_CODE=$?
 if [ $EXIT_CODE -eq 0 ]; then
-        echo "abcdesktop namespace created"
+        echo "namespace/abcdesktop created"
 fi
 
 
