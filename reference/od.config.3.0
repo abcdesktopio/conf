@@ -552,7 +552,7 @@ desktop.defaultbackgroundcolors : [ '#6EC6F0', '#333333', '#666666', '#CD3C14', 
 #
 # desktop.nodeselector
 # This option permits to assign user pods to nodes
-# Value can be None or dict or list 
+# Value can be None or dict
 #
 # - None: 
 # description: No node selector
@@ -560,29 +560,24 @@ desktop.defaultbackgroundcolors : [ '#6EC6F0', '#333333', '#666666', '#CD3C14', 
 # for example 
 # desktop.nodeselector: None
 #
-# - list: 
-# a list of string (node name)  
-# each value is a name of node
-# only default role is supported
-# read https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/rbac-role.yaml
-# for example 
-# desktop.nodeselector: [ 'abc3ws01', 'abc3ws02', 'abc3ws03' ]
-#
 # - dict : 
 # description: It specifies a map of key-value pairs. 
-# For the pod to be eligible to run on a node, the node must have each of the indicated key-value pairs as labels 
-# (it can have additional labels as well). 
+# For the pod to be eligible to run on a node, the node must have each of the indicated key-value pairs as labels  (it can have additional labels as well). 
 # The most common usage is one key-value pair.
 # On the cluster set label to node 
 # kubectl label node YOURNODE abcdesktoprole=worker
 # for example 
 # desktop.nodeselector : { 'abcdesktoprole': 'worker' }
 #
-# only cluster role is supported. Permit pyos service account to list all cluster nodes
-# cluster role is 
-# read https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/rbac-cluster.yaml
+# ClusterRole must be bind to pyos-service account to permit list cluster nodes
+# ClusterRole is defined on https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/rbac-cluster.yaml
+# use ClusterRoleBinding and ClusterRole
+# if pyos-service account does NOT have ClusterRole image pulling is not guarantee
 #
-# the default value is None
+# the default value for desktop.nodeselector is None
+# the default service account role is RoleBinding 
+# set at https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/rbac-role.yaml
+#
 desktop.nodeselector: None
 
 # Add default environment vars 
