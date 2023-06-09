@@ -9,8 +9,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+kind: Role
 metadata:
   name: pyos-role
   namespace: abcdesktop
@@ -50,7 +49,7 @@ rules:
   verbs: ["get", "list", "update", "create", "delete"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
+kind: RoleBinding
 metadata:
   name: pyos-rbac
   namespace: abcdesktop
@@ -59,7 +58,7 @@ subjects:
   name: pyos-serviceaccount
   namespace: abcdesktop
 roleRef:
-  kind: ClusterRole
+  kind: Role
   name: pyos-role
   apiGroup: rbac.authorization.k8s.io
 ---
@@ -331,8 +330,6 @@ spec:
       - name: nginx
         imagePullPolicy: Always
         image: abcdesktopio/oc.nginx:3.0
-        command:
-            - "/usr/sbin/nginx"
         volumeMounts:
           - name: jwtsigningkeys
             mountPath: "/config.signing"
