@@ -55,6 +55,9 @@ firefox.d.$ABCDESKTOP_RELEASE.json
 gimp.d.$ABCDESKTOP_RELEASE.json
 nautilus.d.$ABCDESKTOP_RELEASE.json
 geany.d.$ABCDESKTOP_RELEASE.json
+qterminalpod.d.$ABCDESKTOP_RELEASE.json
+evince.d.$ABCDESKTOP_RELEASE.json
+putty-wine.d.$ABCDESKTOP_RELEASE.json
 "
 
 BASE_PORT=30443
