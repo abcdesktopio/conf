@@ -45,6 +45,9 @@ REGISTRY_DOCKERHUB="docker.io/abcdesktopio"
 # $REGISTRY_DOCKERHUB/firefox.d:$ABCDESKTOP_RELEASE 
 # $REGISTRY_DOCKERHUB/gimp.d:$ABCDESKTOP_RELEASE"
 
+
+# gimp.d.$ABCDESKTOP_RELEASE.json
+
 URL_APPLICATION_CONF_SOURCE="https://raw.githubusercontent.com/abcdesktopio/oc.apps/main"
 # list of json default applications to prefetch
 ABCDESKTOP_JSON_APPLICATIONS="
@@ -52,12 +55,10 @@ ABCDESKTOP_JSON_APPLICATIONS="
 xterm.d.$ABCDESKTOP_RELEASE.json
 writer.d.$ABCDESKTOP_RELEASE.json
 firefox.d.$ABCDESKTOP_RELEASE.json
-gimp.d.$ABCDESKTOP_RELEASE.json
 nautilus.d.$ABCDESKTOP_RELEASE.json
 geany.d.$ABCDESKTOP_RELEASE.json
 qterminalpod.d.$ABCDESKTOP_RELEASE.json
 evince.d.$ABCDESKTOP_RELEASE.json
-putty-wine.d.$ABCDESKTOP_RELEASE.json
 "
 
 BASE_PORT=30443
