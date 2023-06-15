@@ -40,6 +40,8 @@ REGISTRY_DOCKERHUB="docker.io/abcdesktopio"
 # docker.io/library/busybox:latest
 # k8s.gcr.io/pause:3.8"
 
+NAMESPACE=abcdesktop
+echo "namespace=${NAMESPACE}"
 
 # Check if kubectl command is supported
 # run command kubectl version
@@ -47,7 +49,7 @@ KUBE_VERSION=$(kubectl version --output=yaml)
 EXIT_CODE=$?
 if [ $EXIT_CODE -ne 0 ]; then
 	echo "command 'kubectl version' failed"
-	echo "Please install kubectl command first"
+	echo "Please check kubectl command error first"
 	exit $?
 fi
 
@@ -57,15 +59,15 @@ OPENSSL_VERSION=$(openssl version)
 EXIT_CODE=$?
 if [ $EXIT_CODE -ne 0 ]; then
         echo "command 'openssl version' failed"
-        echo "Please install openssl command first"
+        echo "Please check openssl command error first"
         exit $?
 fi
 
 # First create the abcdesktop namespace
-kubectl create namespace abcdesktop
+kubectl create namespace "$NAMESPACE"
 EXIT_CODE=$?
 if [ $EXIT_CODE -eq 0 ]; then
-        echo "namespace/abcdesktop created"
+        echo "namespace/$NAMESPACE created"
 fi
 
 
@@ -91,12 +93,12 @@ if [ ! -f abcdesktop_jwt_user_signing_private_key.pem ]; then
 fi
 
 # Import RSA Keys as Kubernetes secrets 
-kubectl create secret generic abcdesktopjwtdesktoppayload --from-file=abcdesktop_jwt_desktop_payload_private_key.pem --from-file=abcdesktop_jwt_desktop_payload_public_key.pem --namespace=abcdesktop
-kubectl create secret generic abcdesktopjwtdesktopsigning --from-file=abcdesktop_jwt_desktop_signing_private_key.pem --from-file=abcdesktop_jwt_desktop_signing_public_key.pem --namespace=abcdesktop
-kubectl create secret generic abcdesktopjwtusersigning    --from-file=abcdesktop_jwt_user_signing_private_key.pem    --from-file=abcdesktop_jwt_user_signing_public_key.pem    --namespace=abcdesktop
-kubectl label  secret abcdesktopjwtdesktoppayload abcdesktop/role=desktop.payloadkeys -n abcdesktop
-kubectl label  secret abcdesktopjwtdesktopsigning abcdesktop/role=desktop.signingkeys -n abcdesktop
-kubectl label  secret abcdesktopjwtusersigning    abcdesktop/role=user.signingkeys    -n abcdesktop
+kubectl create secret generic abcdesktopjwtdesktoppayload --from-file=abcdesktop_jwt_desktop_payload_private_key.pem --from-file=abcdesktop_jwt_desktop_payload_public_key.pem --namespace="$NAMESPACE"
+kubectl create secret generic abcdesktopjwtdesktopsigning --from-file=abcdesktop_jwt_desktop_signing_private_key.pem --from-file=abcdesktop_jwt_desktop_signing_public_key.pem --namespace="$NAMESPACE"
+kubectl create secret generic abcdesktopjwtusersigning    --from-file=abcdesktop_jwt_user_signing_private_key.pem    --from-file=abcdesktop_jwt_user_signing_public_key.pem    --namespace="$NAMESPACE"
+kubectl label  secret abcdesktopjwtdesktoppayload abcdesktop/role=desktop.payloadkeys -n "$NAMESPACE"
+kubectl label  secret abcdesktopjwtdesktopsigning abcdesktop/role=desktop.signingkeys -n "$NAMESPACE"
+kubectl label  secret abcdesktopjwtusersigning    abcdesktop/role=user.signingkeys    -n "$NAMESPACE"
  
 echo "Downloading file abcdesktop.yaml if need" 
 # create abcdesktop.yaml file
@@ -125,13 +127,13 @@ else
    curl https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/poduser.yaml --output poduser.yaml
 fi
 
-echo "kubectl create configmap abcdesktop-config --from-file=od.config -n abcdesktop"
-kubectl create configmap abcdesktop-config --from-file=od.config -n abcdesktop
+echo "kubectl create configmap abcdesktop-config --from-file=od.config -n $NAMESPACE"
+kubectl create configmap abcdesktop-config --from-file=od.config -n "$NAMESPACE"
 
 EXIT_CODE=$?
 if [ $EXIT_CODE -eq 0 ]
 then
-	kubectl label configmap abcdesktop-config abcdesktop/role=pyos.config -n abcdesktop
+	kubectl label configmap abcdesktop-config abcdesktop/role=pyos.config -n "$NAMESPACE"
         echo "kubectl create configmap abcdesktop-config command was successful"
 else
         echo "kubectl create configmap abcdesktop-config failed"
@@ -148,7 +150,7 @@ else
         exit $?
 fi
 echo "waiting for pod/anonymous-74bea267-8197-4b1d-acff-019b24e778c5 Ready"
-kubectl wait --for=condition=Ready pod/anonymous-74bea267-8197-4b1d-acff-019b24e778c5  -n abcdesktop --timeout=-1s
+kubectl wait --for=condition=Ready pod/anonymous-74bea267-8197-4b1d-acff-019b24e778c5  -n "$NAMESPACE" --timeout=-1s
 kubectl delete -f $PODUSER_YAML
 
 echo "kubectl create -f $ABCDESKTOP_YAML"
@@ -161,22 +163,22 @@ else
         exit $?
 fi
 
-deployments=$(kubectl -n abcdesktop get deployment --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+deployments=$(kubectl -n "$NAMESPACE" get deployment --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 for d in $deployments;  
 do 
 	echo "waiting for deployment/$d available"; 
-	kubectl -n abcdesktop wait deployment/$d --for=condition=available --timeout=-1s; 
+	kubectl -n "$NAMESPACE" wait deployment/$d --for=condition=available --timeout=-1s; 
 done
 
-pods=$(kubectl -n abcdesktop get pods --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+pods=$(kubectl -n "$NAMESPACE" get pods --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 for p in $pods; 
 do
 	echo "waiting for pod/$p Ready"
-	kubectl -n abcdesktop wait pod/$p --for=condition=Ready --timeout=-1s
+	kubectl -n "$NAMESPACE" wait pod/$p --for=condition=Ready --timeout=-1s
 done
 
 # list all pods 
-kubectl get pods --namespace=abcdesktop
+kubectl get pods -n "$NAMESPACE"
 echo ""
 echo "Setup done !"
 echo ""
@@ -225,10 +227,9 @@ fi
 
 echo "If you're using a cloud provider"
 echo "Forwarding abcdesktop service for you on port=$port"
-
-NGINX_POD_NAME=$(kubectl get pods -l run=nginx-od -o jsonpath={.items..metadata.name} -n abcdesktop)
-echo "Setup is running the command 'kubectl port-forward $NGINX_POD_NAME --address 0.0.0.0 $port:80 -n abcdesktop'"
-kubectl port-forward $NGINX_POD_NAME --address 0.0.0.0 $port:80 -n abcdesktop &
+NGINX_POD_NAME=$(kubectl get pods -l run=nginx-od -o jsonpath={.items..metadata.name} -n "$NAMESPACE")
+echo "Setup is running the command 'kubectl port-forward $NGINX_POD_NAME --address 0.0.0.0 $port:80 -n $NAMESPACE'"
+kubectl port-forward $NGINX_POD_NAME --address 0.0.0.0 $port:80 -n "$NAMESPACE" &
 
 
 MY_IP='localhost'
