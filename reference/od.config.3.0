@@ -29,6 +29,13 @@
 # data 
 [global]
 
+
+# default abcdesktop namespace 
+# abcdesktop is the default namespace
+# if you change it, you must update the abcdesktop.yaml file
+namespace: 'abcdesktop'
+
+
 # DEFAULT HOST URL 
 # public host url of the service
 # change this with your URL or
