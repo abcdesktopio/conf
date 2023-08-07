@@ -3,7 +3,7 @@
   "kind": "Pod",
   "metadata": {
     "name": "anonymous-74bea267-8197-4b1d-acff-019b24e778c5",
-    "namespace": "abcdesktop-ns",
+    "namespace": "ns-abcdesktop",
     "labels": {
       "access_provider": "anonymous",
       "access_providertype": "anonymous",
