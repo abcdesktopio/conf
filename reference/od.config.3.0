@@ -592,7 +592,18 @@ desktop.nodeselector: None
 # desktop.envlocal contains a (key,value) added by default as environment variables to oc.user.
 # Only static variables are defined here.
 # Dynamics values are set by python code 
+#
 desktop.envlocal: { 'LIBOVERLAY_SCROLLBAR':'0', 'UBUNTU_MENUPROXY':'0', 'X11LISTEN':'tcp' }
+# 
+# to update session timeout 
+# change WEBSOCKIFY_HEARTBEAT 
+# use 'WEBSOCKIFY_HEARTBEAT':'30' 
+# the new WEBSOCKIFY_HEARTBEAT the value is in second
+# if you can't update the proxy-read-timeout and proxy-send-timeout
+# read https://github.com/abcdesktopio/oc.pyos/issues/2 to get more details
+#
+# desktop.envlocal: { 'LIBOVERLAY_SCROLLBAR':'0', 'UBUNTU_MENUPROXY':'0', 'X11LISTEN':'tcp', 'WEBSOCKIFY_HEARTBEAT':'30' }
+
 
 # 
 # for demo or kiosk mode
