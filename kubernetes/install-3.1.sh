@@ -254,7 +254,6 @@ kubectl label  secret abcdesktopjwtusersigning    abcdesktop/role=user.signingke
 display_message_result "label secret abcdesktopjwtusersigning"
  
 
-echo "Downloading file abcdesktop.yaml if need" 
 # create abcdesktop.yaml file
 if [ -f abcdesktop.yaml ]; then
    display_message "use local file abcdesktop.yaml file" "OK"
@@ -264,7 +263,6 @@ else
    display_message_result "downloaded source $ABCDESKTOP_YAML_SOURCE"
 fi
 
-echo "Downloading file od.config if need" 
 # create od.config file
 if [ -f od.config ]; then
    display_message "use local file od.config file" "OK"
@@ -273,8 +271,6 @@ else
    display_message_result "downloaded source $OD_CONFIG_SOURCE"
 fi
 
-
-echo "Downloading file poduser.yaml if need"
 # create poduser.yaml file
 if [ -f poduser.yaml ]; then
    display_message "use local file poduser.yaml" "OK"
