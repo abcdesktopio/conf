@@ -25,6 +25,9 @@
 # define default NAMESPACE
 NAMESPACE=abcdesktop
 
+# define force
+FORCE=0
+
 # define ABCDESKTOP_YAML path
 ABCDESKTOP_YAML=abcdesktop.yaml 
 
@@ -108,11 +111,12 @@ display_message_result() {
 
 # $1 command
 check_command() {
-    if ! command -v "$1" &> /dev/null
-    then
-        display_message "$1 could not be found" "KO"
+  if ! command -v "$1" &> /dev/null
+  then
+    display_message "$1 could not be found" "KO"
     exit 1
-fi
+  fi
+}
 
 
 
@@ -155,7 +159,7 @@ function clean() {
   for app in $ABCDESKTOP_JSON_APPLICATIONS
   do
     rm "$app"
-    display_message "remove files $app"
+    display_message_result "remove files $app"
   done
 }
 
@@ -180,12 +184,12 @@ eval set "--$opts"
 while [ $# -gt 0 ]
 do
     case "$1" in
-    # commands
-    --help) help; exit;;
-    --version) version; exit;;
-	--clean) clean; exit;;
-    --namespace) NAMESPACE="$2";shift;;
-	--force) FORCE="$2";shift;;
+      # commands
+      --help) help; exit;;
+      --version) version; exit;;
+      --clean) clean; exit;;
+      --namespace) NAMESPACE="$2";shift;;
+      --force) FORCE="$2";shift;;
     esac
     shift
 done
@@ -215,13 +219,12 @@ check_command kubectl
 KUBE_VERSION=$(kubectl version --output=yaml)
 display_message_result "kubectl version"
 
-echo "get the nginx pod name"
 NGINX_POD_NAME=$(kubectl get pods -l run=nginx-od -o jsonpath={.items..metadata.name} -n "$NAMESPACE")
-display_message_result "kubectl pods -l run=nginx-od -o jsonpath={.items..metadata.name} -n $NAMESPACE")
+display_message_result "kubectl pods -l run=nginx-od -o jsonpath={.items..metadata.name} -n $NAMESPACE"
 
 display_message "nginx pod name=$NGINX_POD_NAME" "OK"
 echo "starting port-forward on tcp port $port"
-echo kubectl port-forward $NGINX_POD_NAME --address 0.0.0.0 $port:80 -n "$NAMESPACE" 
+echo "kubectl port-forward $NGINX_POD_NAME --address 0.0.0.0 $port:80 -n $NAMESPACE" 
 rm -f port_forward
 kubectl port-forward "$NGINX_POD_NAME" --address 0.0.0.0 "$port:80" -n "$NAMESPACE" > port_forward & 
 PORT_FORWARD_PID=$! 
@@ -242,11 +245,11 @@ if [ $EXIT_CODE -eq 0 ]; then
   echo "## this process wil take several minutes to complete ##"
   for app in $ABCDESKTOP_JSON_APPLICATIONS
   do
-      echo "Downloading $URL_APPLICATION_CONF_SOURCE/$app"
       curl -sL --output $app  $URL_APPLICATION_CONF_SOURCE/$app
-      echo "Pushing $app to $URL" 
-      curl -X PUT -H 'Content-Type: text/javascript' $URL -d @$app
-      pods=$(kubectl -n abcdesktop get pods --selector=type=pod_application_pull --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+      display_message_result "curl $URL_APPLICATION_CONF_SOURCE/$app"
+      curl -X PUT -H 'Content-Type: text/javascript' $URL -d @$app > /dev/null
+      display_message_result "curl -X PUT -H 'Content-Type: text/javascript' $URL -d @$app"
+      pods=$(kubectl -n "$NAMESPACE" get pods --selector=type=pod_application_pull --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
       echo ""
       echo "list of created pods for pulling is: "
       echo "$pods"
