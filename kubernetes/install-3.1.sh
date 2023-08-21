@@ -321,7 +321,7 @@ kubectl delete -f $PODUSER_YAML
 
 #clean endpoints desktop 
 # if a previous abcdesktop has been done
-kubectl get endpoints desktop  2>/dev/null
+kubectl get endpoints desktop >/dev/null  2>/dev/null
 EXIT_CODE=$?
 if [ $EXIT_CODE -eq 0 ]; then
 	kubectl delete endpoints desktop
