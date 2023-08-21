@@ -55,7 +55,7 @@ fi
 
 # $1 message
 display_section() {
-    printf "\033[0;1;4m$1\033[0;0m\n"
+    printf "\033[0;1;4m%s\033[0;0m\n" "$1"
 }
 
 # $1 message
@@ -70,7 +70,7 @@ display_message() {
         "WARN") COLOR="\033[0;33m";;
         "INFO") COLOR="\033[1;34m";;
     esac
-    printf "[$COLOR${2}\033[0;0m] $1\n"
+    printf "[$COLOR%s\033[0;0m] %s\n" "$2" "$1"
 }
 
 # $1 message
