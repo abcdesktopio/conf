@@ -115,6 +115,83 @@ check_command() {
 fi
 
 
+
+function help() {
+        cat <<-EOF
+abcdesktop pull application tool
+
+Usage: abcdesktop-pullapplications [OPTION] [--namespace abcdesktop]...
+
+Options (exclusives):
+ --help                     Display this help and exit
+ --version                  Display version information and exit
+ --clean 		    Remove *.pem od.config abcdesktop.yaml poduser.yaml files only
+
+Parameters:
+ --namespace                Define the abcdesktop namespace default value is abcdesktop
+ --force                    Continue if an error occurs
+ 
+Examples:
+    abcdesktop-pullapplications
+    Install an abcdesktop service on a kubernetes cluster.
+
+    abcdesktop-pullapplications --namespace=superdesktop
+    Install an abcdesktop service in the superdesktop namespace on a kubernetes cluster
+
+    abcdesktop-pullapplications --force=1
+    Continue if a system or a kubernetes error occurs
+
+  
+Exit status:
+ 0      if OK,
+ 1      if any problem
+
+Report bugs to https://github.com/abcdesktopio/conf/issues
+EOF
+}
+
+
+function clean() {
+  for app in $ABCDESKTOP_JSON_APPLICATIONS
+  do
+    rm "$app"
+    display_message "remove files $app"
+  done
+}
+
+
+
+function version() {
+    cat <<-EOF
+abcdesktop pull images script - $VERSION
+This is free software; see the source for copying conditions.
+Written by Alexandre DEVELY
+EOF
+}
+
+opts=$(getopt \
+    --longoptions "help,version,clean,force:,namespace:," \
+    --name "$(basename "$0")" \
+    --options "" \
+    -- "$@"
+)
+eval set "--$opts"
+
+while [ $# -gt 0 ]
+do
+    case "$1" in
+    # commands
+    --help) help; exit;;
+    --version) version; exit;;
+	--clean) clean; exit;;
+    --namespace) NAMESPACE="$2";shift;;
+	--force) FORCE="$2";shift;;
+    esac
+    shift
+done
+
+echo "abcdesktop pull images script namespace=${NAMESPACE}"
+
 #
 # give me a free tcp port starting from 30443
 BASE_PORT=30443
@@ -148,13 +225,13 @@ echo kubectl port-forward $NGINX_POD_NAME --address 0.0.0.0 $port:80 -n "$NAMESP
 rm -f port_forward
 kubectl port-forward "$NGINX_POD_NAME" --address 0.0.0.0 "$port:80" -n "$NAMESPACE" > port_forward & 
 PORT_FORWARD_PID=$! 
-echo "kubectl port-forward $NGINX_POD_NAME get pid $PORT_FORWARD_PID"
 echo "waiting for pid $PORT_FORWARD_PID" 
 while [ ! -f port_forward ]
 do 
   echo "." 
   sleep 1
 done
+display_message_result "kubectl port-forward $NGINX_POD_NAME get pid $PORT_FORWARD_PID"
 
 # define service URL
 URL="http://localhost:$port/API/manager/image"
