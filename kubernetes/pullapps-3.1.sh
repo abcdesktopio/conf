@@ -29,13 +29,13 @@ NAMESPACE=abcdesktop
 FORCE=0
 
 # define ABCDESKTOP_YAML path
-ABCDESKTOP_YAML=abcdesktop.yaml 
+# ABCDESKTOP_YAML=abcdesktop.yaml 
 
 # current release
 ABCDESKTOP_RELEASE=3.0
 
 # docker hub prefix
-REGISTRY_DOCKERHUB="docker.io/abcdesktopio"
+# REGISTRY_DOCKERHUB="docker.io/abcdesktopio"
 
 # list of default applications to prefetch
 # and
@@ -216,7 +216,7 @@ display_message "Forwarding abcdesktop service for you on port=$port" "OK"
 # Check if kubectl command is supported
 # run command kubectl version
 check_command kubectl
-KUBE_VERSION=$(kubectl version --output=yaml)
+kubectl version > /dev/null
 display_message_result "kubectl version"
 
 NGINX_POD_NAME=$(kubectl get pods -l run=nginx-od -o jsonpath={.items..metadata.name} -n "$NAMESPACE")
@@ -245,9 +245,9 @@ if [ $EXIT_CODE -eq 0 ]; then
   echo "## this process wil take several minutes to complete ##"
   for app in $ABCDESKTOP_JSON_APPLICATIONS
   do
-      curl -sL --output $app  $URL_APPLICATION_CONF_SOURCE/$app
+      curl -sL --output "$app" "$URL_APPLICATION_CONF_SOURCE/$app"
       display_message_result "curl $URL_APPLICATION_CONF_SOURCE/$app"
-      curl -X PUT -H 'Content-Type: text/javascript' $URL -d @$app > /dev/null
+      curl -X PUT -H 'Content-Type: text/javascript' "$URL" -d "@$app" > /dev/null
       display_message_result "curl -X PUT -H 'Content-Type: text/javascript' $URL -d @$app"
       pods=$(kubectl -n "$NAMESPACE" get pods --selector=type=pod_application_pull --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
       echo ""
@@ -255,7 +255,7 @@ if [ $EXIT_CODE -eq 0 ]; then
       echo "$pods"
       echo "waiting for all pods condition Ready. timeout=-1s (it will take a while)"
       kubectl wait --for=condition=Ready pods --selector=type=pod_application_pull --timeout=-1s -n "$NAMESPACE"
-      kubectl delete pod --selector=type=pod_application_pull -n "$NAMESPACE"
+      kubectl delete pod --selector=type=pod_application_pull -n "$NAMESPACE" > /dev/null
   done
   kill $PORT_FORWARD_PID
   echo "$ABCDESKTOP_JSON_APPLICATIONS"
@@ -264,5 +264,5 @@ else
   echo "abcdesktop is not ready"	
   PYOS_POD_NAME=$(kubectl get pods -l run=pyos-od -o jsonpath={.items..metadata.name} -n "$NAMESPACE")
   echo "Somethings goes wrong with this pod $PYOS_POD_NAME or with $NGINX_POD_NAME"
-  kubectl logs $PYOS_POD_NAME -n "$NAMESPACE"
+  kubectl logs "$PYOS_POD_NAME" -n "$NAMESPACE"
 fi
