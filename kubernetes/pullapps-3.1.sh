@@ -170,6 +170,7 @@ function version() {
 abcdesktop pull images script - $VERSION
 This is free software; see the source for copying conditions.
 Written by Alexandre DEVELY
+Written by J.F. Vincent
 EOF
 }
 
