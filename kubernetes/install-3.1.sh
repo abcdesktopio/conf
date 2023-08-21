@@ -257,7 +257,7 @@ display_message_result "label secret abcdesktopjwtusersigning"
 
 # create abcdesktop.yaml file
 if [ -f abcdesktop.yaml ]; then
-   display_message "use local file abcdesktop.yaml file" "OK"
+   display_message "use local file abcdesktop.yaml" "OK"
    ABCDESKTOP_YAML=abcdesktop.yaml
 else
    curl "$ABCDESKTOP_YAML_SOURCE" --output abcdesktop.yaml
@@ -266,7 +266,7 @@ fi
 
 # create od.config file
 if [ -f od.config ]; then
-   display_message "use local file od.config file" "OK"
+   display_message "use local file od.config" "OK"
 else
    curl "$OD_CONFIG_SOURCE" --output od.config
    display_message_result "downloaded source $OD_CONFIG_SOURCE"
@@ -286,18 +286,18 @@ fi
 if [ "$NAMESPACE" != "abcdesktop" ]; then
    # abcdesktop.yaml
    # replace namespace: abcdesktop -> namespace: $NAMESPACE 
-   sed -i "s\namespace: abcdesktop\namespace: $NAMESPACE\g" abcdesktop.yaml
+   sed -i'' -e "s|namespace: abcdesktop|namespace: $NAMESPACE|g" abcdesktop.yaml
    display_message_result "updated abcdesktop.yaml file with new namespace $NAMESPACE"
    # replace .abcdesktop.svc.cluster.local -> .$NAMESPACE.svc.cluster.local
-   sed -i "s\abcdesktop.svc.cluster.local\\$NAMESPACE.svc.cluster.local\g" abcdesktop.yaml
+   sed -i'' -e "s|abcdesktop.svc.cluster.local|$NAMESPACE.svc.cluster.local|g" abcdesktop.yaml
    display_message_result "updated abcdesktop.yaml file with new fqdn $NAMESPACE.svc.cluster.local"
    # od.config
    # replace namespace: 'abcdesktop' -> namespace: '$NAMESPACE'
-   sed -i "s\namespace: 'abcdesktop'\namespace: '$NAMESPACE'\g" od.config
+   sed -i'' -e "s|namespace: 'abcdesktop'|namespace: '$NAMESPACE'|g" od.config
    display_message_result "updated od.config file with new namespace $NAMESPACE"
    # poduser.yaml
    # 
-   sed -i "s\ \"abcdesktop\"\ \"$NAMESPACE\"\g" poduser.yaml
+   sed -i'' -e "s|\"abcdesktop\"|\"$NAMESPACE\"|g" poduser.yaml
    display_message_result "updated poduser.yaml file with new $NAMESPACE"
 fi
 
@@ -350,8 +350,9 @@ done
 # list all pods 
 kubectl get pods -n "$NAMESPACE"
 echo ""
-echo "Setup done !"
+display_message_result "Setup done"
 echo ""
+
 # echo "Open your navigator to http://[your-ip-hostname]:30443/"
 # ABCDESKTOP_SERVICES=$(kubectl get pods --selector=name=nginx-od -o jsonpath={.items..status.hostIP} -n abcdesktop)
 # echo "and replace [your-ip-hostname] by your default server ip address"
