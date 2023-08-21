@@ -392,7 +392,7 @@ if ! [ -x "$(command -v netstat)" ]; then
 else
   isfree=$(netstat -taln |grep $port)
   while [[ -n "$isfree" ]]; do
-    port=$[port+INCREMENT]
+    port=$((port+INCREMENT))
     isfree=$(netstat -taln |grep "$port")
   done
 fi
