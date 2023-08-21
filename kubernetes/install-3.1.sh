@@ -295,6 +295,8 @@ if [ "$NAMESPACE" != "abcdesktop" ]; then
    # replace namespace: 'abcdesktop' -> namespace: '$NAMESPACE'
    sed -i'' -e "s|namespace: 'abcdesktop'|namespace: '$NAMESPACE'|g" od.config
    display_message_result "updated od.config file with new namespace $NAMESPACE"
+   sed -i'' -e "s|abcdesktop.svc.cluster.local|$NAMESPACE.svc.cluster.local|g" od.config
+   display_message_result "updated od.config file with new fqdn $NAMESPACE.svc.cluster.local"
    # poduser.yaml
    # 
    sed -i'' -e "s|\"abcdesktop\"|\"$NAMESPACE\"|g" poduser.yaml
