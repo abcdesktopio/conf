@@ -79,7 +79,6 @@ display_message_result() {
     if [ "$exit_code" -eq 0 ];
     then
         display_message "$1" "OK"
-
     else
         display_message "$1 error $exit_code" "KO"
 	# by default force=0, exit
@@ -150,6 +149,7 @@ function version() {
 abcdesktop install script - $VERSION
 This is free software; see the source for copying conditions.
 Written by Alexandre DEVELY
+Written by J.F. Vincent
 EOF
 }
 
