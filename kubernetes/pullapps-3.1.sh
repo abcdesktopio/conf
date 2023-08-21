@@ -259,7 +259,7 @@ if [ $EXIT_CODE -eq 0 ]; then
   done
   kill $PORT_FORWARD_PID
   echo "$ABCDESKTOP_JSON_APPLICATIONS"
-  echo "all applications are ready to use"
+  echo "applications are ready to use"
 else
   echo "abcdesktop is not ready"	
   PYOS_POD_NAME=$(kubectl get pods -l run=pyos-od -o jsonpath={.items..metadata.name} -n "$NAMESPACE")
