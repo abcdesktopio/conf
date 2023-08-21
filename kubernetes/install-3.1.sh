@@ -138,7 +138,8 @@ EOF
 
 
 function clean() {
-  rm ./*.pem od.config abcdesktop.yaml poduser.yaml
+  rm -f od.config abcdesktop.yaml poduser.yaml
+  rm -f ./*.pem
   display_message_result "remove files"
 }
 
