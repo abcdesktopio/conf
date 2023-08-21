@@ -319,6 +319,16 @@ kubectl wait --for=condition=Ready pod/anonymous-74bea267-8197-4b1d-acff-019b24e
 kubectl delete -f $PODUSER_YAML
 
 
+#clean endpoints desktop 
+# if a previous abcdesktop has been done
+kubectl get endpoints desktop  2>/dev/null
+EXIT_CODE=$?
+if [ $EXIT_CODE -eq 0 ]; then
+	kubectl delete endpoints desktop
+        display_message_result "delete previous endpoint desktop"
+fi
+
+
 kubectl create -f $ABCDESKTOP_YAML
 display_message_result "kubectl create -f $ABCDESKTOP_YAML"
 
