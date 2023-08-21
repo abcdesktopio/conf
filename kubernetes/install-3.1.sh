@@ -55,20 +55,22 @@ fi
 
 # $1 message
 display_section() {
-    echo -e "\033[0;1;4m$1\033[0;0m"
+    printf "\033[0;1;4m$1\033[0;0m\n"
 }
 
 # $1 message
 # $2 status
 display_message() {
-    case "${2^^}" in
+    # ${2^^}: bad substitution, use "${2}" 
+    # use printf instead of echo for better compatibility sh zsh bash
+    case "${2}" in
         "OK") COLOR="\033[0;32m";;
         "KO") COLOR="\033[0;31m";;
         "ERROR") COLOR="\033[0;31m";;
         "WARN") COLOR="\033[0;33m";;
         "INFO") COLOR="\033[1;34m";;
     esac
-    >&2 echo -e "[$COLOR${2^^}\033[0;0m] $1"
+    printf "[$COLOR${2}\033[0;0m] $1\n"
 }
 
 # $1 message
@@ -87,18 +89,6 @@ display_message_result() {
 	fi
     fi
 }
-
-# $1 message
-display_message_result_continue() {
-    if [ "$?" -eq 0 ];
-    then
-        display_message "$1" "OK"
-
-    else
-        display_message "$1" "KO"
-    fi
-}
-
 
 
 # $1 command
@@ -135,7 +125,7 @@ Examples:
     Install an abcdesktop service in the superdesktop namespace on a kubernetes cluster
 
     abcdesktop-install --force=1
-    Continue if a system or kubernetes error occurs
+    Continue if a system or a kubernetes error occurs
 
   
 Exit status:
@@ -149,7 +139,7 @@ EOF
 
 function clean() {
   rm "*.pem" od.config abcdesktop.yaml poduser.yaml
-  display_message_result_continue "remove files"
+  display_message_result "remove files"
 }
 
 
@@ -183,7 +173,7 @@ do
     shift
 done
 
-echo "abcdesktop install script namespace=${NAMESPACE} force=${FORCE}"
+echo "abcdesktop install script namespace=${NAMESPACE}"
 
 # Check if kubectl command is supported
 # run command kubectl version
@@ -199,10 +189,11 @@ display_message_result "openssl version"
 
 # First create the abcdesktop namespace
 KUBE_CREATE_NAMESPACE=$(kubectl create namespace "$NAMESPACE")
-display_message_result_continue "kubectl create namespace $NAMESPACE"
+display_message_result "kubectl create namespace $NAMESPACE"
 
 
 if [ -n "$DEBUG" ]; then
+  echo "params namespace=${NAMESPACE} force=${FORCE}"
   echo "OPENSSL_VERSION=$OPENSSL_VERSION"
   echo "KUBE_VERSION=$KUBE_VERSION"
   echo "KUBE_CREATE_NAMESPACE=$KUBE_CREATE_NAMESPACE"
