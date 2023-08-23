@@ -18,7 +18,7 @@ kubectl delete pvc --all -n abcdesktop 2>/dev/null
 # kubectl delete pv --all -n abcdesktop  2>/dev/null
 echo "remove namespace"
 kubectl delete namespace abcdesktop
-kubectl delete endpoints desktop
+# kubectl delete endpoints desktop
 if [ ! -z "$START" ]; then
   TIMEDIFF=$(expr $EPOCHSECONDS - $START)
   echo "the process takes $TIMEDIFF seconds to complete"
