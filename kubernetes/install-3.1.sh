@@ -38,6 +38,8 @@ NAMESPACE=abcdesktop
 # force continue when an error occurs
 # No force by default
 FORCE=0 
+# TIMEOUT DEFAULT VALUE 
+TIMEOUT=600s
 
 # list of pod container image to prefetch
 # ABCDESKTOP_POD_IMAGES="
@@ -115,6 +117,7 @@ Options (exclusives):
 Parameters:
  --namespace                Define the abcdesktop namespace default value is abcdesktop
  --force                    Continue if an error occurs
+ --timeout                    Continue if an error occurs
  
 Examples:
     abcdesktop-install
@@ -154,7 +157,7 @@ EOF
 }
 
 opts=$(getopt \
-    --longoptions "help,version,clean,force:,namespace:," \
+    --longoptions "help,version,clean,force:,timeout:namespace:," \
     --name "$(basename "$0")" \
     --options "" \
     -- "$@"
@@ -168,6 +171,7 @@ do
         --help) help; exit;;
         --version) version; exit;;
 	--clean) clean; exit;;
+ 	--timeout TIMEOUT=="$2";shift;;
         --namespace) NAMESPACE="$2";shift;;
 	--force) FORCE="$2";shift;;
     esac
@@ -260,7 +264,7 @@ if [ -f abcdesktop.yaml ]; then
    display_message "use local file abcdesktop.yaml" "OK"
    ABCDESKTOP_YAML=abcdesktop.yaml
 else
-   curl "$ABCDESKTOP_YAML_SOURCE" --output abcdesktop.yaml
+   curl --progress-bar "$ABCDESKTOP_YAML_SOURCE" --output abcdesktop.yaml
    display_message_result "downloaded source $ABCDESKTOP_YAML_SOURCE"
 fi
 
@@ -268,7 +272,7 @@ fi
 if [ -f od.config ]; then
    display_message "use local file od.config" "OK"
 else
-   curl "$OD_CONFIG_SOURCE" --output od.config
+   curl --progress-bar "$OD_CONFIG_SOURCE" --output od.config
    display_message_result "downloaded source $OD_CONFIG_SOURCE"
 fi
 
@@ -277,7 +281,7 @@ if [ -f poduser.yaml ]; then
    display_message "use local file poduser.yaml" "OK"
    PODUSER_YAML=poduser.yaml
 else
-   curl "$POD_USER_SOURCE" --output poduser.yaml
+   curl --progress-bar "$POD_USER_SOURCE" --output poduser.yaml
    display_message_result "downloaded source $POD_USER_SOURCE"
 fi
 
@@ -304,10 +308,10 @@ if [ "$NAMESPACE" != "abcdesktop" ]; then
 fi
 
 
-
+# create configmap from od.config file
 kubectl create configmap abcdesktop-config --from-file=od.config -n "$NAMESPACE" > /dev/null
 display_message_result "kubectl create configmap abcdesktop-config --from-file=od.config -n $NAMESPACE"
-
+# tag abcdesktop-config cm
 kubectl label configmap abcdesktop-config abcdesktop/role=pyos.config -n "$NAMESPACE" > /dev/null
 display_message_result "label configmap abcdesktop-config abcdesktop/role=pyos.config"
 
@@ -316,9 +320,11 @@ display_message_result "label configmap abcdesktop-config abcdesktop/role=pyos.c
 kubectl create -f $PODUSER_YAML > /dev/null
 display_message_result "kubectl create -f $PODUSER_YAML"
 
-echo "waiting for pod/anonymous-74bea267-8197-4b1d-acff-019b24e778c5 Ready"
-kubectl wait --for=condition=Ready pod/anonymous-74bea267-8197-4b1d-acff-019b24e778c5  -n "$NAMESPACE" --timeout=-1s
+display_message "waiting for pod/anonymous-74bea267-8197-4b1d-acff-019b24e778c5 Ready" "INFO"
+kubectl wait --for=condition=Ready pod/anonymous-74bea267-8197-4b1d-acff-019b24e778c5  -n "$NAMESPACE" --timeout="$TIMEOUT"
+display_message_result "pod/anonymous-74bea267-8197-4b1d-acff-019b24e778c5 has been done"
 kubectl delete -f $PODUSER_YAML
+display_message_result "pod/anonymous-74bea267-8197-4b1d-acff-019b24e778c5 deleted"
 
 
 #clean endpoints desktop 
@@ -326,33 +332,34 @@ kubectl delete -f $PODUSER_YAML
 kubectl get endpoints desktop >/dev/null  2>/dev/null
 EXIT_CODE=$?
 if [ $EXIT_CODE -eq 0 ]; then
+        display_message "previous endpoint desktop has been found" "INFO"
 	kubectl delete endpoints desktop
         display_message_result "delete previous endpoint desktop"
 fi
 
 
+# main yaml file 
 kubectl create -f $ABCDESKTOP_YAML
 display_message_result "kubectl create -f $ABCDESKTOP_YAML"
-
 
 deployments=$(kubectl -n "$NAMESPACE" get deployment --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 for d in $deployments;  
 do 
-	echo "waiting for deployment/$d available"; 
+	display_message  "waiting for deployment/$d available" "INFO"
 	kubectl -n "$NAMESPACE" wait "deployment/$d" --for=condition=available --timeout=-1s; 
 done
 
 pods=$(kubectl -n "$NAMESPACE" get pods --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 for p in $pods; 
 do
-	echo "waiting for pod/$p Ready"
-	kubectl -n "$NAMESPACE" wait "pod/$p" --for=condition=Ready --timeout=-1s
+ 	display_message "waiting for pod/$p Ready" "INFO"
+	kubectl -n "$NAMESPACE" wait "pod/$p" --for=condition=Ready --timeout="$TIMEOUT"
 done
 
 # list all pods 
 kubectl get pods -n "$NAMESPACE"
 echo ""
-display_message_result "Setup done"
+display_message "Setup done" "INFO"
 echo ""
 
 # echo "Open your navigator to http://[your-ip-hostname]:30443/"
@@ -373,12 +380,12 @@ curl --max-time 3 http://localhost:30443/img/abcdesktop.svg 2>/dev/null 1>/dev/n
 CURL_EXIT_CODE=$?
 if [ "$CURL_EXIT_CODE" -eq 0 ]; then
   display_message "service status is up" "OK"
-  echo ""
-  echo "Open your navigator to http://localhost:30443/"
-  echo ""
+  echo -e
+  display_message "Open your navigator to http://localhost:30443/" "INFO"
+  echo -e
   exit 0
 else
-  echo "service status is down"
+  display_message "service status is down" "INFO"
 fi 
 
 
@@ -388,8 +395,9 @@ fi
 BASE_PORT=30443
 INCREMENT=1
 port=$BASE_PORT
+display_message "Looking for a free tcp port from $port" "INFO"
 if ! [ -x "$(command -v netstat)" ]; then
-  echo "netstat is not installed. I'm using port=$port" >&2
+  display_message "netstat command is not found. I'm using port=$port" "INFO"
 else
   isfree=$(netstat -taln |grep $port)
   while [[ -n "$isfree" ]]; do
@@ -397,14 +405,14 @@ else
     isfree=$(netstat -taln |grep "$port")
   done
 fi
+display_message "get a free tcp port from $port" "OK"
+echo -e
 
-
-echo "If you're using a cloud provider"
-echo "Forwarding abcdesktop service for you on port=$port"
+display_message "If you're using a cloud provider" "INFO"
+display_message "Forwarding abcdesktop service for you on port=$port" "INFO"
 NGINX_POD_NAME=$(kubectl get pods -l run=nginx-od -o jsonpath={.items..metadata.name} -n "$NAMESPACE")
-echo "Setup is running the command 'kubectl port-forward $NGINX_POD_NAME --address 0.0.0.0 $port:80 -n $NAMESPACE'"
+display_message "For you setup is running the command 'kubectl port-forward $NGINX_POD_NAME --address 0.0.0.0 $port:80 -n $NAMESPACE'" "INFO"
 kubectl port-forward "$NGINX_POD_NAME" --address 0.0.0.0 "$port:80" -n "$NAMESPACE" &
-
 
 MY_IP='localhost'
 HOST=$(hostname -I 2>/dev/null)
@@ -413,7 +421,7 @@ if [ "$HOSTNAME_EXIT_CODE" -eq 0 ]; then
 	MY_IP=$(echo "$HOST"|awk '{print $1}')
 fi
 
-echo "Please open your web browser and connect to"
-echo ""
-echo "http://$MY_IP:$port/"
-echo ""
+display_message "Please open your web browser and connect to" "INFO"
+echo -e
+display_message  "http://$MY_IP:$port/" "INFO"
+echo -e
