@@ -67,21 +67,22 @@ qterminalpod.d.$ABCDESKTOP_RELEASE.json
 evince.d.$ABCDESKTOP_RELEASE.json
 "
 
-
 if [ -z "${LOG_FILE}" ];
 then
     LOG_FILE="/var/log/kube.log"
 fi
+
 
 # $1 message
 display_section() {
     printf "\033[0;1;4m%s\033[0;0m\n" "$1"
 }
 
+
 # $1 message
 # $2 status
 display_message() {
-    # ${2^^}: bad substitution, use "${2}" 
+    # ${2^^}: bad substitution, use "${2}"
     # use printf instead of echo for better compatibility sh zsh bash
     case "${2}" in
         "OK") COLOR="\033[0;32m";;
@@ -109,13 +110,14 @@ display_message_result() {
     fi
 }
 
+
 # $1 command
 check_command() {
-  if ! command -v "$1" &> /dev/null
-  then
-    display_message "$1 could not be found" "KO"
+    if ! command -v "$1" &> /dev/null
+    then
+        display_message "$1 could not be found" "KO"
     exit 1
-  fi
+fi
 }
 
 
@@ -195,7 +197,7 @@ do
     shift
 done
 
-echo "abcdesktop pull images script namespace=${NAMESPACE}"
+display_message "abcdesktop pull images script namespace=${NAMESPACE}" "OK"
 
 #
 # give me a free tcp port starting from 30443
@@ -203,7 +205,7 @@ BASE_PORT=30443
 INCREMENT=1
 port=$BASE_PORT
 if ! [ -x "$(command -v netstat)" ]; then
-  echo "netstat is not installed. I'm using port=$port" >&2
+  display_message "netstat is not installed. I'm using port=$port" "INFO"
 else
   isfree=$(netstat -taln |grep $port)
   while [[ -n "$isfree" ]]; do
