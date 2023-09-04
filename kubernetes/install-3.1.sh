@@ -358,9 +358,7 @@ done
 
 # list all pods 
 kubectl get pods -n "$NAMESPACE"
-echo ""
-display_message "Setup done" "INFO"
-echo ""
+display_message_result "Setup done"
 
 # echo "Open your navigator to http://[your-ip-hostname]:30443/"
 # ABCDESKTOP_SERVICES=$(kubectl get pods --selector=name=nginx-od -o jsonpath={.items..status.hostIP} -n abcdesktop)
@@ -374,12 +372,12 @@ echo ""
 
 
 #
-echo "Checking the service url on http://localhost:30443" 
+display_message "Checking the service url on http://localhost:30443" "INFO"
 # GET the abcdesktop logo
 curl --max-time 3 http://localhost:30443/img/abcdesktop.svg 2>/dev/null 1>/dev/null 
 CURL_EXIT_CODE=$?
 if [ "$CURL_EXIT_CODE" -eq 0 ]; then
-  display_message "service status is up" "OK"
+  display_message "abcdesktop service status is up" "OK"
   echo -e
   display_message "Open your navigator to http://localhost:30443/" "INFO"
   echo -e
@@ -395,7 +393,7 @@ fi
 BASE_PORT=30443
 INCREMENT=1
 port=$BASE_PORT
-display_message "Looking for a free tcp port from $port" "INFO"
+display_message "Looking for a free tcp port from port $port" "INFO"
 if ! [ -x "$(command -v netstat)" ]; then
   display_message "netstat command is not found. I'm using port=$port" "INFO"
 else
@@ -405,7 +403,7 @@ else
     isfree=$(netstat -taln |grep "$port")
   done
 fi
-display_message "get a free tcp port from $port" "OK"
+display_message "get a free tcp port $port" "OK"
 echo -e
 
 display_message "If you're using a cloud provider" "INFO"
