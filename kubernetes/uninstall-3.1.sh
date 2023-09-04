@@ -30,8 +30,8 @@ ABCDESKTOP_YAML_SOURCE="https://raw.githubusercontent.com/abcdesktopio/conf/main
 # default namespace
 NAMESPACE=abcdesktop
 # force continue when an error occurs
-# No force by default
-FORCE=0
+# force by default
+FORCE=1
 
 
 if [ -z "${LOG_FILE}" ];
@@ -189,13 +189,12 @@ if [ ! -z "$START" ]; then
   fi
 fi
 
-kubectl delete pods --selector="type=x11server" -n "$NAMESPACE"
+kubectl delete pods --selector="type=x11server" -n "$NAMESPACE" > /dev/null
 display_message_result "delete pods --selector=\"type=x11server\" -n $NAMESPACE"
 
 # create abcdesktop.yaml file
 if [ -f abcdesktop.yaml ]; then
    display_message "use local file abcdesktop.yaml" "OK"
-   ABCDESKTOP_YAML=abcdesktop.yaml
 else
    curl "$ABCDESKTOP_YAML_SOURCE" --output abcdesktop.yaml
    display_message_result "downloaded source $ABCDESKTOP_YAML_SOURCE"
@@ -212,20 +211,21 @@ fi
 
 kubectl delete -f abcdesktop.yaml
 display_message_result "kubectl delete -f abcdesktop.yaml"
-kubectl delete secrets --all -n "$NAMESPACE"
+kubectl delete secrets --all -n "$NAMESPACE" > /dev/null
 display_message_result "kubectl delete secrets --all -n $NAMESPACE"
-kubectl delete cm --all -n "$NAMESPACE"
+kubectl delete cm --all -n "$NAMESPACE" > /dev/null
 display_message_result "kubectl delete configmap --all -n $NAMESPACE"
-kubectl delete pvc --all -n "$NAMESPACE"
+kubectl delete pvc --all -n "$NAMESPACE" > /dev/null
 display_message_result "kubectl delete pvc --all -n $NAMESPACE"
-kubectl delete namespace "$NAMESPACE"
-display_message_result "kubectl delete namespace $NAMESPACE"
+display_message "deleting namespace $NAMESPACE" "INFO"
+delete_message=$(kubectl delete namespace "$NAMESPACE")
+display_message_result "$delete_message"
 
 # delete files
 # clean()
 
 if [ ! -z "$START" ]; then
-  TIMEDIFF=$(expr $EPOCHSECONDS - $START)
+  TIMEDIFF=$(expr "$EPOCHSECONDS" - "$START")
   if [ -n "$DEBUG" ]; then
       display_message  "the process takes $TIMEDIFF seconds to complete" "INFO"
   fi
