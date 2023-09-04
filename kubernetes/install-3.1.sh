@@ -171,7 +171,7 @@ do
         --help) help; exit;;
         --version) version; exit;;
 	--clean) clean; exit;;
- 	--timeout TIMEOUT=="$2";shift;;
+ 	--timeout) TIMEOUT=="$2";shift;;
         --namespace) NAMESPACE="$2";shift;;
 	--force) FORCE="$2";shift;;
     esac
