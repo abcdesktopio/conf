@@ -41,6 +41,7 @@ FORCE=0
 # TIMEOUT DEFAULT VALUE 
 TIMEOUT=600s
 
+
 # list of pod container image to prefetch
 # ABCDESKTOP_POD_IMAGES="
 # $REGISTRY_DOCKERHUB/oc.user.ubuntu:$ABCDESKTOP_RELEASE 
@@ -60,10 +61,11 @@ display_section() {
     printf "\033[0;1;4m%s\033[0;0m\n" "$1"
 }
 
+
 # $1 message
 # $2 status
 display_message() {
-    # ${2^^}: bad substitution, use "${2}" 
+    # ${2^^}: bad substitution, use "${2}"
     # use printf instead of echo for better compatibility sh zsh bash
     case "${2}" in
         "OK") COLOR="\033[0;32m";;
@@ -157,7 +159,7 @@ EOF
 }
 
 opts=$(getopt \
-    --longoptions "help,version,clean,force:,timeout:namespace:," \
+    --longoptions "help,version,clean,force:,timeout:,namespace:," \
     --name "$(basename "$0")" \
     --options "" \
     -- "$@"
@@ -171,14 +173,14 @@ do
         --help) help; exit;;
         --version) version; exit;;
 	--clean) clean; exit;;
- 	--timeout) TIMEOUT=="$2";shift;;
+	--timeout) TIMEOUT="$2";shift;;
         --namespace) NAMESPACE="$2";shift;;
 	--force) FORCE="$2";shift;;
     esac
     shift
 done
 
-echo "abcdesktop install script namespace=${NAMESPACE}"
+display_message  "abcdesktop install script namespace=${NAMESPACE}" "INFO"
 
 # Check if kubectl command is supported
 # run command kubectl version
@@ -317,14 +319,16 @@ display_message_result "label configmap abcdesktop-config abcdesktop/role=pyos.c
 
 
 # create a dummy pod user
+display_message "kubectl create -f $PODUSER_YAML" "INFO"
 kubectl create -f $PODUSER_YAML > /dev/null
 display_message_result "kubectl create -f $PODUSER_YAML"
 
 display_message "waiting for pod/anonymous-74bea267-8197-4b1d-acff-019b24e778c5 Ready" "INFO"
-kubectl wait --for=condition=Ready pod/anonymous-74bea267-8197-4b1d-acff-019b24e778c5  -n "$NAMESPACE" --timeout="$TIMEOUT"
-display_message_result "pod/anonymous-74bea267-8197-4b1d-acff-019b24e778c5 has been done"
-kubectl delete -f $PODUSER_YAML
-display_message_result "pod/anonymous-74bea267-8197-4b1d-acff-019b24e778c5 deleted"
+wait_message=$(kubectl wait --for=condition=Ready pod/anonymous-74bea267-8197-4b1d-acff-019b24e778c5  -n "$NAMESPACE" --timeout="$TIMEOUT")
+display_message_result "$wait_message"
+display_message "deleting for pod/anonymous-74bea267-8197-4b1d-acff-019b24e778c5 Ready" "INFO"
+delete_message=$(kubectl delete --grace-period=0  -f $PODUSER_YAML)
+display_message_result "$delete_message"
 
 
 #clean endpoints desktop 
@@ -333,32 +337,35 @@ kubectl get endpoints desktop >/dev/null  2>/dev/null
 EXIT_CODE=$?
 if [ $EXIT_CODE -eq 0 ]; then
         display_message "previous endpoint desktop has been found" "INFO"
-	kubectl delete endpoints desktop
-        display_message_result "delete previous endpoint desktop"
+	delete_message=$(kubectl delete endpoints desktop)
+        display_message_result "$delete_message"
 fi
 
 
 # main yaml file 
-kubectl create -f $ABCDESKTOP_YAML
-display_message_result "kubectl create -f $ABCDESKTOP_YAML"
+create_message=$(kubectl create -f $ABCDESKTOP_YAML)
+display_message_result "$create_message"
 
 deployments=$(kubectl -n "$NAMESPACE" get deployment --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 for d in $deployments;  
 do 
 	display_message  "waiting for deployment/$d available" "INFO"
-	kubectl -n "$NAMESPACE" wait "deployment/$d" --for=condition=available --timeout=-1s; 
+	wait_message=$(kubectl -n "$NAMESPACE" wait "deployment/$d" --for=condition=available --timeout=-1s)
+        display_message_result "$wait_message"	
 done
 
 pods=$(kubectl -n "$NAMESPACE" get pods --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 for p in $pods; 
 do
- 	display_message "waiting for pod/$p Ready" "INFO"
-	kubectl -n "$NAMESPACE" wait "pod/$p" --for=condition=Ready --timeout="$TIMEOUT"
+ 	display_message "waiting for pod/$p Ready" "INFO" 
+	wait_message=$(kubectl -n "$NAMESPACE" wait "pod/$p" --for=condition=Ready --timeout="$TIMEOUT")
+	display_message_result "$wait_message"
 done
 
 # list all pods 
+display_message "list all pods in namespace $NAMESPACE" "INFO"
 kubectl get pods -n "$NAMESPACE"
-display_message_result "Setup done"
+display_message "Setup done" "INFO"
 
 # echo "Open your navigator to http://[your-ip-hostname]:30443/"
 # ABCDESKTOP_SERVICES=$(kubectl get pods --selector=name=nginx-od -o jsonpath={.items..status.hostIP} -n abcdesktop)
@@ -377,9 +384,8 @@ display_message "Checking the service url on http://localhost:30443" "INFO"
 curl --max-time 3 http://localhost:30443/img/abcdesktop.svg 2>/dev/null 1>/dev/null 
 CURL_EXIT_CODE=$?
 if [ "$CURL_EXIT_CODE" -eq 0 ]; then
-  display_message "abcdesktop service status is up" "OK"
   echo -e
-  display_message "Open your navigator to http://localhost:30443/" "INFO"
+  display_message "Please open your web browser and connect to http://localhost:30443/" "OK"
   echo -e
   exit 0
 else
@@ -393,7 +399,7 @@ fi
 BASE_PORT=30443
 INCREMENT=1
 port=$BASE_PORT
-display_message "Looking for a free tcp port from port $port" "INFO"
+display_message "Looking for a free tcp port from $port" "INFO"
 if ! [ -x "$(command -v netstat)" ]; then
   display_message "netstat command is not found. I'm using port=$port" "INFO"
 else
@@ -403,7 +409,7 @@ else
     isfree=$(netstat -taln |grep "$port")
   done
 fi
-display_message "get a free tcp port $port" "OK"
+display_message "get a free tcp port from $port" "OK"
 echo -e
 
 display_message "If you're using a cloud provider" "INFO"
@@ -419,7 +425,7 @@ if [ "$HOSTNAME_EXIT_CODE" -eq 0 ]; then
 	MY_IP=$(echo "$HOST"|awk '{print $1}')
 fi
 
-display_message "Please open your web browser and connect to" "INFO"
+display_message "Please open your web browser and connect to" "OK"
 echo -e
 display_message  "http://$MY_IP:$port/" "INFO"
 echo -e
