@@ -184,7 +184,9 @@ fi
 
 START=$EPOCHSECONDS
 if [ ! -z "$START" ]; then
-  echo "at $START epoch seconds"
+  if [ -n "$DEBUG" ]; then
+      display_message "start at $START epoch seconds" "INFO"
+  fi
 fi
 
 kubectl delete pods --selector="type=x11server" -n "$NAMESPACE"
@@ -209,19 +211,22 @@ if [ "$NAMESPACE" != "abcdesktop" ]; then
 fi
 
 kubectl delete -f abcdesktop.yaml
-display_message_result "kubectl delete secrets --all -n $NAMESPACE"
-
+display_message_result "kubectl delete -f abcdesktop.yaml"
 kubectl delete secrets --all -n "$NAMESPACE"
+display_message_result "kubectl delete secrets --all -n $NAMESPACE"
 kubectl delete cm --all -n "$NAMESPACE"
+display_message_result "kubectl delete configmap --all -n $NAMESPACE"
 kubectl delete pvc --all -n "$NAMESPACE"
-
+display_message_result "kubectl delete pvc --all -n $NAMESPACE"
 kubectl delete namespace "$NAMESPACE"
 display_message_result "kubectl delete namespace $NAMESPACE"
 
 # delete files
-clean()
+# clean()
 
 if [ ! -z "$START" ]; then
   TIMEDIFF=$(expr $EPOCHSECONDS - $START)
-  echo "the process takes $TIMEDIFF seconds to complete"
+  if [ -n "$DEBUG" ]; then
+      display_message  "the process takes $TIMEDIFF seconds to complete" "INFO"
+  fi
 fi
