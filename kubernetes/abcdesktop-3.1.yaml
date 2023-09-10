@@ -1,0 +1,672 @@
+# Copyright abcdesktop.io
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# http://www.apache.org/licenses/LICENSE-2.0
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: pyos-role
+  namespace: abcdesktop
+rules:
+- apiGroups: ['']
+  resources: ['nodes']
+  verbs: ["get", "watch", "list"]
+- apiGroups: ['']
+  resources: ['pods']
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ['']
+  resources: ['events']
+  verbs: [ "get", "list", "watch" ]
+- apiGroups: ['']
+  resources: ['pods/exec']
+  verbs: ["create", "get", "list", "watch", "update", "patch", "delete"]
+- apiGroups: ['']
+  resources: ['pods/ephemeralcontainers']
+  verbs: ["create", "get", "list", "watch", "update", "patch", "delete"]
+- apiGroups: ['']
+  resources: ['secrets']
+  verbs:  ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ['']
+  resources: ['configmaps']
+  verbs:  ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: [""]
+  resources: ["endpoints"]
+  verbs: ["get", "list"]
+- apiGroups: ['']
+  resources: ['pods/log']
+  verbs: ['get', 'list', 'watch' ]
+- apiGroups: [""]
+  resources: ["persistentvolumes"]
+  verbs: ["get", "list", "create", "delete"]
+- apiGroups: [""]
+  resources: ["persistentvolumeclaims"]
+  verbs: ["get", "list", "update", "create", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: pyos-rbac
+  namespace: abcdesktop
+subjects:
+- kind: ServiceAccount
+  name: pyos-serviceaccount
+  namespace: abcdesktop
+roleRef:
+  kind: Role
+  name: pyos-role
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: pyos-serviceaccount
+  namespace: abcdesktop
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: abcdesktop
+  name: configmap-mongodb-scripts
+  labels:
+    abcdesktop/role: mongodb-config
+data:
+  ensure-users.js: |
+    const targetDbList = cat('/etc/abcdesktop/MONGO_DBS_LIST');
+    const rootUser = cat('/etc/abcdesktop/admin/MONGO_ROOT_USERNAME');
+    const rootPass = cat('/etc/abcdesktop/admin/MONGO_ROOT_PASSWORD');
+    const usersStr = cat('/etc/abcdesktop/MONGO_USERS_LIST');
+
+    // auth against admin
+    const adminDb = db.getSiblingDB('admin');
+    adminDb.auth(rootUser, rootPass);
+    print('Successfully authenticated admin user');
+
+    print( 'List of database' );
+    print(targetDbList );
+    const targetDbs=targetDbList.split(',');
+
+    for (targetDbStr of targetDbs) {
+      print ( 'use ' + targetDbStr );
+      // we'll create the users here
+      const targetDb = db.getSiblingDB(targetDbStr);
+      // user-defined roles should be stored in the admin db
+      const customRoles = adminDb
+        .getRoles({rolesInfo: 1, showBuiltinRoles: false})
+        .map(role => role.role)
+        .filter(Boolean);
+
+      // parse the list of users, and create each user as needed
+      usersStr
+        .trim()
+        .split(';')
+        .map(s => s.split(':'))
+        .forEach(user => {
+          const username = user[0];
+          const rolesStr = user[1];
+          const password = user[2];
+
+          if (!rolesStr || !password) {
+            return;
+          }
+
+          const roles = rolesStr.split(',');
+          const userDoc = {
+            user: username,
+            pwd: password,
+          };
+
+          userDoc.roles = roles.map(role => {
+            if (!~customRoles.indexOf(role)) {
+              // is this a user defined role?
+              return role; // no, it is built-in, just use the role name
+            }
+            return {role: role, db: 'admin'}; // yes, user-defined, specify the long format
+          });
+
+          try {
+            targetDb.createUser(userDoc);
+          } catch (err) {
+            print( err );
+            if (!~err.message.toLowerCase().indexOf('duplicate')) {
+              // if not a duplicate user
+              throw err; // rethrow
+            }
+          }
+        }
+      );
+    }
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+  namespace: abcdesktop
+  labels:
+    abcdesktop/role: nginx-config
+data:
+  default: | 
+    lua_package_path "/usr/local/share/lua/5.1/?.lua;;";
+    types {
+        # Web fonts
+        application/font-woff2               woff2;
+        application/-font-ttf                ttc ttf;
+        font/opentype                        otf;
+    }
+    server {
+        resolver 'kube-dns.kube-system.svc.cluster.local';
+        set $my_speedtest 'speedtest.abcdesktop.svc.cluster.local';
+        set $my_proxy 'pyos.abcdesktop.svc.cluster.local';
+        listen 80;
+        server_name _;
+        root /var/webModules;
+        index index.html index.htm;
+        # default abcdesktop.io oc.user tcp port
+        set $pulseaudio_http_port               4714;
+        set $ws_tcp_bridge_tcp_port             6081;
+        set $api_service_tcp_port               8000;
+        set $filemanager_bridge_tcp_port        29780;
+        set $xterm_tcp_port                     29781;
+        set $printerfile_service_tcp_port       29782;
+        set $file_service_tcp_port              29783;
+        set $broadcast_tcp_port                 29784;
+        set $lync_service_tcp_port              29785;
+        set $spawner_service_tcp_port           29786;
+        set $janus_service_tcp_port		29787; 
+        # uncomment to use env var
+        # set_by_lua  $filemanager_bridge_tcp_port 'return os.getenv("FILEMANAGER_BRIDGE_TCP_PORT")';
+        # set_by_lua  $broadcast_tcp_port 'return os.getenv("BROADCAST_SERVICE_TCP_PORT")';
+        # set_by_lua  $ws_tcp_bridge_tcp_port 'return os.getenv("WS_TCP_BRIDGE_SERVICE_TCP_PORT")';
+        # set_by_lua  $spawner_service_tcp_port 'return os.getenv("SPAWNER_SERVICE_TCP_PORT")';
+        # set_by_lua  $xterm_tcp_port 'return os.getenv("XTERM_TCP_PORT")';
+        # set_by_lua  $file_service_tcp_port 'return os.getenv("FILE_SERVICE_TCP_PORT")';
+        # set_by_lua  $pulseaudio_http_port 'return os.getenv("PULSEAUDIO_HTTP_PORT")';
+        location /nstatus {
+                 # allow 127.0.0.1;
+                 # deny all;
+                 stub_status;
+        }
+        
+        include route.conf;
+    }
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  namespace: abcdesktop
+  name: secret-mongodb
+  labels:
+    abcdesktop/role: secret-mongodb
+type: Opaque
+stringData:
+  MONGO_ROOT_USERNAME: 'root'
+  MONGO_ROOT_PASSWORD: 'Oge5iQw9dGBvRDd'
+  MONGO_USERNAME: 'pyos'
+  MONGO_PASSWORD: 'Az4MeYWUjZDg4Zjhk'
+  MONGO_USERS_LIST: 'pyos:readWrite:Az4MeYWUjZDg4Zjhk'
+  MONGO_DBS_LIST: 'image,fail2ban,loginHistory,applications,profiles'
+  MONGODB_URL: 'mongodb://pyos:Az4MeYWUjZDg4Zjhk@mongodb.abcdesktop.svc.cluster.local'
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb-od
+  namespace: abcdesktop
+  labels:
+    run: mongodb-od
+    type: database
+    abcdesktop/role: mongodb
+spec:
+  selector:
+    matchLabels:
+      run: mongodb-od
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: mongodb-od
+        type: database
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo:4.4
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME_FILE
+          value: /etc/abcdesktop/admin/MONGO_ROOT_USERNAME
+        - name: MONGO_INITDB_ROOT_PASSWORD_FILE
+          value: /etc/abcdesktop/admin/MONGO_ROOT_PASSWORD
+        volumeMounts:
+        - name: abcdesktop
+          mountPath: /etc/abcdesktop
+          readOnly: true
+        - name: mongodb-scripts
+          mountPath: /docker-entrypoint-initdb.d
+          readOnly: true
+      volumes:
+         - name: abcdesktop
+           secret:
+             secretName: secret-mongodb
+             items:
+             - key: MONGO_ROOT_USERNAME
+               path: admin/MONGO_ROOT_USERNAME
+               mode: 0444
+             - key: MONGO_ROOT_PASSWORD
+               path: admin/MONGO_ROOT_PASSWORD
+               mode: 0444
+             - key: MONGO_USERNAME
+               path: MONGO_USERNAME
+               mode: 0444
+             - key: MONGO_PASSWORD
+               path: MONGO_PASSWORD
+               mode: 0444
+             - key: MONGO_USERS_LIST
+               path: MONGO_USERS_LIST
+               mode: 0444
+             - key: MONGO_DBS_LIST
+               path: MONGO_DBS_LIST
+               mode: 0444
+         - name: mongodb-scripts
+           configMap:
+             name: configmap-mongodb-scripts 
+             items:
+             - key: ensure-users.js
+               path: ensure-users.js
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: abcdesktop
+  name: memcached-od 
+  labels:
+    abcdesktop/role: memcached
+spec:
+  selector:
+    matchLabels:
+      run: memcached-od
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: memcached-od
+        type: database
+    spec:
+      containers:
+      - name: memcached
+        image: memcached 
+        ports:
+          - containerPort: 11211
+---
+apiVersion: apps/v1
+kind: Deployment 
+metadata:
+  namespace: abcdesktop
+  name: nginx-od
+  labels:
+    abcdesktop/role: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: nginx-od
+  template:
+    metadata:
+      namespace: abcdesktop
+      labels:
+        name: nginx-od
+        run: nginx-od
+        type: frontend
+        netpol/speedtest: 'true'
+        netpol/memcached: 'true'
+        netpol/pyos: 'true'
+        netpol/ocuser: 'true'
+        netpol/dns: 'true'
+    spec:
+      containers:
+      - name: nginx
+        imagePullPolicy: Always
+        image: abcdesktopio/oc.nginx:3.0
+        volumeMounts:
+          - name: jwtsigningkeys
+            mountPath: "/config.signing"
+            readOnly: true
+          - name: jwtpayloadkeys
+            mountPath: "/config.payload"
+            readOnly: true
+          - name: default-config
+            mountPath: /etc/nginx/sites-enabled/default
+            subPath: default
+            readOnly: true
+        ports:
+          - containerPort: 80
+            name: http
+          - containerPort: 443
+            name: https
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          failureThreshold: 1
+          periodSeconds: 10
+        startupProbe:
+          httpGet:
+            path: /
+            port: 80
+          failureThreshold: 5
+          periodSeconds: 10
+        resources:
+          limits:
+            cpu: 2
+            memory: 512Mi
+          requests:
+            cpu: 0.25
+            memory: 64Mi
+        env:
+          - name: JWT_DESKTOP_PAYLOAD_PRIVATE_KEY
+            value: "/config.payload/abcdesktop_jwt_desktop_payload_private_key.pem"
+          - name: JWT_DESKTOP_SIGNING_PUBLIC_KEY
+            value: "/config.signing/abcdesktop_jwt_desktop_signing_public_key.pem"
+          - name: NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+      volumes:
+          - name: jwtsigningkeys
+            secret:
+              secretName: abcdesktopjwtdesktopsigning
+          - name: jwtpayloadkeys
+            secret:
+              secretName: abcdesktopjwtdesktoppayload
+          - name: default-config
+            configMap:
+              name: nginx-config
+      dnsPolicy: ClusterFirst
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: abcdesktop
+  name: speedtest-od
+  labels:
+    abcdesktop/role: speedtest
+spec:
+  selector:
+    matchLabels:
+      run: speedtest-od
+  replicas: 1
+  template:
+    metadata:
+      namespace: abcdesktop
+      labels:
+        run: speedtest-od 
+    spec:
+      containers:
+      - name: speedtest
+        image: abcdesktopio/oc.speedtest:3.0
+        ports:
+          - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: abcdesktop
+  name: pyos-od
+  labels:
+    abcdesktop/role: pyos
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: pyos-od
+  template:
+    metadata:
+      namespace: abcdesktop
+      labels:
+        name: pyos-od
+        run: pyos-od
+        netpol/https: 'true'
+        netpol/ldaps: 'true'
+        netpol/auth: 'true'
+        netpol/cifs: 'true'
+        netpol/api: 'true'
+        netpol/dns: 'true'
+        netpol/mongodb: 'true'
+        netpol/memcached: 'true'
+        netpol/graylog: 'true'
+    spec:
+      serviceAccountName: pyos-serviceaccount
+      containers:
+      - name : pyos
+        imagePullPolicy: Always
+        image: abcdesktopio/oc.pyos:3.1
+        command:
+            - "/var/pyos/od.py"
+        volumeMounts:
+          - name: jwtsigningkeys
+            mountPath: "/config.signing"
+            readOnly: true
+          - name: jwtusersigningkeys
+            mountPath: "/config.usersigning"
+            readOnly: true
+          - name: jwtpayloadkeys
+            mountPath: "/config.payload"
+            readOnly: true
+          - name: volume-abcdesktop-config
+            mountPath: /var/pyos/od.config
+            subPath: od.config
+            readOnly: true
+        ports:
+          - containerPort: 8000
+        livenessProbe:
+          httpGet:
+            path: /API/healthz
+            port: 8000
+          failureThreshold: 1
+          periodSeconds: 10
+        startupProbe:
+          httpGet:
+            path: /API/healthz
+            port: 8000
+          failureThreshold: 5
+          periodSeconds: 10
+        resources:
+          limits:
+            cpu: 2
+            memory: 1024Mi
+          requests:
+            cpu: 0.5
+            memory: 128Mi
+        env:
+          - name: NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          - name: MONGODB_URL
+            valueFrom:
+              secretKeyRef:
+                name: secret-mongodb
+                key: MONGODB_URL
+      volumes:
+        - name: jwtusersigningkeys
+          secret:
+            secretName: abcdesktopjwtusersigning
+        - name: jwtsigningkeys
+          secret:
+            secretName: abcdesktopjwtdesktopsigning
+        - name: jwtpayloadkeys
+          secret:
+            secretName: abcdesktopjwtdesktoppayload
+        - name: volume-abcdesktop-config
+          configMap:
+            name: abcdesktop-config
+      dnsPolicy: ClusterFirst
+---
+kind: Endpoints
+apiVersion: v1
+metadata:
+  name: desktop
+---
+apiVersion: v1 
+kind: Service 
+metadata: 
+  name: desktop
+  namespace: abcdesktop 
+  labels:
+    abcdesktop/role: desktop
+spec: 
+  clusterIP: None
+  selector:
+    type: x11server
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: memcached
+  namespace: abcdesktop
+  labels:
+    abcdesktop/role: memcached
+spec:
+  selector:
+    run: memcached-od
+  ports:
+  - port: 11211
+    protocol: TCP
+    targetPort: 11211
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: mongodb
+  namespace: abcdesktop
+  labels:
+    abcdesktop/role: mongodb
+spec:
+  selector:
+    run: mongodb-od 
+  ports:
+  - protocol: TCP
+    port: 27017
+    targetPort: 27017
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: speedtest
+  namespace: abcdesktop
+  labels:
+    abcdesktop/role: speedtest
+spec:
+  selector:
+    run: speedtest-od
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: nginx
+  namespace: abcdesktop
+  labels:
+    abcdesktop/role: nginx
+spec:
+  type: NodePort
+  selector:
+    run: nginx-od
+  ports:
+  - protocol: TCP
+    port: 80
+    nodePort: 30443
+    targetPort: 80
+    name: http
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: pyos
+  namespace: abcdesktop
+  labels:
+    abcdesktop/role: pyos
+spec:
+  selector:
+    run: pyos-od
+  ports:
+  - port: 8000
+    protocol: TCP
+    targetPort: 8000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: abcdesktop
+  name: openldap-od 
+  labels:
+    abcdesktop/role: openldap
+spec:
+  selector:
+    matchLabels:
+      run: openldap-od
+  replicas: 1
+  template:
+    metadata:
+      namespace: abcdesktop
+      labels:
+        run: openldap-od
+        netpol/dns: 'true'
+    spec:
+      containers:
+      - name: openldap
+        image: abcdesktopio/oc.openldap:3.0
+        ports:
+          - containerPort: 10389
+          - containerPort: 10636
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: openldap
+  namespace: abcdesktop
+  labels:
+    abcdesktop/role: openldap
+spec:
+  selector:
+    run: openldap-od
+  ports:
+  - name: ldap
+    protocol: TCP
+    port: 389
+    targetPort: 10389
+  - name: ldaps
+    protocol: TCP
+    port: 636
+    targetPort: 10636
