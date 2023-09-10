@@ -24,7 +24,7 @@
 
 VERSION="3.1.0"
 
-ABCDESKTOP_YAML_SOURCE="https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/abcdesktop-3.0.yaml"
+ABCDESKTOP_YAML_SOURCE="https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/abcdesktop-3.1.yaml"
 
 
 # default namespace
