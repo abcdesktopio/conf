@@ -1,0 +1,1121 @@
+{
+  "apiVersion": "v1",
+  "kind": "Pod",
+  "metadata": {
+    "name": "anonymous-74bea267-8197-4b1d-acff-019b24e778c5",
+    "namespace": "abcdesktop",
+    "labels": {
+      "access_provider": "anonymous",
+      "access_providertype": "anonymous",
+      "access_userid": "758b58db-7dcc-47d1-b95e-4f18bee61f68",
+      "access_username": "anonymous",
+      "domain": "desktop",
+      "netpol/ocuser": "true",
+      "xauthkey": "bf5a4d8c048121cf6c176c425ac3c0",
+      "pulseaudio_cookie": "d34b796e90f7f13ff21a4a23fa32d969",
+      "broadcast_cookie": "c2b1ff172eb1ecb11fd320cc42e219f74d1e2fd76f3ddd39",
+      "tennetwork": "true",
+      "type": "x11server",
+      "service_graphical": "6081",
+      "service_spawner": "29786",
+      "service_broadcast": "29784",
+      "service_webshell": "29781",
+      "service_printer": "681",
+      "service_printerfile": "29782",
+      "service_filer": "29783",
+      "service_storage": "enabled",
+      "service_init": "enabled",
+      "service_ephemeral_container": "enabled",
+      "service_pod_application": "enabled"
+    },
+    "annotations": {
+      "lastlogin_datetime": "2022-11-10T11:21:49"
+    }
+  },
+  "spec": {
+    "dnsPolicy": "ClusterFirst",
+    "dnsConfig": null,
+    "automountServiceAccountToken": false,
+    "subdomain": "desktop",
+    "shareProcessNamespace": true,
+    "volumes": [
+      {
+        "name": "tmp",
+        "emptyDir": {
+          "medium": "Memory",
+          "sizeLimit": "8Gi"
+        }
+      },
+      {
+        "name": "x11socket",
+        "emptyDir": {
+          "medium": "Memory"
+        }
+      },
+      {
+        "name": "pulseaudiosocket",
+        "emptyDir": {
+          "medium": "Memory"
+        }
+      },
+      {
+        "name": "cupsdsocket",
+        "emptyDir": {
+          "medium": "Memory"
+        }
+      },
+      {
+        "name": "run",
+        "emptyDir": {
+          "medium": "Memory",
+          "sizeLimit": "1M"
+        }
+      },
+      {
+        "name": "log",
+        "emptyDir": {
+          "medium": "Memory",
+          "sizeLimit": "8M"
+        }
+      },
+      {
+        "name": "home-758b58db-7dcc-47d1-b95e-4f18bee61f68",
+        "emptyDir": {}
+      }
+    ],
+    "nodeSelector": null,
+    "initContainers": [
+      {
+        "name": "i-758b58db-7dcc-47d1-b95e-4f18bee61f68-74bea267-8197-4b1d-acff",
+        "imagePullPolicy": "IfNotPresent",
+        "image": "busybox",
+        "command": [
+          "sh",
+          "-c",
+          "chown 4096:4096 /home/balloon"
+        ],
+        "volumeMounts": [
+          {
+            "name": "tmp",
+            "mountPath": "/tmp"
+          },
+          {
+            "name": "x11socket",
+            "mountPath": "/tmp/.X11-unix"
+          },
+          {
+            "name": "pulseaudiosocket",
+            "mountPath": "/tmp/.pulseaudio"
+          },
+          {
+            "name": "cupsdsocket",
+            "mountPath": "/tmp/.cupsd"
+          },
+          {
+            "name": "run",
+            "mountPath": "/var/run/desktop"
+          },
+          {
+            "name": "log",
+            "mountPath": "/var/log/desktop"
+          },
+          {
+            "name": "home-758b58db-7dcc-47d1-b95e-4f18bee61f68",
+            "mountPath": "/home/balloon"
+          }
+        ],
+        "env": [
+          {
+            "name": "DISPLAY",
+            "value": ":0.0"
+          },
+          {
+            "name": "HOME",
+            "value": "/home/balloon"
+          },
+          {
+            "name": "SET_DEFAULT_WALLPAPER",
+            "value": "welcometoabcdesktop.png"
+          },
+          {
+            "name": "LANGUAGE",
+            "value": "en_US"
+          },
+          {
+            "name": "LANG",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_ALL",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_PAPER",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_ADDRESS",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_MONETARY",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_TIME",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_MEASUREMENT",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_IDENTIFICATION",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_TELEPHONE",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_NUMERIC",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "ABCDESKTOP_USERNAME",
+            "value": "Anonymous"
+          },
+          {
+            "name": "ABCDESKTOP_USERID",
+            "value": "758b58db-7dcc-47d1-b95e-4f18bee61f68"
+          },
+          {
+            "name": "ABCDESKTOP_PROVIDERNAME",
+            "value": "anonymous"
+          },
+          {
+            "name": "ABCDESKTOP_PROVIDERTYPE",
+            "value": "anonymous"
+          },
+          {
+            "name": "WEBCLIENT_SOURCEIPADDR",
+            "value": "10.244.0.1"
+          },
+          {
+            "name": "XAUTH_KEY",
+            "value": "bf5a4d8c048121cf6c176c425ac3c0"
+          },
+          {
+            "name": "PULSEAUDIO_COOKIE",
+            "value": "d34b796e90f7f13ff21a4a23fa32d969"
+          },
+          {
+            "name": "BROADCAST_COOKIE",
+            "value": "c2b1ff172eb1ecb11fd320cc42e219f74d1e2fd76f3ddd39"
+          },
+          {
+            "name": "USER",
+            "value": "758b58db-7dcc-47d1-b95e-4f18bee61f68"
+          },
+          {
+            "name": "LOGNAME",
+            "value": "758b58db-7dcc-47d1-b95e-4f18bee61f68"
+          },
+          {
+            "name": "ABCDESKTOP_LABEL_tennetwork",
+            "value": "true"
+          },
+          {
+            "name": "ABCDESKTOP_SERVICE_graphical",
+            "value": "enabled"
+          },
+          {
+            "name": "ABCDESKTOP_SERVICE_spawner",
+            "value": "enabled"
+          },
+          {
+            "name": "ABCDESKTOP_SERVICE_webshell",
+            "value": "enabled"
+          },
+          {
+            "name": "ABCDESKTOP_SERVICE_printer",
+            "value": "enabled"
+          },
+          {
+            "name": "ABCDESKTOP_SERVICE_filer",
+            "value": "enabled"
+          },
+          {
+            "name": "ABCDESKTOP_SERVICE_init",
+            "value": "enabled"
+          },
+          {
+            "name": "ABCDESKTOP_SERVICE_storage",
+            "value": "enabled"
+          },
+          {
+            "name": "NODE_NAME",
+            "valueFrom": {
+              "fieldRef": {
+                "fieldPath": "spec.nodeName"
+              }
+            }
+          },
+          {
+            "name": "POD_NAME",
+            "valueFrom": {
+              "fieldRef": {
+                "fieldPath": "metadata.name"
+              }
+            }
+          },
+          {
+            "name": "POD_NAMESPACE",
+            "valueFrom": {
+              "fieldRef": {
+                "fieldPath": "metadata.namespace"
+              }
+            }
+          },
+          {
+            "name": "POD_IP",
+            "valueFrom": {
+              "fieldRef": {
+                "fieldPath": "status.podIP"
+              }
+            }
+          }
+        ],
+        "securityContext": {
+          "runAsUser": 0
+        }
+      }
+    ],
+    "containers": [
+      {
+        "imagePullPolicy": "Always",
+        "image": "abcdesktopio/oc.user.ubuntu:3.0",
+        "name": "x-758b58db-7dcc-47d1-b95e-4f18bee61f68-74bea267-8197-4b1d-acff",
+        "args": [],
+        "env": [
+          {
+            "name": "DISPLAY",
+            "value": ":0.0"
+          },
+          {
+            "name": "HOME",
+            "value": "/home/balloon"
+          },
+          {
+            "name": "SET_DEFAULT_WALLPAPER",
+            "value": "welcometoabcdesktop.png"
+          },
+          {
+            "name": "LANGUAGE",
+            "value": "en_US"
+          },
+          {
+            "name": "LANG",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_ALL",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_PAPER",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_ADDRESS",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_MONETARY",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_TIME",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_MEASUREMENT",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_IDENTIFICATION",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_TELEPHONE",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_NUMERIC",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "ABCDESKTOP_USERNAME",
+            "value": "Anonymous"
+          },
+          {
+            "name": "ABCDESKTOP_USERID",
+            "value": "758b58db-7dcc-47d1-b95e-4f18bee61f68"
+          },
+          {
+            "name": "ABCDESKTOP_PROVIDERNAME",
+            "value": "anonymous"
+          },
+          {
+            "name": "ABCDESKTOP_PROVIDERTYPE",
+            "value": "anonymous"
+          },
+          {
+            "name": "WEBCLIENT_SOURCEIPADDR",
+            "value": "10.244.0.1"
+          },
+          {
+            "name": "XAUTH_KEY",
+            "value": "bf5a4d8c048121cf6c176c425ac3c0"
+          },
+          {
+            "name": "PULSEAUDIO_COOKIE",
+            "value": "d34b796e90f7f13ff21a4a23fa32d969"
+          },
+          {
+            "name": "BROADCAST_COOKIE",
+            "value": "c2b1ff172eb1ecb11fd320cc42e219f74d1e2fd76f3ddd39"
+          },
+          {
+            "name": "USER",
+            "value": "758b58db-7dcc-47d1-b95e-4f18bee61f68"
+          },
+          {
+            "name": "LOGNAME",
+            "value": "758b58db-7dcc-47d1-b95e-4f18bee61f68"
+          },
+          {
+            "name": "ABCDESKTOP_LABEL_tennetwork",
+            "value": "true"
+          },
+          {
+            "name": "ABCDESKTOP_SERVICE_graphical",
+            "value": "enabled"
+          },
+          {
+            "name": "ABCDESKTOP_SERVICE_spawner",
+            "value": "enabled"
+          },
+          {
+            "name": "ABCDESKTOP_SERVICE_webshell",
+            "value": "enabled"
+          },
+          {
+            "name": "ABCDESKTOP_SERVICE_printer",
+            "value": "enabled"
+          },
+          {
+            "name": "ABCDESKTOP_SERVICE_filer",
+            "value": "enabled"
+          },
+          {
+            "name": "ABCDESKTOP_SERVICE_init",
+            "value": "enabled"
+          },
+          {
+            "name": "ABCDESKTOP_SERVICE_storage",
+            "value": "enabled"
+          },
+          {
+            "name": "NODE_NAME",
+            "valueFrom": {
+              "fieldRef": {
+                "fieldPath": "spec.nodeName"
+              }
+            }
+          },
+          {
+            "name": "POD_NAME",
+            "valueFrom": {
+              "fieldRef": {
+                "fieldPath": "metadata.name"
+              }
+            }
+          },
+          {
+            "name": "POD_NAMESPACE",
+            "valueFrom": {
+              "fieldRef": {
+                "fieldPath": "metadata.namespace"
+              }
+            }
+          },
+          {
+            "name": "POD_IP",
+            "valueFrom": {
+              "fieldRef": {
+                "fieldPath": "status.podIP"
+              }
+            }
+          }
+        ],
+        "volumeMounts": [
+          {
+            "name": "tmp",
+            "mountPath": "/tmp"
+          },
+          {
+            "name": "x11socket",
+            "mountPath": "/tmp/.X11-unix"
+          },
+          {
+            "name": "pulseaudiosocket",
+            "mountPath": "/tmp/.pulseaudio"
+          },
+          {
+            "name": "cupsdsocket",
+            "mountPath": "/tmp/.cupsd"
+          },
+          {
+            "name": "run",
+            "mountPath": "/var/run/desktop"
+          },
+          {
+            "name": "log",
+            "mountPath": "/var/log/desktop"
+          },
+          {
+            "name": "home-758b58db-7dcc-47d1-b95e-4f18bee61f68",
+            "mountPath": "/home/balloon"
+          }
+        ],
+        "securityContext": {
+          "readOnlyRootFilesystem": true,
+          "allowPrivilegeEscalation": true,
+          "runAsUser": 4096,
+          "runAsGroup": 4096
+        },
+        "resources": {
+          "requests": {
+            "memory": "320Mi",
+            "cpu": "250m"
+          },
+          "limits": {
+            "memory": "1Gi",
+            "cpu": "1000m"
+          }
+        },
+        "lifecycle": {
+          "preStop": {
+            "exec": {
+              "command": [
+                "/bin/bash",
+                "-c",
+                "rm -rf /home/balloon/*"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "c-758b58db-7dcc-47d1-b95e-4f18bee61f68-74bea267-8197-4b1d-acff",
+        "imagePullPolicy": "Always",
+        "image": "abcdesktopio/oc.cupsd:3.0",
+        "env": [
+          {
+            "name": "DISPLAY",
+            "value": ":0.0"
+          },
+          {
+            "name": "HOME",
+            "value": "/home/balloon"
+          },
+          {
+            "name": "SET_DEFAULT_WALLPAPER",
+            "value": "welcometoabcdesktop.png"
+          },
+          {
+            "name": "LANGUAGE",
+            "value": "en_US"
+          },
+          {
+            "name": "LANG",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_ALL",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_PAPER",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_ADDRESS",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_MONETARY",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_TIME",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_MEASUREMENT",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_IDENTIFICATION",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_TELEPHONE",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_NUMERIC",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "ABCDESKTOP_USERNAME",
+            "value": "Anonymous"
+          },
+          {
+            "name": "ABCDESKTOP_USERID",
+            "value": "758b58db-7dcc-47d1-b95e-4f18bee61f68"
+          },
+          {
+            "name": "ABCDESKTOP_PROVIDERNAME",
+            "value": "anonymous"
+          },
+          {
+            "name": "ABCDESKTOP_PROVIDERTYPE",
+            "value": "anonymous"
+          },
+          {
+            "name": "WEBCLIENT_SOURCEIPADDR",
+            "value": "10.244.0.1"
+          },
+          {
+            "name": "XAUTH_KEY",
+            "value": "bf5a4d8c048121cf6c176c425ac3c0"
+          },
+          {
+            "name": "PULSEAUDIO_COOKIE",
+            "value": "d34b796e90f7f13ff21a4a23fa32d969"
+          },
+          {
+            "name": "BROADCAST_COOKIE",
+            "value": "c2b1ff172eb1ecb11fd320cc42e219f74d1e2fd76f3ddd39"
+          },
+          {
+            "name": "USER",
+            "value": "758b58db-7dcc-47d1-b95e-4f18bee61f68"
+          },
+          {
+            "name": "LOGNAME",
+            "value": "758b58db-7dcc-47d1-b95e-4f18bee61f68"
+          },
+          {
+            "name": "ABCDESKTOP_LABEL_tennetwork",
+            "value": "true"
+          },
+          {
+            "name": "ABCDESKTOP_SERVICE_graphical",
+            "value": "enabled"
+          },
+          {
+            "name": "ABCDESKTOP_SERVICE_spawner",
+            "value": "enabled"
+          },
+          {
+            "name": "ABCDESKTOP_SERVICE_webshell",
+            "value": "enabled"
+          },
+          {
+            "name": "ABCDESKTOP_SERVICE_printer",
+            "value": "enabled"
+          },
+          {
+            "name": "ABCDESKTOP_SERVICE_filer",
+            "value": "enabled"
+          },
+          {
+            "name": "ABCDESKTOP_SERVICE_init",
+            "value": "enabled"
+          },
+          {
+            "name": "ABCDESKTOP_SERVICE_storage",
+            "value": "enabled"
+          },
+          {
+            "name": "NODE_NAME",
+            "valueFrom": {
+              "fieldRef": {
+                "fieldPath": "spec.nodeName"
+              }
+            }
+          },
+          {
+            "name": "POD_NAME",
+            "valueFrom": {
+              "fieldRef": {
+                "fieldPath": "metadata.name"
+              }
+            }
+          },
+          {
+            "name": "POD_NAMESPACE",
+            "valueFrom": {
+              "fieldRef": {
+                "fieldPath": "metadata.namespace"
+              }
+            }
+          },
+          {
+            "name": "POD_IP",
+            "valueFrom": {
+              "fieldRef": {
+                "fieldPath": "status.podIP"
+              }
+            }
+          }
+        ],
+        "volumeMounts": [
+          {
+            "name": "tmp",
+            "mountPath": "/tmp"
+          }
+        ],
+        "securityContext": {
+          "runAsUser": 0
+        },
+        "resources": {
+          "requests": {
+            "memory": "64Mi",
+            "cpu": "125m"
+          },
+          "limits": {
+            "memory": "512Mi",
+            "cpu": "500m"
+          }
+        }
+      },
+      {
+        "name": "f-758b58db-7dcc-47d1-b95e-4f18bee61f68-74bea267-8197-4b1d-acff",
+        "imagePullPolicy": "Always",
+        "image": "abcdesktopio/oc.filer:3.0",
+        "env": [
+          {
+            "name": "DISPLAY",
+            "value": ":0.0"
+          },
+          {
+            "name": "HOME",
+            "value": "/home/balloon"
+          },
+          {
+            "name": "SET_DEFAULT_WALLPAPER",
+            "value": "welcometoabcdesktop.png"
+          },
+          {
+            "name": "LANGUAGE",
+            "value": "en_US"
+          },
+          {
+            "name": "LANG",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_ALL",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_PAPER",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_ADDRESS",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_MONETARY",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_TIME",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_MEASUREMENT",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_IDENTIFICATION",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_TELEPHONE",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_NUMERIC",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "ABCDESKTOP_USERNAME",
+            "value": "Anonymous"
+          },
+          {
+            "name": "ABCDESKTOP_USERID",
+            "value": "758b58db-7dcc-47d1-b95e-4f18bee61f68"
+          },
+          {
+            "name": "ABCDESKTOP_PROVIDERNAME",
+            "value": "anonymous"
+          },
+          {
+            "name": "ABCDESKTOP_PROVIDERTYPE",
+            "value": "anonymous"
+          },
+          {
+            "name": "WEBCLIENT_SOURCEIPADDR",
+            "value": "10.244.0.1"
+          },
+          {
+            "name": "XAUTH_KEY",
+            "value": "bf5a4d8c048121cf6c176c425ac3c0"
+          },
+          {
+            "name": "PULSEAUDIO_COOKIE",
+            "value": "d34b796e90f7f13ff21a4a23fa32d969"
+          },
+          {
+            "name": "BROADCAST_COOKIE",
+            "value": "c2b1ff172eb1ecb11fd320cc42e219f74d1e2fd76f3ddd39"
+          },
+          {
+            "name": "USER",
+            "value": "758b58db-7dcc-47d1-b95e-4f18bee61f68"
+          },
+          {
+            "name": "LOGNAME",
+            "value": "758b58db-7dcc-47d1-b95e-4f18bee61f68"
+          },
+          {
+            "name": "ABCDESKTOP_LABEL_tennetwork",
+            "value": "true"
+          },
+          {
+            "name": "ABCDESKTOP_SERVICE_graphical",
+            "value": "enabled"
+          },
+          {
+            "name": "ABCDESKTOP_SERVICE_spawner",
+            "value": "enabled"
+          },
+          {
+            "name": "ABCDESKTOP_SERVICE_webshell",
+            "value": "enabled"
+          },
+          {
+            "name": "ABCDESKTOP_SERVICE_printer",
+            "value": "enabled"
+          },
+          {
+            "name": "ABCDESKTOP_SERVICE_filer",
+            "value": "enabled"
+          },
+          {
+            "name": "ABCDESKTOP_SERVICE_init",
+            "value": "enabled"
+          },
+          {
+            "name": "ABCDESKTOP_SERVICE_storage",
+            "value": "enabled"
+          },
+          {
+            "name": "NODE_NAME",
+            "valueFrom": {
+              "fieldRef": {
+                "fieldPath": "spec.nodeName"
+              }
+            }
+          },
+          {
+            "name": "POD_NAME",
+            "valueFrom": {
+              "fieldRef": {
+                "fieldPath": "metadata.name"
+              }
+            }
+          },
+          {
+            "name": "POD_NAMESPACE",
+            "valueFrom": {
+              "fieldRef": {
+                "fieldPath": "metadata.namespace"
+              }
+            }
+          },
+          {
+            "name": "POD_IP",
+            "valueFrom": {
+              "fieldRef": {
+                "fieldPath": "status.podIP"
+              }
+            }
+          }
+        ],
+        "volumeMounts": [
+          {
+            "name": "tmp",
+            "mountPath": "/tmp"
+          },
+          {
+            "name": "x11socket",
+            "mountPath": "/tmp/.X11-unix"
+          },
+          {
+            "name": "pulseaudiosocket",
+            "mountPath": "/tmp/.pulseaudio"
+          },
+          {
+            "name": "cupsdsocket",
+            "mountPath": "/tmp/.cupsd"
+          },
+          {
+            "name": "run",
+            "mountPath": "/var/run/desktop"
+          },
+          {
+            "name": "log",
+            "mountPath": "/var/log/desktop"
+          },
+          {
+            "name": "home-758b58db-7dcc-47d1-b95e-4f18bee61f68",
+            "mountPath": "/home/balloon"
+          }
+        ],
+        "securityContext": {
+          "runAsUser": 4096,
+          "runAsGroup": 4096
+        },
+        "resources": null
+      },
+      {
+        "name": "o-758b58db-7dcc-47d1-b95e-4f18bee61f68-74bea267-8197-4b1d-acff",
+        "imagePullPolicy": "IfNotPresent",
+        "image": "k8s.gcr.io/pause:3.8",
+        "env": [
+          {
+            "name": "DISPLAY",
+            "value": ":0.0"
+          },
+          {
+            "name": "HOME",
+            "value": "/home/balloon"
+          },
+          {
+            "name": "SET_DEFAULT_WALLPAPER",
+            "value": "welcometoabcdesktop.png"
+          },
+          {
+            "name": "LANGUAGE",
+            "value": "en_US"
+          },
+          {
+            "name": "LANG",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_ALL",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_PAPER",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_ADDRESS",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_MONETARY",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_TIME",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_MEASUREMENT",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_IDENTIFICATION",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_TELEPHONE",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "LC_NUMERIC",
+            "value": "en_US.UTF-8"
+          },
+          {
+            "name": "ABCDESKTOP_USERNAME",
+            "value": "Anonymous"
+          },
+          {
+            "name": "ABCDESKTOP_USERID",
+            "value": "758b58db-7dcc-47d1-b95e-4f18bee61f68"
+          },
+          {
+            "name": "ABCDESKTOP_PROVIDERNAME",
+            "value": "anonymous"
+          },
+          {
+            "name": "ABCDESKTOP_PROVIDERTYPE",
+            "value": "anonymous"
+          },
+          {
+            "name": "WEBCLIENT_SOURCEIPADDR",
+            "value": "10.244.0.1"
+          },
+          {
+            "name": "XAUTH_KEY",
+            "value": "bf5a4d8c048121cf6c176c425ac3c0"
+          },
+          {
+            "name": "PULSEAUDIO_COOKIE",
+            "value": "d34b796e90f7f13ff21a4a23fa32d969"
+          },
+          {
+            "name": "BROADCAST_COOKIE",
+            "value": "c2b1ff172eb1ecb11fd320cc42e219f74d1e2fd76f3ddd39"
+          },
+          {
+            "name": "USER",
+            "value": "758b58db-7dcc-47d1-b95e-4f18bee61f68"
+          },
+          {
+            "name": "LOGNAME",
+            "value": "758b58db-7dcc-47d1-b95e-4f18bee61f68"
+          },
+          {
+            "name": "ABCDESKTOP_LABEL_tennetwork",
+            "value": "true"
+          },
+          {
+            "name": "ABCDESKTOP_SERVICE_graphical",
+            "value": "enabled"
+          },
+          {
+            "name": "ABCDESKTOP_SERVICE_spawner",
+            "value": "enabled"
+          },
+          {
+            "name": "ABCDESKTOP_SERVICE_webshell",
+            "value": "enabled"
+          },
+          {
+            "name": "ABCDESKTOP_SERVICE_printer",
+            "value": "enabled"
+          },
+          {
+            "name": "ABCDESKTOP_SERVICE_filer",
+            "value": "enabled"
+          },
+          {
+            "name": "ABCDESKTOP_SERVICE_init",
+            "value": "enabled"
+          },
+          {
+            "name": "ABCDESKTOP_SERVICE_storage",
+            "value": "enabled"
+          },
+          {
+            "name": "NODE_NAME",
+            "valueFrom": {
+              "fieldRef": {
+                "fieldPath": "spec.nodeName"
+              }
+            }
+          },
+          {
+            "name": "POD_NAME",
+            "valueFrom": {
+              "fieldRef": {
+                "fieldPath": "metadata.name"
+              }
+            }
+          },
+          {
+            "name": "POD_NAMESPACE",
+            "valueFrom": {
+              "fieldRef": {
+                "fieldPath": "metadata.namespace"
+              }
+            }
+          },
+          {
+            "name": "POD_IP",
+            "valueFrom": {
+              "fieldRef": {
+                "fieldPath": "status.podIP"
+              }
+            }
+          }
+        ],
+        "volumeMounts": [
+          {
+            "name": "tmp",
+            "mountPath": "/tmp"
+          },
+          {
+            "name": "x11socket",
+            "mountPath": "/tmp/.X11-unix"
+          },
+          {
+            "name": "pulseaudiosocket",
+            "mountPath": "/tmp/.pulseaudio"
+          },
+          {
+            "name": "cupsdsocket",
+            "mountPath": "/tmp/.cupsd"
+          },
+          {
+            "name": "run",
+            "mountPath": "/var/run/desktop"
+          },
+          {
+            "name": "log",
+            "mountPath": "/var/log/desktop"
+          },
+          {
+            "name": "home-758b58db-7dcc-47d1-b95e-4f18bee61f68",
+            "mountPath": "/home/balloon"
+          }
+        ],
+        "securityContext": {
+          "runAsUser": 4096,
+          "runAsGroup": 4096
+        },
+        "resources": {
+          "requests": {
+            "memory": "32Mi",
+            "cpu": "100m"
+          },
+          "limits": {
+            "memory": "128Mi",
+            "cpu": "250m"
+          }
+        }
+      }
+    ]
+  }
+}
