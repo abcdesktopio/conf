@@ -32,7 +32,7 @@ FORCE=0
 # ABCDESKTOP_YAML=abcdesktop.yaml 
 
 # current release
-ABCDESKTOP_RELEASE=3.0
+ABCDESKTOP_RELEASE=3.1
 
 # docker hub prefix
 # REGISTRY_DOCKERHUB="docker.io/abcdesktopio"
