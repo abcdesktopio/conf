@@ -22,12 +22,12 @@
 # run curl -L https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/install.sh | sh -
 #
 
-VERSION="3.1.0"
+VERSION="3.1"
 
 
-ABCDESKTOP_YAML_SOURCE="https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/abcdesktop-3.0.yaml"
-OD_CONFIG_SOURCE="https://raw.githubusercontent.com/abcdesktopio/conf/main/reference/od.config.3.0"
-POD_USER_SOURCE="https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/poduser.yaml"
+ABCDESKTOP_YAML_SOURCE="https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/abcdesktop-$VERSION.yaml"
+OD_CONFIG_SOURCE="https://raw.githubusercontent.com/abcdesktopio/conf/main/reference/od.config.$VERSION"
+POD_USER_SOURCE="https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/poduser-$VERSION.yaml"
 
 
 # define YAML path
