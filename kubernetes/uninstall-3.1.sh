@@ -22,9 +22,9 @@
 # run curl -L https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/uninstall-3.1.sh | sh -
 #
 
-VERSION="3.1.0"
+VERSION="3.1"
 
-ABCDESKTOP_YAML_SOURCE="https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/abcdesktop-3.1.yaml"
+ABCDESKTOP_YAML_SOURCE="https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/abcdesktop-$VERSION.yaml"
 
 
 # default namespace
