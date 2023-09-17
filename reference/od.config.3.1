@@ -99,8 +99,6 @@ jwt_token_user : {
   'exp': 360,
   'jwtuserprivatekeyfile': '/config.usersigning/abcdesktop_jwt_user_signing_private_key.pem',
   'jwtuserpublickeyfile' : '/config.usersigning/abcdesktop_jwt_user_signing_public_key.pem' }
-
-
 #
 # JWT RSA SIGNING ANS PAYLOAD KEYS
 # od.py use two RSA keys to sign jwt and encrypt payload's jwt  
@@ -125,18 +123,18 @@ jwt_token_desktop : {
   'jwtdesktopprivatekeyfile':     '/config.signing/abcdesktop_jwt_desktop_signing_private_key.pem',
   'jwtdesktoppublickeyfile' :     '/config.signing/abcdesktop_jwt_desktop_signing_public_key.pem',
   'payloaddesktoppublickeyfile' : '/config.payload/abcdesktop_jwt_desktop_payload_public_key.pem' }
-
 # END OF JWT SECTION #
 
-
-controllers: { 'ManagerController': { 'permitip':    [ '10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', 'fd00::/8', '169.254.0.0/16', '127.0.0.0/8' ] },
+# CONTROLLERS SECTION #
+#
+controllers: { 'ManagerController': { 'permitip': [ '10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', 'fd00::/8', '169.254.0.0/16', '127.0.0.0/8' ] },
                'StoreController':   { 'wrapped_key': {} },
                'ComposerController' : { 'requestsallowed' : { 'getdesktopdescription': False } },
                'DesktopController' :  { 'requestsallowed' : { 'dns': False }, 'permitip': [  '10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', 'fd00::/8', '169.254.0.0/16', '127.0.0.0/8' ] } } 
-
+# END OF CONTROLLERS SECTION #
 
 ### AUTH SECTION ###
-
+#
 # Complete AUTH Sample dictionnary
 # The authmanagers is defined as a dictionnary object :
 #
@@ -208,7 +206,7 @@ controllers: { 'ManagerController': { 'permitip':    [ '10.0.0.0/8', '172.16.0.0
 #                       'wins_servers'  : [ '192.168.1.12' ],
 #     }
 # }
-
+#
 # implicit: use for Anonymous Authentification
 # 'implicit': {
 #    'providers': {
@@ -219,27 +217,6 @@ controllers: { 'ManagerController': { 'permitip':    [ '10.0.0.0/8', '172.16.0.0
 #        'username': 'Anonymous'
 #      }     
 #    }
-
-fail2ban : {      'enable' : False,
-                  'banexpireafterseconds': 600,
-                  'failsbeforeban' : 5,
-                  'protectednetworks' :  ['192.168.1.0/24'] }
-
-
-auth.logmein : {  'enable' : False,
-                  'network_list' : ['0.0.0.0/0'],
-                  'permit_querystring' : True,
-                  'http_attribut' : 'ABCDESKTOPUSERCERT' }
-
-auth.prelogin : { 'enable' : False,
-                  'url' : 'https://FQHN/index.session.mustache.html',
-                  'network_list' : ['0.0.0.0/0'],
-                  'http_attribut ' : 'abcuserid',
-                  'http_attribut_to_force_auth_prelogin':  'MUST_USE_PRELOGIN' }
-
-tipsinfo : { 'networkmap': False }
-
-
 authmanagers: {
   'external': {
     'providers': {}
@@ -306,6 +283,35 @@ ldapconfig : {
 # END OF AUTH SECTION
 
 
+### FAIL2BAN SECTION ###
+#
+fail2ban : {      'enable' : False,
+                  'banexpireafterseconds': 600,
+                  'failsbeforeban' : 5,
+                  'protectednetworks' :  ['192.168.1.0/24'] }
+# END OF FAIL2BAN SECTION
+
+### LOGMEIN PRELOGON SECTION ###
+#
+auth.logmein : {  'enable' : False,
+                  'network_list' : ['0.0.0.0/0'],
+                  'permit_querystring' : True,
+                  'http_attribut' : 'ABCDESKTOPUSERCERT' }
+
+auth.prelogin : { 'enable' : False,
+                  'url' : 'https://FQHN/index.session.mustache.html',
+                  'network_list' : ['0.0.0.0/0'],
+                  'http_attribut ' : 'abcuserid',
+                  'http_attribut_to_force_auth_prelogin':  'MUST_USE_PRELOGIN' }
+# END OF LOGMEIN PRELOGON SECTION
+
+
+### TIPSINFO SECTION ###
+#
+tipsinfo : { 'networkmap': False }
+# END OF TIPSINFO SECTION
+
+
 # MEMCACHE SECTION
 # memcache server
 # describe how od.py can reach the memcached server
@@ -357,10 +363,13 @@ language : [  'af_ZA', 'am_ET', 'an_ES', 'ar_AE', 'ar_BH', 'ar_DZ', 'ar_EG', 'ar
 # WebRTC Janus config
 #
 webrtc.enable : False
+# END OF WebRTC Janus config SECTION
 
-
-
+#
 # Application execute class defined
+# define some executeclasses name with 
+# resources requests and limits value
+# then map executeclasses to application
 executeclasses : {
   'default':{
     'nodeSelector':None,
@@ -397,6 +406,10 @@ executeclasses : {
 desktop.release : '3.0'
 
 desktop.pod : { 
+  # default spec for all containers
+  # can be overwritten on dedicated container spec
+  # value inside mustrache like {{ uidNumber }} is replaced by context run value
+  # for example {{ uidNumber }} is the uid number define in ldap server 
   'spec' : {
     'shareProcessNamespace': True,
     'shareProcessMemory': True,
@@ -407,6 +420,8 @@ desktop.pod : {
       'runAsGroup': '{{ gidNumber }}'
     }
   },  
+  # graphical is the main abcdesktop container 
+  # include x11 service 
   'graphical' : { 
     'image': { 'default': 'abcdesktopio/oc.user.ubuntu:3.1' },
     'imagePullPolicy':  'IfNotPresent',
@@ -424,22 +439,31 @@ desktop.pod : {
     'tcpport': 6081,
     'secrets_requirement' : [ 'abcdesktop/vnc', 'abcdesktop/kerberos']
   },
+  # spawner core service to configure desktop
+  # run inside graphical container  
   'spawner' : { 
     'enable': True,
     'tcpport': 29786,
     'waitportbin' : '/composer/node/wait-port/node_modules/.bin/wait-port',
     'acl':  { 'permit': [ 'all' ] } 
   },
+  # broadcast core service for notification
+  # run inside graphical container  
   'broadcast' : { 
     'enable': True,
     'tcpport': 29784,
     'acl':  { 'permit': [ 'all' ] } 
   },
+  # webshell is no a container, just a service 
+  # run inside graphical container  
+  # usefull to debug application and troubleshooting
   'webshell' : { 
     'enable': True,
     'tcpport': 29781,
     'acl':  { 'permit': [ 'all' ] } 
   },
+  # container printer
+  # printer is a cupsd service 
   'printer' : { 
     'image': 'abcdesktopio/oc.cupsd:3.0',
     'imagePullPolicy': 'IfNotPresent',
@@ -452,11 +476,16 @@ desktop.pod : {
     },
     'acl':  { 'permit': [ 'all' ] } 
   },
+  # allow to download file in the printer queue
+  # use to print file from the web browser
+  # printerfile is no a container, just a service 
   'printerfile' : { 
     'enable': True,
     'tcpport': 29782,
     'acl':  { 'permit': [ 'all' ] } 
   },
+  # container filer
+  # filer provide upload and download files features
   'filer' : { 
     'image': 'abcdesktopio/oc.filer:3.0',
     'imagePullPolicy':  'IfNotPresent',
@@ -464,6 +493,8 @@ desktop.pod : {
     'tcpport': 29783,
     'acl':  { 'permit': [ 'all' ] } 
     },
+  # container storage
+  # storage is just a pause go get all volumes
   'storage' : { 
     'image': 'k8s.gcr.io/pause:3.8',
     'imagePullPolicy':  'IfNotPresent',
@@ -474,6 +505,11 @@ desktop.pod : {
       'limits'  : { 'memory': "128Mi", 'cpu': "250m" } 
     }
   },
+  # container sound
+  # sound is a pulseaudio service instance
+  # can forword sound to webrtc gateway or as http stream
+  # http stream can have glitch and does not proviede image and sound sync
+  # webrtc gateway with rtp sound stream is better
   'sound': { 
     'image': 'abcdesktopio/oc.pulseaudio.18.04:3.1',
     'imagePullPolicy': 'IfNotPresent',
@@ -482,19 +518,22 @@ desktop.pod : {
     'acl':  { 'permit': [ 'all' ] },
     'resources': { 
       'requests': { 'memory': "8Mi",  'cpu': "50m"  },  
-      'limits'  : { 'memory': "64Mi", 'cpu': "250m" } 
+      'limits'  : { 'memory': "128Mi", 'cpu': "500m" } 
     } 
   },
+  # container init
+  # a simple busybox to chowner and chmod of homedir
+  # by defaul homedir belongs to root
   'init': { 
     'image': 'busybox',
     'enable': True,
-    # 'imagePullSecrets': [ { 'name': name_of_secret } ]
     'imagePullPolicy': 'IfNotPresent',
     'securityContext': { 'runAsUser': 0 },
     'acl':  { 'permit': [ 'all' ] },
     'command':  [ 'sh', '-c',  'chmod 750 ~ && chown {{ uidNumber }}:{{ gidNumber }} ~' ] 
   },
   # 
+  # container x11overlay
   # uncomment this section to add wartermarking on X11 display
   # it creates a X11 window stay on top as root
   # 'x11overlay': { 
@@ -508,6 +547,12 @@ desktop.pod : {
   #      'limits'  : { 'memory': "64Mi", 'cpu': '500m"  } 
   #  } 
   # },
+  # application can run 
+  # as ephemeral_container 
+  # ephemeral_container are binded to graphical_container
+  # as pod_application
+  # pod_application run as pod
+  # 
   'ephemeral_container': {
     'enable': True,
     'acl':  { 'permit': [ 'all' ] },
@@ -538,6 +583,7 @@ desktop.policies: { 'rules': { } }
 # desktop.homedirectorytype: 'hostPath'
 desktop.homedirectorytype: 'hostPath'
 #
+#
 # read https://www.abcdesktop.io/3.0/config/volumes
 #
 # where user home dir are located if desktop.homedirectorytype is 'hostPath'
@@ -550,7 +596,6 @@ desktop.hostPathRoot: '/tmp'
 # replace mystorageclass by your own storageClassName
 # 
 # desktop.homedirectorytype: 'persistentVolumeClaim'
-# desktop.persistentvolumespec: None
 # desktop.persistentvolumeclaimspec: {
 #   'storageClassName': 'mystorageclass',
 #   'resources': { 
