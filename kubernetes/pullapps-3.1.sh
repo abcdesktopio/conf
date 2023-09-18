@@ -54,7 +54,7 @@ ABCDESKTOP_RELEASE=3.1
 
 # gimp.d.$ABCDESKTOP_RELEASE.json
 
-URL_APPLICATION_CONF_SOURCE="https://raw.githubusercontent.com/abcdesktopio/oc.apps/main"
+URL_APPLICATION_CONF_SOURCE="https://raw.githubusercontent.com/abcdesktopio/images/main/artifact/$ABCDESKTOP_RELEASE"
 # list of json default applications to prefetch
 ABCDESKTOP_JSON_APPLICATIONS="
 2048-alpine.d.$ABCDESKTOP_RELEASE.json
@@ -69,7 +69,7 @@ evince.d.$ABCDESKTOP_RELEASE.json
 
 if [ -z "${LOG_FILE}" ];
 then
-    LOG_FILE="/var/log/kube.log"
+    LOG_FILE="/var/log/pullapps.log"
 fi
 
 
@@ -248,10 +248,14 @@ if [ $EXIT_CODE -eq 0 ]; then
   echo "## this process wil take several minutes to complete ##"
   for app in $ABCDESKTOP_JSON_APPLICATIONS
   do
+      # download the json file description for this application $app
       curl -sL --output "$app" "$URL_APPLICATION_CONF_SOURCE/$app"
       display_message_result "curl $URL_APPLICATION_CONF_SOURCE/$app"
+      # import the json file description for this application $app into abdesktop service
       curl -X PUT -H 'Content-Type: text/javascript' "$URL" -d "@$app" > /dev/null
       display_message_result "curl -X PUT -H 'Content-Type: text/javascript' $URL -d @$app"
+      # abcdesktop will start a pod with label type=pod_application_pull
+      # to prefetch container image
       pods=$(kubectl -n "$NAMESPACE" get pods --selector=type=pod_application_pull --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
       echo ""
       echo "list of created pods for pulling is: "
@@ -259,6 +263,7 @@ if [ $EXIT_CODE -eq 0 ]; then
       echo "waiting for all pods condition Ready. timeout=-1s (it will take a while)"
       kubectl wait --for=condition=Ready pods --selector=type=pod_application_pull --timeout=-1s -n "$NAMESPACE"
       kubectl delete pod --selector=type=pod_application_pull -n "$NAMESPACE" > /dev/null
+      display_message_result "$app"
   done
   kill $PORT_FORWARD_PID
   echo "$ABCDESKTOP_JSON_APPLICATIONS"
