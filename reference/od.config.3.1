@@ -35,7 +35,6 @@
 # if you change it, you must update the abcdesktop.yaml file
 namespace: 'abcdesktop'
 
-
 # DEFAULT HOST URL 
 # public host url of the service
 # change this with your URL or
@@ -280,6 +279,21 @@ ldapconfig : {
                                 }
                         }
                 } } }
+
+# For external provider only 
+# OAuthLib params
+# source https://oauthlib.readthedocs.io/en/latest/oauth2/security.html
+#
+# OAuthLib will raise an InsecureTransportError if you attempt to use OAuth2 over HTTP, rather than HTTPS. 
+# Setting this environment variable will prevent this error from being raised. 
+# This is mostly useful for local testing, or automated tests. Never set this variable in production.
+OAUTHLIB_INSECURE_TRANSPORT: True
+#
+# Prevent "Scope has changed" warning 
+# requests_oauthlib library this generates a Warning, rather than an Exception
+# If a user only approved read only scope but the code is now using different scope.
+# when a scope mismatch occurs, user must be prompted to reauthorize via oauth.
+OAUTHLIB_RELAX_TOKEN_SCOPE: True
 # END OF AUTH SECTION
 
 
