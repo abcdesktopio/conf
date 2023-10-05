@@ -646,13 +646,6 @@ desktop.defaultbackgroundcolors : [ '#6EC6F0', '#333333', '#666666', '#CD3C14', 
 #
 # desktop.nodeselector
 # This option permits to assign user pods to nodes
-# Value can be None or dict
-#
-# - None: 
-# description: No node selector
-# all roles is are supported
-# for example 
-# desktop.nodeselector: None
 #
 # - dict : 
 # description: It specifies a map of key-value pairs. 
@@ -662,17 +655,18 @@ desktop.defaultbackgroundcolors : [ '#6EC6F0', '#333333', '#666666', '#CD3C14', 
 # kubectl label node YOURNODE abcdesktoprole=worker
 # for example 
 # desktop.nodeselector : { 'abcdesktoprole': 'worker' }
+desktop.nodeselector: {}
+
 #
 # ClusterRole must be bind to pyos-service account to permit list cluster nodes
 # ClusterRole is defined on https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/rbac-cluster.yaml
 # use ClusterRoleBinding and ClusterRole
 # if pyos-service account does NOT have ClusterRole image pulling is not guarantee
 #
-# the default value for desktop.nodeselector is None
 # the default service account role is RoleBinding 
 # set at https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/rbac-role.yaml
 #
-desktop.nodeselector: None
+
 
 # Add default environment vars 
 # desktop.envlocal is a dictionary. 
