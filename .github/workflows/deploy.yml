@@ -23,7 +23,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+
       - name: clone kube-tools
         uses: actions/checkout@v4
         with:
@@ -34,16 +34,20 @@ jobs:
       # install kubernetes cluster 
       - name: setup kubernetes
         run: |
-          cd kube-tools && ./km --apply
+          cd kube-tools && sudo ./km --apply
 
       # install abcdesktop
       - name: Run a multi-line script
         run: |
-          curl -sL https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/install-3.1.sh | bash
+          wget https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/install-3.1.sh
+          chmod 755 install-3.1.sh
+          sudo ./install-3.1.sh
 
       # install applications
       - name: Run a multi-line script
         run: |
-          curl -sL https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/pullapps-3.1.sh | bash
+          wget https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/pullapps-3.1.sh
+          chmod 755 pullapps-3.1.sh
+          sudo ./pullapps-3.1.sh
 
        
