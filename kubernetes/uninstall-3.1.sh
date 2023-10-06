@@ -25,7 +25,8 @@
 VERSION="3.1"
 
 ABCDESKTOP_YAML_SOURCE="https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/abcdesktop-$VERSION.yaml"
-
+ABCDESKTOP_CLUSTER_ROLE="https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/rbac-cluster.yaml"
+ABCDESKTOP_DEFAULT_ROLE="https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/rbac-role.yaml"
 
 # default namespace
 NAMESPACE=abcdesktop
@@ -211,6 +212,8 @@ fi
 
 kubectl delete -f abcdesktop.yaml
 display_message_result "kubectl delete -f abcdesktop.yaml"
+# delete cluster roles if updated
+kubectl delete -f "$ABCDESKTOP_CLUSTER_ROLE" > /dev/null 2>/dev/null
 kubectl delete secrets --all -n "$NAMESPACE" > /dev/null
 display_message_result "kubectl delete secrets --all -n $NAMESPACE"
 kubectl delete cm --all -n "$NAMESPACE" > /dev/null
