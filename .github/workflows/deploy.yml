@@ -41,7 +41,7 @@ jobs:
         run: |
           wget https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/install-3.1.sh
           chmod 755 install-3.1.sh
-          sudo ./install-3.1.sh --timeout 120s
+          sudo ./install-3.1.sh --timeout 240s
 
       # install applications
       - name: Run a multi-line script
