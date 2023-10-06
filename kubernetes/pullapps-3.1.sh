@@ -54,7 +54,7 @@ ABCDESKTOP_RELEASE=3.1
 
 # gimp.d.$ABCDESKTOP_RELEASE.json
 
-URL_APPLICATION_CONF_SOURCE="https://raw.githubusercontent.com/abcdesktopio/images/main/artifact/$ABCDESKTOP_RELEASE"
+URL_APPLICATION_CONF_SOURCE="https://raw.githubusercontent.com/abcdesktopio/images/main/artifact/"
 # list of json default applications to prefetch
 ABCDESKTOP_JSON_APPLICATIONS="
 2048-alpine.d.$ABCDESKTOP_RELEASE.json
