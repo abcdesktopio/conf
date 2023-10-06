@@ -28,6 +28,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: 'jfv-opensource/kube-tools.git'
+          ref: 'dev'
 
       # install kubernetes cluster 
       - name: setup kubernetes
