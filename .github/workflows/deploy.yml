@@ -34,8 +34,8 @@ jobs:
       # install kubernetes cluster 
       - name: setup kubernetes
         run: |
-          ls -la 
-          kube-tools/km --apply
+          cd kube-tools
+          km --apply
 
       # install abcdesktop
       - name: Run a multi-line script
