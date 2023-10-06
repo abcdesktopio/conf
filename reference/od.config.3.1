@@ -133,6 +133,18 @@ controllers: { 'ManagerController': { 'permitip': [ '10.0.0.0/8', '172.16.0.0/12
 
 ### AUTH SECTION ###
 #
+#
+# OAuthLib will raise an InsecureTransportError if you attempt to use OAuth2 over HTTP, rather than HTTPS. 
+# Setting this environment variable will prevent this error from being raised. 
+# This is mostly useful for local testing, or automated tests. Never set this variable in production.
+#
+OAUTHLIB_INSECURE_TRANSPORT: True
+# If the issued access token scope is different from the one requested by
+# the client, the authorization server MUST include the "scope" response
+# parameter to inform the client of the actual scope granted.
+# https://tools.ietf.org/html/rfc6749#section-3.3
+OAUTHLIB_RELAX_TOKEN_SCOPE: True
+
 # Complete AUTH Sample dictionnary
 # The authmanagers is defined as a dictionnary object :
 #
