@@ -29,7 +29,6 @@
 # data 
 [global]
 
-
 # default abcdesktop namespace 
 # abcdesktop is the default namespace
 # if you change it, you must update the abcdesktop.yaml file
@@ -378,6 +377,12 @@ language : [  'af_ZA', 'am_ET', 'an_ES', 'ar_AE', 'ar_BH', 'ar_DZ', 'ar_EG', 'ar
 #
 webrtc.enable : False
 # END OF WebRTC Janus config SECTION
+
+# Kubernetes timeout
+# default timeout to bound a persistentVolumeClaim
+K8S_BOUND_PVC_TIMEOUT_SECONDS: 60
+# default timeout to create a pod
+K8S_CREATE_POD_TIMEOUT_SECONDS: 30
 
 #
 # Application execute class defined
