@@ -28,11 +28,14 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: 'jfv-opensource/kube-tools.git'
+          path: 'kube-tools'
           ref: 'dev'
 
       # install kubernetes cluster 
       - name: setup kubernetes
-        run: kube-tools/km --apply
+        run: |
+          ls -la 
+          kube-tools/km --apply
 
       # install abcdesktop
       - name: Run a multi-line script
