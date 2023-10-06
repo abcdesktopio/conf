@@ -615,8 +615,8 @@ desktop.policies: { 'rules': { } }
 # desktop.homedirectorytype: 'hostPath'
 desktop.homedirectorytype: 'hostPath'
 #
-#
-# read https://www.abcdesktop.io/3.0/config/volumes
+# READ
+# https://www.abcdesktop.io/3.1/config/persistentvolumes/
 #
 # where user home dir are located if desktop.homedirectorytype is 'hostPath'
 # this can be /tmp for example
@@ -628,14 +628,40 @@ desktop.hostPathRoot: '/tmp'
 # replace mystorageclass by your own storageClassName
 # 
 # desktop.homedirectorytype: 'persistentVolumeClaim'
-# desktop.persistentvolumeclaimspec: {
-#   'storageClassName': 'mystorageclass',
-#   'resources': { 
-#.     'requests': { 'storage': '1Gi' } 
-#   },
-#   'accessModes': [ 'ReadWriteOnce' ] }
+# 
+# desktop.persistentvolume: {
+#            'metadata': { 'name': '{{ provider }}-{{ userid }}-{{ uuid }}' },
+#            'spec': {
+#            'storageClassName': 'nfs-csi',
+#            'mountOptions': [
+#              'nfsvers=3'
+#            ],
+#            'capacity': {
+#              'storage': '10Gi'
+#            },
+#            'accessModes': [ 'ReadWriteOnce' ],
+#            'csi': {
+#              'driver': 'nfs.csi.k8s.io',
+#              'readOnly': False,
+#              'volumeHandle': '192.168.7.101#volume1#homedir#{{ userid }}',
+#              'volumeAttributes': {
+#                  'server': '192.168.7.101',
+#                  'share': '/volume1/homedir/{{ userid }}'
+#              } } } }
+# desktop.persistentvolumeclaim: {
+#            'metadata': {
+#                'name': '{{ provider }}-{{ userid }}-{{ uuid }}',
+#            },
+#            'spec': {
+#              'volumeName': '{{ provider }}-{{ userid }}-{{ uuid }}',
+#              'storageClassName': 'nfs-csi',
+#              'resources': { 
+#                'requests': { 
+#                  'storage': '1Gi'
+#                } 
+#            },
+#            'accessModes': [ 'ReadWriteOnce' ] } }
 #
-
 
 #
 # desktop.defaultbackgroundcolors
