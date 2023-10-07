@@ -222,37 +222,25 @@ check_command kubectl
 kubectl version > /dev/null
 display_message_result "kubectl version"
 
-NGINX_POD_NAME=$(kubectl get pods -l run=nginx-od -o jsonpath={.items..metadata.name} -n "$NAMESPACE")
-display_message_result "kubectl pods -l run=nginx-od -o jsonpath={.items..metadata.name} -n $NAMESPACE"
+PYOS_POD_NAME=$(kubectl get pods -l run=pyos-od -o jsonpath={.items..metadata.name} -n "$NAMESPACE")
+display_message_result "kubectl pods -l run=pyos-od -o jsonpath={.items..metadata.name} -n $NAMESPACE"
+display_message "pyos pod name=$PYOS_POD_NAME" "OK"
 
-display_message "nginx pod name=$NGINX_POD_NAME" "OK"
-echo "starting port-forward on tcp port $port"
-echo "kubectl port-forward $NGINX_POD_NAME --address 0.0.0.0 $port:80 -n $NAMESPACE" 
-rm -f port_forward
-kubectl port-forward "$NGINX_POD_NAME" --address 0.0.0.0 "$port:80" -n "$NAMESPACE" > port_forward & 
-PORT_FORWARD_PID=$! 
-echo "waiting for pid $PORT_FORWARD_PID" 
-while [ ! -f port_forward ]
-do 
-  echo "." 
-  sleep 1
-done
-display_message_result "kubectl port-forward $NGINX_POD_NAME get pid $PORT_FORWARD_PID"
-
-# define service URL
-URL="http://localhost:$port/API/manager/image"
+# define service URL 
+# inside pyos
+URL="http://localhost:8080/API/manager/image"
 
 # call HEALTZ
-EXIT_CODE=$?
-if [ $EXIT_CODE -eq 0 ]; then
-  echo "## this process wil take several minutes to complete ##"
-  for app in $ABCDESKTOP_JSON_APPLICATIONS
-  do
+for app in $ABCDESKTOP_JSON_APPLICATIONS
+do
       # download the json file description for this application $app
       curl -sL --output "$app" "$URL_APPLICATION_CONF_SOURCE/$app"
       display_message_result "curl $URL_APPLICATION_CONF_SOURCE/$app"
       # import the json file description for this application $app into abdesktop service
-      curl -X PUT -H 'Content-Type: text/javascript' "$URL" -d "@$app" > /dev/null
+      kubectl cp -n "$NAMESPACE" "$app" "$PYOS_POD_NAME:/tmp/$app"
+      display_message_result "Copy $app to $PYOS_POD_NAME:/tmp/$app"
+      # import the json file description for this application $app into abdesktop service
+      kubectl exec -n "$NAMESPACE" -t "$PYOS_POD_NAME" -- curl -X PUT -H 'Content-Type: text/javascript' "$URL" -d "@/tmp/$app" 
       display_message_result "curl -X PUT -H 'Content-Type: text/javascript' $URL -d @$app"
       # abcdesktop will start a pod with label type=pod_application_pull
       # to prefetch container image
@@ -264,13 +252,5 @@ if [ $EXIT_CODE -eq 0 ]; then
       kubectl wait --for=condition=Ready pods --selector=type=pod_application_pull --timeout=-1s -n "$NAMESPACE"
       kubectl delete pod --selector=type=pod_application_pull -n "$NAMESPACE" > /dev/null
       display_message_result "$app"
-  done
-  kill $PORT_FORWARD_PID
-  echo "$ABCDESKTOP_JSON_APPLICATIONS"
-  echo "applications are ready to use"
-else
-  echo "abcdesktop is not ready"	
-  PYOS_POD_NAME=$(kubectl get pods -l run=pyos-od -o jsonpath={.items..metadata.name} -n "$NAMESPACE")
-  echo "Somethings goes wrong with this pod $PYOS_POD_NAME or with $NGINX_POD_NAME"
-  kubectl logs "$PYOS_POD_NAME" -n "$NAMESPACE"
-fi
+done
+echo "end of pull apps script"
