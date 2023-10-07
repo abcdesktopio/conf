@@ -359,7 +359,16 @@ for p in $pods;
 do
  	display_message "waiting for pod/$p Ready" "INFO" 
 	wait_message=$(kubectl -n "$NAMESPACE" wait "pod/$p" --for=condition=Ready --timeout="$TIMEOUT")
-	display_message_result "$wait_message"
+        exit_code="$?"
+        if [ "$exit_code" -eq 0 ];
+        then
+            display_message "$wait_message" "OK"
+        else
+            display_message "$wait_message error $exit_code" "KO"
+	    display_message "kubectl get pods -n $NAMESPACE for help" "INFO"
+	    kubectl -n "$NAMESPACE" get pods
+   	    exit 1
+        fi
 done
 
 # list all pods 
