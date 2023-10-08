@@ -38,6 +38,8 @@ NAMESPACE=abcdesktop
 # force continue when an error occurs
 # No force by default
 FORCE=0 
+# No fetch
+NOFETCH=0
 # TIMEOUT DEFAULT VALUE 
 TIMEOUT=600s
 
@@ -115,11 +117,12 @@ Options (exclusives):
  --help                     Display this help and exit
  --version                  Display version information and exit
  --clean 		    Remove *.pem od.config abcdesktop.yaml poduser.yaml files only
+ --nofetch                  Disable image fetching for poduser.yaml
+ --force                    Continue if an error occurs
 
 Parameters:
  --namespace                Define the abcdesktop namespace default value is abcdesktop
- --force                    Continue if an error occurs
- --timeout                    Continue if an error occurs
+ --timeout                  Continue if an error occurs
  
 Examples:
     abcdesktop-install
@@ -128,7 +131,7 @@ Examples:
     abcdesktop-install --namespace=superdesktop
     Install an abcdesktop service in the superdesktop namespace on a kubernetes cluster
 
-    abcdesktop-install --force=1
+    abcdesktop-install --force
     Continue if a system or a kubernetes error occurs
 
   
@@ -159,7 +162,7 @@ EOF
 }
 
 opts=$(getopt \
-    --longoptions "help,version,clean,force:,timeout:,namespace:," \
+    --longoptions "help,version,clean,nofetch,force,timeout:,namespace:" \
     --name "$(basename "$0")" \
     --options "" \
     -- "$@"
@@ -175,7 +178,8 @@ do
 	--clean) clean; exit;;
 	--timeout) TIMEOUT="$2";shift;;
         --namespace) NAMESPACE="$2";shift;;
-	--force) FORCE="$2";shift;;
+        --nofetch) NOFETCH=1;shift;;
+	--force) FORCE=1;shift;;
     esac
     shift
 done
@@ -309,7 +313,7 @@ if [ "$NAMESPACE" != "abcdesktop" ]; then
    display_message_result "updated poduser.yaml file with new $NAMESPACE"
 fi
 
-
+#
 # create configmap from od.config file
 kubectl create configmap abcdesktop-config --from-file=od.config -n "$NAMESPACE" > /dev/null
 display_message_result "kubectl create configmap abcdesktop-config --from-file=od.config -n $NAMESPACE"
@@ -317,19 +321,20 @@ display_message_result "kubectl create configmap abcdesktop-config --from-file=o
 kubectl label configmap abcdesktop-config abcdesktop/role=pyos.config -n "$NAMESPACE" > /dev/null
 display_message_result "label configmap abcdesktop-config abcdesktop/role=pyos.config"
 
-
-# create a dummy pod user
-display_message "kubectl create -f $PODUSER_YAML" "INFO"
-kubectl create -f $PODUSER_YAML > /dev/null
-display_message_result "kubectl create -f $PODUSER_YAML"
-
-display_message "waiting for pod/anonymous-74bea267-8197-4b1d-acff-019b24e778c5 Ready" "INFO"
-wait_message=$(kubectl wait --for=condition=Ready pod/anonymous-74bea267-8197-4b1d-acff-019b24e778c5  -n "$NAMESPACE" --timeout="$TIMEOUT")
-display_message_result "$wait_message"
-display_message "deleting for pod/anonymous-74bea267-8197-4b1d-acff-019b24e778c5 Ready" "INFO"
-delete_message=$(kubectl delete --grace-period=0  -f $PODUSER_YAML)
-display_message_result "$delete_message"
-
+#
+# by default create the poduser sample
+if [ $NOFETCH -eq 0 ]; then
+  # create a dummy pod user
+  display_message "kubectl create -f $PODUSER_YAML" "INFO"
+  kubectl create -f $PODUSER_YAML > /dev/null
+  display_message_result "kubectl create -f $PODUSER_YAML"
+  display_message "waiting for pod/anonymous-74bea267-8197-4b1d-acff-019b24e778c5 Ready" "INFO"
+  wait_message=$(kubectl wait --for=condition=Ready pod/anonymous-74bea267-8197-4b1d-acff-019b24e778c5  -n "$NAMESPACE" --timeout="$TIMEOUT")
+  display_message_result "$wait_message"
+  display_message "deleting for pod/anonymous-74bea267-8197-4b1d-acff-019b24e778c5 Ready" "INFO"
+  delete_message=$(kubectl delete --grace-period=0  -f $PODUSER_YAML)
+  display_message_result "$delete_message"
+fi
 
 #clean endpoints desktop 
 # if a previous abcdesktop has been done
@@ -359,16 +364,7 @@ for p in $pods;
 do
  	display_message "waiting for pod/$p Ready" "INFO" 
 	wait_message=$(kubectl -n "$NAMESPACE" wait "pod/$p" --for=condition=Ready --timeout="$TIMEOUT")
-        exit_code="$?"
-        if [ "$exit_code" -eq 0 ];
-        then
-            display_message "$wait_message" "OK"
-        else
-            display_message "$wait_message error $exit_code" "KO"
-	    display_message "kubectl get pods -n $NAMESPACE for help" "INFO"
-	    kubectl -n "$NAMESPACE" get pods
-   	    exit 1
-        fi
+	display_message_result "$wait_message"
 done
 
 # list all pods 
