@@ -37,14 +37,14 @@ jobs:
           cd kube-tools && sudo ./km --apply
 
       # install abcdesktop
-      - name: Run a multi-line script
+      - name: Run install abcdesktop script
         run: |
           wget https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/install-3.1.sh
           chmod 755 install-3.1.sh
           sudo ./install-3.1.sh --nofetch --timeout 900s
 
       # install applications
-      - name: Run a multi-line script
+      - name: Run install applications script
         run: |
           wget https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/pullapps-3.1.sh
           chmod 755 pullapps-3.1.sh
