@@ -40,13 +40,13 @@ jobs:
       # install abcdesktop
       - name: Run install abcdesktop script
         run: |
-          cd main/kubernetes
+          cd kubernetes
           sudo ./install-3.1.sh --nofetch --timeout 900s
 
       # install applications
       - name: Run install applications script
         run: |
-          cd main/kubernetes
+          cd kubernetes
           sudo ./pullapps-3.1.sh
 
       # run test
