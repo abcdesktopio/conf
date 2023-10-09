@@ -25,33 +25,31 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
-      - name: clone kube-tools
+      - name: clone kube-tools branch release
         uses: actions/checkout@v4
         with:
           repository: 'jfv-opensource/kube-tools.git'
           path: 'kube-tools'
-          ref: 'dev'
+          ref: 'release'
 
       # install kubernetes cluster 
-      - name: setup kubernetes
+      - name: Setup kubernetes
         run: |
           cd kube-tools && sudo ./km --apply
 
       # install abcdesktop
-      - name: Run install abcdesktop script
+      - name: Install abcdesktop
         run: |
           sudo kubernetes/install-3.1.sh --nofetch --timeout 900s
-
-      # run test
-      - name: Run oc.podmantest
-        run: |
+          sudo kubectl get pods -n abcdesktop
+          echo Run pod test oc.podmantest
           sudo kubectl create -f kubernetes/pod.postman.test.yaml
           sudo kubectl -n abcdesktop wait pod/postmantest --for=condition=Ready --timeout=900s
           sudo kubectl -n abcdesktop wait pod/postmantest --for=condition=ready=False --timeout=900s
-          sudo kubectl -n abcdesktop log  pod/postmantest
+          sudo kubectl -n abcdesktop logs postmantest 
 
       # install applications
-      - name: Run install applications script
+      - name: Install applications script
         run: |
           sudo kubernetes/pullapps-3.1.sh
 
