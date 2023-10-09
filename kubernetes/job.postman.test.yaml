@@ -6,6 +6,9 @@ metadata:
 spec:
   backoffLimit: 1
   template:
+    metadata:
+      labels:
+        run: jobpostmantest
     spec:
       restartPolicy: Never
       containers:
