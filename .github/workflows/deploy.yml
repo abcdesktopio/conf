@@ -25,12 +25,12 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
-      - name: clone kube-tools
+      - name: clone kube-tools branch release
         uses: actions/checkout@v4
         with:
           repository: 'jfv-opensource/kube-tools.git'
           path: 'kube-tools'
-          ref: 'dev'
+          ref: 'release'
 
       # install kubernetes cluster 
       - name: setup kubernetes
