@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: abcdesktop
+  name: newman
+spec:
+  restartPolicy: Never
+  containers:
+  - name: postman-test
+    image: abcdesktopio/oc.postmantest:main
