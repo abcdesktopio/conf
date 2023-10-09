@@ -42,10 +42,7 @@ jobs:
         run: |
           sudo kubernetes/install-3.1.sh --nofetch --timeout 900s
           sudo kubectl get pods -n abcdesktop
-
-      # run test
-      - name: Run pod test oc.podmantest
-        run: |
+          echo Run pod test oc.podmantest
           sudo kubectl create -f kubernetes/pod.postman.test.yaml
           sudo kubectl -n abcdesktop wait pod/postmantest --for=condition=Ready --timeout=900s
           sudo kubectl -n abcdesktop wait pod/postmantest --for=condition=ready=False --timeout=900s
