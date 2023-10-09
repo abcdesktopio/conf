@@ -1,0 +1,306 @@
+{
+	"info": {
+		"_postman_id": "d6916715-3e5c-4b35-8572-b18d74f73e85",
+		"name": "createdesktop_implicit",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "auth_implicit",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+							"postman.setEnvironmentVariable(\"jwt_user_token\", jsonData.result.jwt_user_token);",
+							"pm.test(\"jwt_user_token=\" + postman.getEnvironmentVariable(\"jwt_user_token\") );",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"manager\" : null,\n    \"provider\": \"anonymous\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/API/auth/auth",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"API",
+						"auth",
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "launchdesktop",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// test http status ",
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+							"",
+							"/*",
+							"{\"status\": 200, \"result\": {\"target_ip\": \"localhost\", \"vncpassword\": \"fihmFP4p3Q\", \"authorization\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJrZXkiOjAsImhhc2giOiJCUEoxSitUOENrenJZOU9ySVhpRmtzUlVIZXdXdVlid1JQNWVBL3VqSnFuUm1URDRLb2FKZlJMK2tQN05xMFduRWRkWDVZamVJUmFid2Z0TjZGZm1kaVNaUWhuZmJyNFcrZzVPWDl4ckY2UmtLN2RURGpTSmliNGVjSVdMNXZtdmQ2MlB6aWpaU013cXI2dmxCdnNQdHY3RURIbVdMei9UNXBuKy95RHdtVFk9IiwiZXhwIjoxNjMyNTc0NzI3fQ.udJpxahYYuO_IP2evI1AYgDEwhATJLRz8UygbV2iMJOGV4gqPgzu140wLgNIyIMgn3-XdkqVyeejJ2-VpRGriD2mjM1FNS-gQPr3wlLsrDkAgPTAIvmOFYh8s34U0MAVYky1y38F2CLNxtIEnIO7isUg99OgMmxWYWg1AZorjRblghZwxxe3pspTBrY2gRBOePpHkdymq4B6_aRrHQXoEsC91znRMgDnVvcc4yAVm5G-2TjTY5IgrPfZFugjWr_OKvGdds9uFAw9G8G4xpicdrhiwAAUM7bQ8zRa95UKgCRf46S8q6Qj4na-OHgpJy2xuD2UsvlGUq6EkOUZBl8Ctw\", \"websocketrouting\": \"http_origin\", \"websockettcpport\": 6081, \"expire_in\": 240}, \"message\": \"ok\"}",
+							"*/",
+							"",
+							"",
+							"// test json type",
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Test data type of the response\", () => {",
+							"  pm.expect(jsonData).to.be.an(\"object\");",
+							"  pm.expect(jsonData.status).to.be.a(\"number\");",
+							"  pm.expect(jsonData.message).to.be.a(\"string\");",
+							"  pm.expect(jsonData.result).to.be.a(\"object\");",
+							"  pm.expect(jsonData.result.target_ip).to.be.a(\"string\");",
+							"  pm.expect(jsonData.result.vncpassword).to.be.a(\"string\");",
+							"  pm.expect(jsonData.result.authorization).to.be.a(\"string\");",
+							"  pm.expect(jsonData.result.websocketrouting).to.be.a(\"string\");",
+							"  pm.expect(jsonData.result.websockettcpport).to.be.a(\"number\");",
+							"  pm.expect(jsonData.result.expire_in).to.be.a(\"number\");",
+							"});",
+							"",
+							"pm.test(\"Test desktop properties\", () => {",
+							"    pm.expect(jsonData.status).to.eql(200);",
+							"    pm.expect(jsonData.message).to.eql('ok');",
+							"});",
+							"",
+							"",
+							"postman.setEnvironmentVariable(\"jwt_desktop_token\", jsonData.result.authorization);",
+							"console.log( 'jwt_desktop_token=' + postman.getEnvironmentVariable(\"jwt_desktop_token\") );",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"console.log( \"jwt_user_token=\" + postman.getEnvironmentVariable(\"jwt_user_token\") );"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Abcauthorization",
+						"value": "Bearer {{jwt_user_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"width\": 1440,\n  \"height\": 819,\n  \"timezone\": \"Europe/Paris\",\n  \"hostname\": \"localhost\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/API/composer/launchdesktop",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"API",
+						"composer",
+						"launchdesktop"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getwindowslist",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"// test http status ",
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+							"",
+							"// test json type",
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Test data type of the response\", () => {",
+							"  pm.expect(jsonData).to.be.an(\"object\");",
+							"  pm.expect(jsonData.code).to.be.a(\"number\");",
+							"  pm.expect(jsonData.data).to.be.a(\"array\");",
+							"});",
+							"// test expectedObject data value",
+							"const expectedObject = {",
+							"    \"code\": 200,",
+							"    \"data\": []",
+							"  };",
+							"",
+							"pm.test(\"Test getwindowslist value expectedObject\", () => {",
+							" pm.expect(pm.response.json()).to.deep.include(expectedObject);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"console.log( postman.getEnvironmentVariable(\"base_url\") + \"/spawner/getwindowslist\" );",
+							"console.log( \"jwt_desktop_token=\" + postman.getEnvironmentVariable(\"jwt_desktop_token\"));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Abcauthorization",
+						"value": "Bearer {{jwt_desktop_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/spawner/getwindowslist",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"spawner",
+						"getwindowslist"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "logout",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+							"",
+							"// test json type",
+							"const jsonData = pm.response.json();",
+							"console.log( jsonData );"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "abcauthorization",
+						"value": "Bearer {{jwt_user_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{}"
+				},
+				"url": {
+					"raw": "{{base_url}}/API/auth/logout",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"API",
+						"auth",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "jwt_user_token",
+			"value": "jwt_user_token"
+		},
+		{
+			"key": "base_url",
+			"value": "http://localhost:30443"
+		},
+		{
+			"key": "jwt_desktop_token",
+			"value": "jwt_desktop_token"
+		}
+	]
+}
