@@ -40,14 +40,7 @@ jobs:
       # install abcdesktop
       - name: Run install abcdesktop script
         run: |
-          cd kubernetes
-          sudo ./install-3.1.sh --nofetch --timeout 900s
-
-      # install applications
-      - name: Run install applications script
-        run: |
-          cd kubernetes
-          sudo ./pullapps-3.1.sh
+          sudo kubernetes/install-3.1.sh --nofetch --timeout 900s
 
       # run test
       - name: Run oc.podmantest
@@ -56,5 +49,10 @@ jobs:
           sudo kubectl -n abcdesktop wait pod/postman-test --for=condition=Ready --timeout=900s
           sudo kubectl -n abcdesktop wait pod/postman-test --for=condition=ready=False --timeout=900s
           sudo kubectl -n abcdesktop log  pod/postman-test
+
+      # install applications
+      - name: Run install applications script
+        run: |
+          sudo kubernetes/pullapps-3.1.sh
 
        
