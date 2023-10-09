@@ -40,7 +40,7 @@ jobs:
       # install abcdesktop
       - name: Install abcdesktop
         run: |
-          sudo kubernetes/install-3.1.sh --nofetch --timeout 900s
+          sudo kubernetes/install-3.1.sh --timeout 900s
           sudo kubectl get pods -n abcdesktop
           echo Run pod test oc.podmantest
           sudo kubectl create -f kubernetes/job.postman.test.yaml
