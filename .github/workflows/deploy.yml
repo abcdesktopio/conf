@@ -44,7 +44,7 @@ jobs:
           sudo kubectl get pods -n abcdesktop
           echo Run pod test oc.podmantest
           sudo kubectl create -f kubernetes/job.postman.test.yaml
-          sudo kubectl wait --for=condition=complete --timeout=900s job/postmantest -n abcdesktop
+          sudo kubectl wait --for=condition=complete --timeout=900s job/jobpostmantest -n abcdesktop
       
       # install applications
       - name: Install applications script
