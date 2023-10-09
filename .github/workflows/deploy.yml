@@ -23,6 +23,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
 
       - name: clone kube-tools
         uses: actions/checkout@v4
@@ -39,15 +40,21 @@ jobs:
       # install abcdesktop
       - name: Run install abcdesktop script
         run: |
-          wget https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/install-3.1.sh
-          chmod 755 install-3.1.sh
+          cd main/kubernetes
           sudo ./install-3.1.sh --nofetch --timeout 900s
 
       # install applications
       - name: Run install applications script
         run: |
-          wget https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/pullapps-3.1.sh
-          chmod 755 pullapps-3.1.sh
+          cd main/kubernetes
           sudo ./pullapps-3.1.sh
+
+      # run test
+      - name: Run oc.podmantest
+        run: |
+          sudo kubectl create -f pod.postman.test.yaml
+          sudo kubectl -n abcdesktop wait pod/postman-test --for=condition=Ready --timeout=900s
+          sudo kubectl -n abcdesktop wait pod/postman-test --for=condition=ready=False --timeout=900s
+          sudo kubectl -n abcdesktop log  pod/postman-test
 
        
