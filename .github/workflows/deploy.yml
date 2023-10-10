@@ -36,10 +36,6 @@ jobs:
       - name: Setup kubernetes
         run: |
           cd kube-tools && sudo ./km --apply
-
-      # install abcdesktop
-      - name: Install abcdesktop
-        run: |
           sudo kubernetes/install-3.1.sh --timeout 900s
           sudo kubectl get pods -n abcdesktop
           echo Run pod test oc.podmantest
