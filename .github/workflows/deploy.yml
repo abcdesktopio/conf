@@ -39,6 +39,7 @@ jobs:
       - name: Setup kubernetes Install abcdesktop Run postman tests
         run: |
           cd kube-tools && sudo ./km --apply && cd ..
-          sudo kubernetes/install-3.1.sh --timeout 900s --nofetch
+          sudo kubernetes/install-3.1.sh --timeout 1800s --nofetch
+          curl http://localhost:30443
           sudo kubectl get pods -n abcdesktop
           sudo kubernetes/run_postmantest-3.1.sh
