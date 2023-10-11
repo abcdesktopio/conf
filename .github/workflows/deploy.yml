@@ -32,15 +32,15 @@ jobs:
           path: 'kube-tools'
           ref: 'release'
 
-      # install kubernetes cluster 
-      - name: Setup kubernetes
+      # Install kubernetes cluster 
+      # Install abcdesktop 
+      # Run postman tests
+      - name: Setup kubernetes Install abcdesktop Run postman tests
         run: |
           cd kube-tools && sudo ./km --apply && cd ..
           sudo kubernetes/install-3.1.sh --timeout 900s
           sudo kubectl get pods -n abcdesktop
-          echo Run pod test oc.podmantest
-          sudo kubectl create -f kubernetes/job.postman.test.yaml
-          sudo kubectl wait --for=condition=complete --timeout=900s job/jobpostmantest -n abcdesktop
+          sudo kubernetes/run_postmantest.sh
       
       # install applications
       - name: Install applications script
