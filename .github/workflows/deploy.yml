@@ -40,6 +40,6 @@ jobs:
         run: |
           cd kube-tools && sudo ./km --apply && cd ..
           sudo kubernetes/install-3.1.sh --timeout 1800s --nofetch
-          curl http://localhost:30443 > /dev/null
+          kubernetes/samples/create_pod.sh
           sudo kubectl get pods -n abcdesktop
           sudo kubernetes/run_postmantest-3.1.sh
