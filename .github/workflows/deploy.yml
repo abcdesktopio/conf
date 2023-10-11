@@ -41,11 +41,5 @@ jobs:
           cd kube-tools && sudo ./km --apply && cd ..
           sudo kubernetes/install-3.1.sh --timeout 900s --nofetch
           sudo kubectl get pods -n abcdesktop
-          sudo kubernetes/run_postmantest.sh
-      
-      # install applications
-      - name: Install applications script
-        run: |
+          sudo kubernetes/run_postmantest-3.1.sh
           sudo kubernetes/pullapps-3.1.sh
-
-       
