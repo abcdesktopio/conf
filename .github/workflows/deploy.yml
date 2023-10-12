@@ -56,4 +56,8 @@ jobs:
       - name: Uninstall abcdesktop
         run: |
           sudo kubernetes/uninstall-3.1.sh
+          sudo rm *.pem
+          sudo rm od.config
+          sudo rm abcdesktop.yaml
+          sudo rm poduser.yaml
           
