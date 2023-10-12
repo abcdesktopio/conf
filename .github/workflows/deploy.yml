@@ -43,7 +43,7 @@ jobs:
 
       - name: Install abcdesktop
         run: |
-          sudo kubernetes/install-3.1.sh --timeout 1800s --force
+          sudo kubernetes/install-3.1.sh --timeout 1800s --force --imagepullpolicy Always
           
       - name: get pods
         run: |
