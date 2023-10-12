@@ -188,6 +188,11 @@ do
 done
 
 display_message  "abcdesktop install script namespace=${NAMESPACE}" "INFO"
+if [ ! -z "$IMAGEPULLPOLICY" ];
+then
+     display_message "imagePullPolcy is set to $IMAGEPULLPOLICY" "INFO"
+fi
+
 
 # Check if kubectl command is supported
 # run command kubectl version
