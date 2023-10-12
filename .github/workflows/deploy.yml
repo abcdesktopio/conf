@@ -48,7 +48,7 @@ jobs:
       - name: get pods
         run: |
           sudo kubectl get pods -n abcdesktop
-          sudo kubernetes/sample/create_pod.sh
+          sudo kubernetes/samples/create_pod.sh
           sudo kubectl get pods -n abcdesktop
 
       - name: Run postman tests
