@@ -51,6 +51,10 @@ jobs:
           sudo kubernetes/samples/create_pod.sh
           sudo kubectl get pods -n abcdesktop
 
+      - name: Pull applications
+        run: | 
+          sudo kubernetes/pullapps-3.1.sh
+
       - name: Run postman tests
         run: |
           sudo kubernetes/run_postmantest-3.1.sh
