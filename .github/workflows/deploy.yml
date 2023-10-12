@@ -37,10 +37,26 @@ jobs:
       # Install abcdesktop 
       # Run postman tests
       # Each step runs in its own process in the runner environment
+      - name: Setup kubernetes
+        run: |
+          cd kube-tools && sudo ./km --apply
+
+      # Install abcdesktop 
+      # Each step runs in its own process in the runner environment
       - name: Setup kubernetes Install abcdesktop Run postman tests
         run: |
-          cd kube-tools && sudo ./km --apply && cd ..
-          sudo kubernetes/install-3.1.sh --timeout 1800s --nofetch
-          kubernetes/samples/create_pod.sh
+          sudo kubernetes/install-3.1.sh --timeout 1800s
+          
+      # Each step runs in its own process in the runner environment
+      - name: get pods
+        run: |
           sudo kubectl get pods -n abcdesktop
+
+      - name: Run postman tests
+        run: |
           sudo kubernetes/run_postmantest-3.1.sh
+
+      - name: Uninstall abcdesktop
+        run: |
+          sudo kubernetes/uninstall-3.1.sh
+          
