@@ -42,7 +42,8 @@ FORCE=0
 NOFETCH=0
 # TIMEOUT DEFAULT VALUE 
 TIMEOUT=600s
-
+# update ImagePolicy
+# IMAGEPULLPOLICY unset value by default
 
 # list of pod container image to prefetch
 # ABCDESKTOP_POD_IMAGES="
@@ -123,6 +124,7 @@ Options (exclusives):
 Parameters:
  --namespace                Define the abcdesktop namespace default value is abcdesktop
  --timeout                  Continue if an error occurs
+ --imagepullpolicy          Update image pull policy on all pods
  
 Examples:
     abcdesktop-install
@@ -162,7 +164,7 @@ EOF
 }
 
 opts=$(getopt \
-    --longoptions "help,version,clean,nofetch,force,timeout:,namespace:" \
+    --longoptions "help,version,clean,nofetch,force,timeout:,namespace:,imagepullpolicy:" \
     --name "$(basename "$0")" \
     --options "" \
     -- "$@"
@@ -178,6 +180,7 @@ do
 	--clean) clean; exit;;
 	--timeout) TIMEOUT="$2";shift;;
         --namespace) NAMESPACE="$2";shift;;
+	--imagepullpolicy) IMAGEPULLPOLICY="$2";shift;;
         --nofetch) NOFETCH=1;shift;;
 	--force) FORCE=1;shift;;
     esac
@@ -272,6 +275,11 @@ if [ -f abcdesktop.yaml ]; then
 else
    curl --progress-bar "$ABCDESKTOP_YAML_SOURCE" --output abcdesktop.yaml
    display_message_result "downloaded source $ABCDESKTOP_YAML_SOURCE"
+   if [ ! -z "$IMAGEPULLPOLICY" ];
+   then
+     sed -i "s/IfNotPresent/$IMAGEPULLPOLICY/g" abcdesktop.yaml
+     display_message_result "update imagePullPolcy to $IMAGEPULLPOLICY"
+   fi
 fi
 
 # create od.config file
@@ -280,6 +288,11 @@ if [ -f od.config ]; then
 else
    curl --progress-bar "$OD_CONFIG_SOURCE" --output od.config
    display_message_result "downloaded source $OD_CONFIG_SOURCE"
+   if [ ! -z "$IMAGEPULLPOLICY" ];
+   then
+     sed -i "s/IfNotPresent/$IMAGEPULLPOLICY/g" od.config
+     display_message_result "update imagePullPolcy to $IMAGEPULLPOLICY"
+   fi
 fi
 
 # create poduser.yaml file
@@ -289,6 +302,11 @@ if [ -f poduser.yaml ]; then
 else
    curl --progress-bar "$POD_USER_SOURCE" --output poduser.yaml
    display_message_result "downloaded source $POD_USER_SOURCE"
+   if [ ! -z "$IMAGEPULLPOLICY" ];
+   then
+     sed -i "s/IfNotPresent/$IMAGEPULLPOLICY/g" poduser.yaml
+     display_message_result "update imagePullPolcy to $IMAGEPULLPOLICY"
+   fi
 fi
 
 
