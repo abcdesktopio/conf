@@ -14,6 +14,7 @@ git clone https://github.com/jfv-opensource/kube-tools.git
 cd kube-tools && ./km --apply && cd ..
 echo "Setup abcdesktop"
 git clone https://github.com/abcdesktopio/conf.git
+cd conf
 kubernetes/install-3.1.sh --timeout 1800s 
 echo "get pods"
 kubectl get pods -n abcdesktop
