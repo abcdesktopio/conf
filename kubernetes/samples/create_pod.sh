@@ -8,10 +8,13 @@ jwt_user_token=$(echo $json_login|jq -r .result.jwt_user_token)
 abcauthorization="Bearer $jwt_user_token"
 #echo "HEADER=$abcauthorization"
 echo "json_login=$json_login"
+sleep 5
 # launch a pod 
 desktop_pod=$(curl -X POST $ABCDESKTOP_URL/API/composer/launchdesktop -H 'Content-Type: application/json' -H "Abcauthorization: $abcauthorization"  -d '{}')
 echo "desktop_pod=$desktop_pod"
-
+status=$(echo $desktop_pod|jq -r .status)
+result=$(echo $desktop_pod|jq -r .result)
+echo "status=$status result=$result"
 # logout
 logout=$(curl -X POST $ABCDESKTOP_URL/API/auth/logout -H 'Content-Type: application/json' -H "Abcauthorization: $abcauthorization"  -d '{}')
 # echo "logout=$logout"
