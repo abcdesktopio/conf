@@ -18,6 +18,7 @@ cd conf
 kubernetes/install-3.1.sh --timeout 1800s 
 echo "get pods"
 kubectl get pods -n abcdesktop
+apt-get install -y jq
 kubernetes/samples/create_pod.sh
 kubectl get pods -n abcdesktop
 echo "pull applications"
