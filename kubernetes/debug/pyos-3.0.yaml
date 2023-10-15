@@ -1,0 +1,89 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: abcdesktop
+  name: pyos-od
+  labels:
+    abcdesktop/role: pyos
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: pyos-od
+  template:
+    metadata:
+      namespace: abcdesktop
+      labels:
+        name: pyos-od
+        run: pyos-od
+        netpol/https: 'true'
+        netpol/ldaps: 'true'
+        netpol/auth: 'true'
+        netpol/cifs: 'true'
+        netpol/api: 'true'
+        netpol/dns: 'true'
+        netpol/mongodb: 'true'
+        netpol/memcached: 'true'
+        netpol/graylog: 'true'
+    spec:
+      serviceAccountName: pyos-serviceaccount
+      containers:
+      - name : pyos
+        imagePullPolicy: Always
+        image: abcdesktopio/oc.pyos:3.0
+        command: [ "/usr/bin/sleep" ]
+        args: ["1d"]
+        volumeMounts:
+          - name: jwtsigningkeys
+            mountPath: "/config.signing"
+            readOnly: true
+          - name: jwtusersigningkeys
+            mountPath: "/config.usersigning"
+            readOnly: true
+          - name: jwtpayloadkeys
+            mountPath: "/config.payload"
+            readOnly: true
+          - name: volume-abcdesktop-config
+            mountPath: /var/pyos/od.config
+            subPath: od.config
+            readOnly: true
+        ports:
+          - containerPort: 8000
+        env:
+          - name: NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          - name: MONGODB_URL
+            valueFrom:
+              secretKeyRef:
+                name: secret-mongodb
+                key: MONGODB_URL
+      volumes:
+        - name: jwtusersigningkeys
+          secret:
+            secretName: abcdesktopjwtusersigning
+        - name: jwtsigningkeys
+          secret:
+            secretName: abcdesktopjwtdesktopsigning
+        - name: jwtpayloadkeys
+          secret:
+            secretName: abcdesktopjwtdesktoppayload
+        - name: volume-abcdesktop-config
+          configMap:
+            name: abcdesktop-config
+      dnsPolicy: ClusterFirst
+---
