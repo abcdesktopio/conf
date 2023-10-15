@@ -533,19 +533,34 @@ desktop.pod : {
 
 desktop.policies: { 'rules': { } }
 
-# 
+#
+# desktop.homedirectorytype define how to create user's homedirectory 
+#
+# if desktop.homedirectorytype is set to None, the homedirectory volume is an empty dir 
+# { 'name': volume_home_name, 'emptyDir': {} }
+#
+# if desktop.homedirectorytype is set to 'hostPath', the homedirectory volume is a hostpath 
+# and read the desktop.hostPathRoot value
+# { name':volume_home_name, 'hostPath': { 'path': desktop.hostPathRoot + '/' + subpath_name, 'type':'DirectoryOrCreate' }  }
+#
+# if desktop.homedirectorytype is set to 'persistentVolumeClaim', the homedirectory volume is a 'persistentVolumeClaim' 
+# and read the desktop.persistentvolumeclaim value
+# read https://www.abcdesktopio.io/3.1/config/persistentvolumes/ to get more informations about pv and pvc 
+#
+# values can be :
+# desktop.homedirectorytype: None 
 # desktop.homedirectorytype: 'persistentVolumeClaim' 
 # desktop.homedirectorytype: 'hostPath'
-desktop.homedirectorytype: 'hostPath'
+
 #
 # read https://www.abcdesktop.io/3.0/config/volumes
 #
-# where user home dir are located if desktop.homedirectorytype is 'hostPath'
-# this can be /tmp for example
-# in production the recommanded value is a mount point (like nfs) 
-# set :
-# desktop.hostPathRoot: '/mnt/abcdesktop'
+# desktop.hostPathRoot set the hostPath root directory
+# desktop.hostPathRoot is read only if desktop.homedirectorytype: 'hostPath'
+# the user's home directory is located in host '/tmp' directory
 desktop.hostPathRoot: '/tmp'
+
+
 # if desktop.homedirectorytype is set to persistentVolumeClaim
 # replace mystorageclass by your own storageClassName
 # 
