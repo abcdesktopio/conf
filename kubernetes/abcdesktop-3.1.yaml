@@ -178,7 +178,6 @@ data:
         set $broadcast_tcp_port                 29784;
         set $lync_service_tcp_port              29785;
         set $spawner_service_tcp_port           29786;
-        set $janus_service_tcp_port		          29787; 
         set $signalling_service_tcp_port        29787; 
         
         # uncomment to use env var
