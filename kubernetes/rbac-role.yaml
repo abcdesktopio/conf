@@ -5,9 +5,6 @@ metadata:
   namespace: abcdesktop
 rules:
 - apiGroups: ['']
-  resources: ['nodes']
-  verbs: ["get", "watch", "list"]
-- apiGroups: ['']
   resources: ['pods']
   verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
 - apiGroups: ['']
