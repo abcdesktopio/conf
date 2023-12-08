@@ -360,7 +360,7 @@ spec:
         resources:
           limits:
             cpu: 2
-            memory: 512Mi
+            memory: 1024Mi
           requests:
             cpu: 0.25
             memory: 64Mi
