@@ -318,11 +318,6 @@ auth.prelogin : { 'enable' : False,
 # END OF LOGMEIN PRELOGON SECTION
 
 
-### TIPSINFO SECTION ###
-#
-tipsinfo : { 'networkmap': False }
-# END OF TIPSINFO SECTION
-
 
 # MEMCACHE SECTION
 # memcache server
@@ -372,10 +367,59 @@ language : [  'af_ZA', 'am_ET', 'an_ES', 'ar_AE', 'ar_BH', 'ar_DZ', 'ar_EG', 'ar
 # END OF LANGUAGE SECTION
 
 
-# WebRTC Janus config
+# WebRTC configuration 
 #
-webrtc.enable : False
-# END OF WebRTC Janus config SECTION
+#
+webrtc.enable : False # by default no sound
+# 
+# install a coturn server first with TLS support
+# /etc/turnserver.conf
+# # minimal configurtion file for /etc/turnserver.conf
+# # use TLS/SSL
+# lt-cred-mech
+# use-auth-secret
+# static-auth-secret=SUPERSECRETFORABCDESKTOPUSERS
+# # Certificate file.
+# # Use an absolute path or path relative to the
+# # configuration file.
+# # Use PEM file format.
+# cert=/etc/certs/fullchain.pem
+# # Private key file.
+# # Use an absolute path or path relative to the
+# # configuration file.
+# # Use PEM file format.
+# pkey=/etc/certs/privkey.pem
+#
+# in most cases, you need a stun and turn servers
+# 
+# webrtc.rtc_configuration:{ 'iceServers':[ {'urls':'stun:stun.l.google.com:19302'} ] }
+# webrtc.coturn: { 
+#  'coturn_static_auth_secret': 'SUPERSECRETFORABCDESKTOPUSERS', 
+#  'ttl':3600, 
+#  'protocol': 'turns',
+#  'url': 'turnserver.domain.local:3478' }
+#  
+#  'coturn_static_auth_secret' is the sahred secret with coturn server
+#  'ttl' : ttl for auth
+#  'protocol': can be 'turn' or 'turns'
+#  'url': turn server or turns server for the web browser 
+#
+# pyos will build the rtc_configuration json conf 
+#
+# webrtc.rtc_configuration becomes
+# # {
+# #   "iceServers": [
+# #       {
+# #           "urls": "stun:stun.l.google.com:19302"
+# #      },
+# #       {
+# #           "urls": "turns:nturns.domain.local:3478",
+# #           "username": "1703086872",
+# #           "credential": "+BuFkb0hFf8pAoFwpp0A0UbO+1k="
+# #       }
+# #   ]
+# # }
+# END OF WebRTC SECTION
 
 # Kubernetes timeout
 # default timeout to bound a persistentVolumeClaim
@@ -679,15 +723,6 @@ desktop.homedirectorytype: None  # use a empty dir
 #            'accessModes': [ 'ReadWriteOnce' ] } }
 #
 
-#
-# desktop.defaultbackgroundcolors
-# list of string color 
-# example [ '#6EC6F0', '#333333' ]
-# The desktop.defaultbackgroundcolors allow you to change the desktop default background color.
-# The default value is a list of string 
-# [ '#6EC6F0', '#333333', '#666666', '#CD3C14', '#4BB4E6', '#50BE87', '#A885D8', '#FFB4E6' ]
-# The desktop.defaultbackgroundcolors length can contain up to 8 entries. 
-desktop.defaultbackgroundcolors : [ '#6EC6F0', '#333333', '#666666', '#CD3C14', '#4BB4E6', '#50BE87', '#A885D8', '#FFB4E6' ]
 
 #
 # desktop.nodeselector
@@ -801,13 +836,49 @@ dock : {
     'icon': u'webshell.svg' } }
 
 
+# FRONT START OPTIONS 
 
-# FRONT END OPTIONS 
+# welcomeinfo
+# Show a welcome message to front for maintenance or whatever 
+# welcomeinfo: { 
+#  'welcome': [ 
+#    { 'notbefore': '04 Dec 2023 00:12:00 GMT', 
+#      'notafter':  '08 Dec 2023 00:12:00 GMT', 
+#      'title': 'Platform scheduled maintenance', 
+#      'information': 'Scheduled service maintenance from 04 Dec 2023 00:12:00 GMT to 08 Dec 2023 00:12:00 GMT.' 
+#    } ] }
+
+# front zoom value 
+# set <number> values
+# default is 1 render element at its normal size.
+# use document.body.style.zoom non-standard zoom CSS property can be used to control the magnification level of an element.
+# zoom has not been implemented by Firefox
+# desktop.zoom: 1.1;
+# desktop.zoom: 0.7;
+desktop.zoom : 1
+
 # front.menuconfig is a dictionary to show or hide menu entries 
 # at the to rignt corner 
 # in front js
 # 'grabmouse': False,
 front.menuconfig  : { 'settings': True, 'appstore': True, 'screenshot':True, 'download': True, 'logout': True, 'disconnect': True }
+
+#
+# desktop.defaultbackgroundcolors
+# list of string color 
+# example [ '#6EC6F0', '#333333' ]
+# The desktop.defaultbackgroundcolors allow you to change the desktop default background color.
+# The default value is a list of string 
+# [ '#6EC6F0', '#333333', '#666666', '#CD3C14', '#4BB4E6', '#50BE87', '#A885D8', '#FFB4E6' ]
+# The desktop.defaultbackgroundcolors length can contain up to 8 entries. 
+desktop.defaultbackgroundcolors : [ '#6EC6F0', '#333333', '#666666', '#CD3C14', '#4BB4E6', '#50BE87', '#A885D8', '#FFB4E6' ]
+
+# tips info
+# display a custom network information page
+tipsinfo : { 'networkmap': False }
+
+# FRONT END OPTIONS 
+
 
 
 #
