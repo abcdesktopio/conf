@@ -487,7 +487,7 @@ desktop.pod : {
   # value inside mustrache like {{ uidNumber }} is replaced by context run value
   # for example {{ uidNumber }} is the uid number define in ldap server 
   'spec' : {
-    'shareProcessNamespace': True,
+    'shareProcessNamespace': False,
     'shareProcessMemory': True,
     'shareProcessMemorySize': '256Mi',
     'securityContext': {
@@ -499,7 +499,8 @@ desktop.pod : {
   # graphical is the main abcdesktop container 
   # include x11 service 
   'graphical' : { 
-    'image': { 'default': 'abcdesktopio/oc.user.ubuntu:3.2' },
+    # 'image': { 'default': 'abcdesktopio/oc.user.ubuntu:3.2' },
+    'image': { 'default': 'abcdesktopio/oc.user.sudo:3.2' },
     'imagePullPolicy':  'IfNotPresent',
     'enable': True,
     'acl':  { 'permit': [ 'all' ] },
@@ -593,8 +594,8 @@ desktop.pod : {
     'tcpport': 4714,
     'acl':  { 'permit': [ 'all' ] },
     'resources': { 
-      'requests': { 'memory': "8Mi",  'cpu': "50m"  },  
-      'limits'  : { 'memory': "128Mi", 'cpu': "500m" } 
+      'requests': { 'memory': "32Mi",  'cpu': "50m"  },  
+      'limits'  : { 'memory': "256Mi", 'cpu': "500m" } 
     } 
   },
   # container init
@@ -636,8 +637,8 @@ desktop.pod : {
         'supplementalGroups': [ '{{ supplementalGroups }}' ] ,
         'readOnlyRootFilesystem': False, 
         'allowPrivilegeEscalation': True, 
-        'runAsUser':                '{{ uidNumber }}',
-        'runAsGroup':               '{{ gidNumber }}'
+        'runAsUser':'{{ uidNumber }}',
+        'runAsGroup':'{{ gidNumber }}'
     }
   },
   'pod_application' : {
@@ -647,8 +648,8 @@ desktop.pod : {
         'supplementalGroups': [ '{{ supplementalGroups }}' ] ,
         'readOnlyRootFilesystem': False,
         'allowPrivilegeEscalation': True,
-        'runAsUser':                '{{ uidNumber }}',
-        'runAsGroup':               '{{ gidNumber }}'
+        'runAsUser':'{{ uidNumber }}',
+        'runAsGroup':'{{ gidNumber }}'
     },
     'acl':  { 'permit': [ 'all' ] } } }
 
