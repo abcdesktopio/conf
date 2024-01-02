@@ -112,7 +112,7 @@ ensure_service_account_created() {
   #  https://github.com/kubernetes/kubernetes/issues/66689
   i="0"
   SERVICE_ACCOUNT="${1}"
-  while [ $i -lt 10 ]
+  while [ $i -lt 20 ]
   do
     kubectl -n "${NAMESPACE}" get serviceaccount "${SERVICE_ACCOUNT}" -o name > /dev/null
     lastcommand=$?
@@ -122,7 +122,7 @@ ensure_service_account_created() {
         break
     else
 	i=$[$i+1]
-        display_message " retry $i/10 $SERVICE_ACCOUNT account is net yet created, sleeping for 5s" "INFO"
+        display_message " retry $i/10 $SERVICE_ACCOUNT account is not yet created, sleeping for 5s" "INFO"
         sleep 5
     fi
   done  
