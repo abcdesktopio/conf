@@ -106,6 +106,27 @@ fi
 }
 
 
+# $1 service account
+ensure_service_account_created() {
+  # The default account is known to take a while to appear; see
+  #  https://github.com/kubernetes/kubernetes/issues/66689
+  i="0"
+  SERVICE_ACCOUNT="${1}"
+  while [ $i -lt 10 ]
+  do
+    kubectl -n "${NAMESPACE}" get serviceaccount "${SERVICE_ACCOUNT}" -o name > /dev/null
+    if [ "$?" -eq 0 ];
+    then
+        display_message "$SERVICE_ACCOUNT account is created" "OK"
+        break
+    else
+        i=$[$i+1]
+        display_message " retry $i/10 $SERVICE_ACCOUNT account is net yet created, sleeping for 5s" "INFO"
+        sleep 5
+    fi
+  done  
+}
+
 
 function help() {
         cat <<-EOF
@@ -343,6 +364,11 @@ display_message_result "kubectl create configmap abcdesktop-config --from-file=o
 kubectl label configmap abcdesktop-config abcdesktop/role=pyos.config -n "$NAMESPACE" > /dev/null
 display_message_result "label configmap abcdesktop-config abcdesktop/role=pyos.config"
 
+
+#
+# ensure_service_account_created 
+ensure_service_account_created default
+
 #
 # by default create the poduser sample
 if [ $NOFETCH -eq 0 ]; then
@@ -372,6 +398,9 @@ fi
 # main yaml file 
 create_message=$(kubectl create -f $ABCDESKTOP_YAML)
 display_message_result "$create_message"
+
+# ensure service account pyos-serviceaccount
+ensure_service_account_created pyos-serviceaccount
 
 deployments=$(kubectl -n "$NAMESPACE" get deployment --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 for d in $deployments;  
