@@ -419,6 +419,22 @@ webrtc.enable : False # by default no sound
 # #       }
 # #   ]
 # # }
+
+
+#
+# webrtc.rtc_constraints
+# webrtc.rtc_constraints: { 'video': False, 'audio': True }
+# For both video and audio, its value is either a boolean or an object. 
+# define if 'audio' should be send using the user's microphone, the default value is True 
+# keep in mind that a user can refuse local microphone access
+# define if 'video' should be send using the user's webcam, the default value is False 
+# keep in mind that a user can refuse local camera access
+#
+# This value is used by navigator.mediaDevices.getUserMedia(rtc_constraints)
+# https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
+#
+webrtc.rtc_constraints: { 'video': False, 'audio': True }
+
 # END OF WebRTC SECTION
 
 # Kubernetes timeout
