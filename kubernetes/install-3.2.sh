@@ -121,7 +121,7 @@ ensure_service_account_created() {
         display_message "$SERVICE_ACCOUNT account is created" "OK"
         break
     else
-	i=$[$i+1]
+	i=$((i+1))
         display_message " retry $i/10 $SERVICE_ACCOUNT account is not yet created, sleeping for 5s" "INFO"
         sleep 5
     fi
