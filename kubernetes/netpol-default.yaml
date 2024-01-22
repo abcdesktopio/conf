@@ -317,6 +317,9 @@ spec:
     # spawner_service_tcp_port
     - protocol: TCP
       port: 29786
+    # signalling_service_tcp_port
+    - protocol: TCP
+      port: 29787
   egress:
   # pod user can run dns query to all kube-system 
   - ports:
