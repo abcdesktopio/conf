@@ -222,7 +222,7 @@ check_command kubectl
 kubectl version > /dev/null
 display_message_result "kubectl version"
 
-PYOS_POD_NAME=$(kubectl get pods -l run=pyos-od -o jsonpath={.items..metadata.name} -n "$NAMESPACE")
+PYOS_POD_NAME=$(kubectl get pods -l run=pyos-od -o jsonpath={.items..metadata.name} -n "$NAMESPACE" | awk '{print $1}')
 display_message_result "kubectl pods -l run=pyos-od -o jsonpath={.items..metadata.name} -n $NAMESPACE"
 display_message "pyos pod name=$PYOS_POD_NAME" "OK"
 
