@@ -163,7 +163,7 @@ EOF
 
 function clean() {
   rm -f od.config abcdesktop.yaml
-  rm -f ./*.pem
+  rm -f *.pem
   display_message_result "remove files"
 }
 
