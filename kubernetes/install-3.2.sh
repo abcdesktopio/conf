@@ -26,19 +26,14 @@ VERSION="3.2"
 
 ABCDESKTOP_YAML_SOURCE="https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/abcdesktop-$VERSION.yaml"
 OD_CONFIG_SOURCE="https://raw.githubusercontent.com/abcdesktopio/conf/main/reference/od.config.$VERSION"
-POD_USER_SOURCE="https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/poduser-$VERSION.yaml"
-
 
 # define YAML path
 ABCDESKTOP_YAML=abcdesktop.yaml
-PODUSER_YAML=poduser.yaml
 # default namespace
 NAMESPACE=abcdesktop
 # force continue when an error occurs
 # No force by default
 FORCE=0 
-# No fetch
-NOFETCH=0
 # TIMEOUT DEFAULT VALUE 
 TIMEOUT=600s
 # update ImagePolicy
@@ -138,8 +133,7 @@ Usage: abcdesktop-install [OPTION] [--namespace abcdesktop]...
 Options (exclusives):
  --help                     Display this help and exit
  --version                  Display version information and exit
- --clean 		    Remove *.pem od.config abcdesktop.yaml poduser.yaml files only
- --nofetch                  Disable image fetching for poduser.yaml
+ --clean 		    Remove *.pem od.config abcdesktop.yaml files only
  --force                    Continue if an error occurs
 
 Parameters:
@@ -168,7 +162,7 @@ EOF
 
 
 function clean() {
-  rm -f od.config abcdesktop.yaml poduser.yaml
+  rm -f od.config abcdesktop.yaml
   rm -f ./*.pem
   display_message_result "remove files"
 }
@@ -185,7 +179,7 @@ EOF
 }
 
 opts=$(getopt \
-    --longoptions "help,version,clean,nofetch,force,timeout:,namespace:,imagepullpolicy:" \
+    --longoptions "help,version,clean,force,timeout:,namespace:,imagepullpolicy:" \
     --name "$(basename "$0")" \
     --options "" \
     -- "$@"
@@ -202,7 +196,6 @@ do
 	--timeout) TIMEOUT="$2";shift;;
         --namespace) NAMESPACE="$2";shift;;
 	--imagepullpolicy) IMAGEPULLPOLICY="$2";shift;;
-        --nofetch) NOFETCH=1;shift;;
 	--force) FORCE=1;shift;;
     esac
     shift
@@ -321,21 +314,6 @@ else
    fi
 fi
 
-# create poduser.yaml file
-if [ -f poduser.yaml ]; then
-   display_message "use local file poduser.yaml" "OK"
-   PODUSER_YAML=poduser.yaml
-else
-   curl --progress-bar "$POD_USER_SOURCE" --output poduser.yaml
-   display_message_result "downloaded source $POD_USER_SOURCE"
-   if [ ! -z "$IMAGEPULLPOLICY" ];
-   then
-     sed -i "s/IfNotPresent/$IMAGEPULLPOLICY/g" poduser.yaml
-     display_message_result "update imagePullPolcy to $IMAGEPULLPOLICY"
-   fi
-fi
-
-
 # Patching file is namespace has changed
 if [ "$NAMESPACE" != "abcdesktop" ]; then
    # abcdesktop.yaml
@@ -351,10 +329,6 @@ if [ "$NAMESPACE" != "abcdesktop" ]; then
    display_message_result "updated od.config file with new namespace $NAMESPACE"
    sed -i'' -e "s|abcdesktop.svc.cluster.local|$NAMESPACE.svc.cluster.local|g" od.config
    display_message_result "updated od.config file with new fqdn $NAMESPACE.svc.cluster.local"
-   # poduser.yaml
-   # 
-   sed -i'' -e "s|\"abcdesktop\"|\"$NAMESPACE\"|g" poduser.yaml
-   display_message_result "updated poduser.yaml file with new $NAMESPACE"
 fi
 
 #
@@ -369,21 +343,6 @@ display_message_result "label configmap abcdesktop-config abcdesktop/role=pyos.c
 #
 # ensure_service_account_created 
 ensure_service_account_created default
-
-#
-# by default create the poduser sample
-if [ $NOFETCH -eq 0 ]; then
-  # create a dummy pod user
-  display_message "kubectl create -f $PODUSER_YAML" "INFO"
-  kubectl create -f $PODUSER_YAML > /dev/null
-  display_message_result "kubectl create -f $PODUSER_YAML"
-  display_message "waiting for pod/anonymous-74bea267-8197-4b1d-acff-019b24e778c5 Ready" "INFO"
-  wait_message=$(kubectl wait --for=condition=Ready pod/anonymous-74bea267-8197-4b1d-acff-019b24e778c5  -n "$NAMESPACE" --timeout="$TIMEOUT")
-  display_message_result "$wait_message"
-  display_message "deleting for pod/anonymous-74bea267-8197-4b1d-acff-019b24e778c5 Ready" "INFO"
-  delete_message=$(kubectl delete --grace-period=0  -f $PODUSER_YAML)
-  display_message_result "$delete_message"
-fi
 
 #clean endpoints desktop 
 # if a previous abcdesktop has been done

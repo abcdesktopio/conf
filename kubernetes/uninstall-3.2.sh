@@ -97,7 +97,7 @@ Usage: abcdesktop-uninstall [OPTION] [--namespace abcdesktop]...
 Options (exclusives):
  --help                     Display this help and exit
  --version                  Display version information and exit
- --clean                    Remove *.pem od.config abcdesktop.yaml poduser.yaml files only
+ --clean                    Remove *.pem od.config abcdesktop.yaml files only
 
 Parameters:
  --namespace                Define the abcdesktop namespace default value is abcdesktop
@@ -124,8 +124,8 @@ EOF
 
 
 function clean() {
-  rm -f od.config abcdesktop.yaml poduser.yaml
-  display_message_result "remove od.config abcdesktop.yaml poduser.yaml"
+  rm -f od.config abcdesktop.yaml
+  display_message_result "remove od.config abcdesktop.yaml"
   rm -f ./*.pem
   display_message_result "remove *.pem"
 }
