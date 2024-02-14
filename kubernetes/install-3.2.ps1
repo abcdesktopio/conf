@@ -22,12 +22,10 @@ $VERSION="3.2"
 
 $ABCDESKTOP_YAML_SOURCE="https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/abcdesktop-$VERSION.yaml"
 $OD_CONFIG_SOURCE="https://raw.githubusercontent.com/abcdesktopio/conf/main/reference/od.config.$VERSION"
-$POD_USER_SOURCE="https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/poduser-$VERSION.yaml"
 
 
 # define YAML path
 $ABCDESKTOP_YAML="abcdesktop.yaml"
-$PODUSER_YAML="poduser.yaml"
 # define config path
 $OD_CONFIG="od.config"
 # default namespace
@@ -35,8 +33,6 @@ $NAMESPACE="abcdesktop"
 # force continue when an error occurs
 # No force by default
 $FORCE=0 
-# No fetch
-$NOFETCH=0
 # TIMEOUT DEFAULT VALUE 
 $TIMEOUT="600s"
 # update ImagePolicy
@@ -95,11 +91,11 @@ function check_command {
 }
 
 function clean_files {
-    rm .\od.config 
-    rm .\abcdesktop.yaml 
-    rm .\poduser.yaml
-    display_message_result "remove od.config abcdesktop.yaml poduser.yaml"
-    rm ./*.pem
+    rm od.config 
+    display_message_result "remove od.config"
+    rm abcdesktop.yaml 
+    display_message_result "remove abcdesktop.yaml"
+    rm *.pem
     display_message_result "remove *.pem"
 }
 
@@ -113,8 +109,7 @@ function help {
     Options (exclusives):
      --help                     Display this help and exit
      --version                  Display version information and exit
-     --clean 		    Remove *.pem od.config abcdesktop.yaml poduser.yaml files only
-     --nofetch                  Disable image fetching for poduser.yaml
+     --clean 		        Remove *.pem od.config abcdesktop.yaml files only
      --force                    Continue if an error occurs
     
     Parameters:
@@ -161,7 +156,6 @@ while ($args) {
         "--timeout" { $TIMEOUT = $args[1]; $args = $args[1..$args.length]; break }
         "--namespace" { $NAMESPACE = $args[1]; $args = $args[1..$args.length]; break }
         "--imagepullpolicy" { $IMAGEPULLPOLICY = $args[1]; $args = $args[1..$args.length]; break }
-        "--nofetch" { $NOFETCH = 1; break }
         "--force" { $FORCE = 1; break }
     }
     $args = $args[1..$args.length]
@@ -273,21 +267,6 @@ else{
     }
 }
 
-# create poduser.yaml file
-if (Test-Path $PODUSER_YAML){
-    display_message "use local file poduser.yaml" "OK"
-    $PODUSER_YAML="poduser.yaml"
-}
-else{
-    curl $POD_USER_SOURCE -OutFile poduser.yaml
-    display_message_result "downloaded source $POD_USER_SOURCE"
-
-    if (-not [string]::IsNullOrWhiteSpace($IMAGEPULLPOLICY)) {
-        (Get-Content $PODUSER_YAML) -replace 'IfNotPresent', $IMAGEPULLPOLICY | Set-Content $PODUSER_YAML
-        display_message_result "update imagePullPolcy to $IMAGEPULLPOLICY"
-    }
-}
-
 # Patching file is namespace has changed
 if ("$NAMESPACE" -ne "abcdesktop"){
    # abcdesktop.yaml
@@ -309,12 +288,6 @@ if ("$NAMESPACE" -ne "abcdesktop"){
    $content = $content -replace 'abcdesktop.svc.cluster.local', "$NAMESPACE.svc.cluster.local"
    display_message_result "updated od.config file with new fqdn $NAMESPACE.svc.cluster.local"
    Set-Content -Path $path -Value $content
-   # poduser.yaml
-   $path=".\poduser.yaml"
-   $content = Get-Content -Path $path
-   $content = $content -replace "`"abcdesktop`"", "`"$NAMESPACE`""
-   display_message_result "updated poduser.yaml file with new $NAMESPACE"
-   Set-Content -Path $path -Value $content
 }
 
 # create configmap from od.config file
@@ -323,20 +296,6 @@ display_message_result "kubectl create configmap abcdesktop-config --from-file=o
 # tag abcdesktop-config cm
 kubectl label configmap abcdesktop-config abcdesktop/role=pyos.config -n $NAMESPACE > $null
 display_message_result "label configmap abcdesktop-config abcdesktop/role=pyos.config"
-
-# by default create the poduser sample
-if ( $NOFETCH -eq 0 ){
-  # create a dummy pod user
-  display_message "kubectl create -f $PODUSER_YAML" "INFO"
-  kubectl create -f $PODUSER_YAML > $null
-  display_message_result "kubectl create -f $PODUSER_YAML"
-  display_message "waiting for pod/anonymous-74bea267-8197-4b1d-acff-019b24e778c5 Ready" "INFO"
-  $wait_message=$(kubectl wait --for=condition=Ready pod/anonymous-74bea267-8197-4b1d-acff-019b24e778c5  -n $NAMESPACE --timeout=$TIMEOUT)
-  display_message_result "$wait_message"
-  display_message "deleting for pod/anonymous-74bea267-8197-4b1d-acff-019b24e778c5 Ready" "INFO"
-  $delete_message=$(kubectl delete --grace-period=0  -f $PODUSER_YAML)
-  display_message_result "$delete_message"
-}
 
 #clean endpoints desktop 
 # if a previous abcdesktop has been done

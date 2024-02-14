@@ -79,11 +79,10 @@ function check_command {
 }
 
 function clean_files {
-    rm .\od.config 
-    rm .\abcdesktop.yaml 
-    rm .\poduser.yaml
+    rm od.config 
+    rm abcdesktop.yaml 
     display_message_result "remove od.config abcdesktop.yaml poduser.yaml"
-    rm ./*.pem
+    rm *.pem
     display_message_result "remove *.pem"
 }
 
@@ -96,7 +95,7 @@ function help {
     Options (exclusives):
     --help                     Display this help and exit
     --version                  Display version information and exit
-    --clean                    Remove *.pem od.config abcdesktop.yaml poduser.yaml files only
+    --clean                    Remove *.pem od.config abcdesktop.yaml files only
 
     Parameters:
     --namespace                Define the abcdesktop namespace default value is abcdesktop
