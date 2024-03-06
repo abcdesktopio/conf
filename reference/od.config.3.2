@@ -513,7 +513,8 @@ desktop.pod : {
       'supplementalGroups': [ '{{ supplementalGroups }}' ],
       'runAsUser': '{{ uidNumber }}',
       'runAsGroup': '{{ gidNumber }}'
-    }
+    },
+    'tolerations': []
   },  
   # graphical is the main abcdesktop container 
   # include x11 service 
