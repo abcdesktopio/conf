@@ -671,6 +671,7 @@ desktop.pod : {
         'runAsUser':'{{ uidNumber }}',
         'runAsGroup':'{{ gidNumber }}'
     },
+    'tolerations': [],
     'acl':  { 'permit': [ 'all' ] } } }
 
 desktop.policies: { 'rules': { } }
