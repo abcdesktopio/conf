@@ -223,8 +223,13 @@ kubectl version > /dev/null
 display_message_result "kubectl version"
 
 PYOS_POD_NAME=$(kubectl get pods -l run=pyos-od -o jsonpath={.items..metadata.name} -n "$NAMESPACE" | awk '{print $1}')
-display_message_result "kubectl pods -l run=pyos-od -o jsonpath={.items..metadata.name} -n $NAMESPACE"
-display_message "pyos pod name=$PYOS_POD_NAME" "OK"
+display_message_result "kubectl get pods -l run=pyos-od -o jsonpath={.items..metadata.name} -n $NAMESPACE"
+if [ -z "${PYOS_POD_NAME}" ]; then
+  display_message "pyos pod is not found, fatal error" "KO"
+  exit 1
+fi
+
+display_message "pyos pod has name=$PYOS_POD_NAME" "OK"
 
 # define service URL 
 # inside pyos
