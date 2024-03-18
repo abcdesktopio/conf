@@ -528,10 +528,10 @@ desktop.pod : {
     'enable': True,
     'acl':  { 'permit': [ 'all' ] },
     'waitportbin' : '/composer/node/wait-port/node_modules/.bin/wait-port',
-    # 'resources': { 
-    #   'requests': { 'memory': "320Mi", 'cpu': "250m"  },
-    #   'limits'  : { 'memory': "1Gi",   'cpu': "1000m" } 
-    # },
+    'resources': { 
+      'requests': { 'memory': "256Mi", 'cpu': "100m"  },
+      'limits'  : { 'memory': "1Gi",   'cpu': "1000m" } 
+    },
     'securityContext': {
       'readOnlyRootFilesystem': False, 
       'allowPrivilegeEscalation': True
@@ -571,7 +571,7 @@ desktop.pod : {
     'tcpport': 681,
     'securityContext': { 'runAsUser': 0 },
     'resources': { 
-      'requests': { 'memory': "64Mi", 'cpu': "125m" },  
+      'requests': { 'memory': "32Mi", 'cpu': "50m" },  
       'limits'  : { 'memory': "512Mi",  'cpu': "500m" } 
     },
     'acl':  { 'permit': [ 'all' ] } 
@@ -591,7 +591,11 @@ desktop.pod : {
     'imagePullPolicy':  'IfNotPresent',
     'enable': True,
     'tcpport': 29783,
-    'acl':  { 'permit': [ 'all' ] } 
+    'resources': {
+      'requests': { 'memory': "32Mi", 'cpu': "25m" },  
+      'limits'  : { 'memory': "512Mi",  'cpu': "100m" } 
+    },
+    'acl':  { 'permit': [ 'all' ] }
     },
   # container storage
   # storage is just a pause go get all volumes
@@ -601,7 +605,7 @@ desktop.pod : {
     'enable': True,
     'acl': { 'permit': [ 'all' ] },
     'resources': { 
-      'requests': { 'memory': "32Mi",  'cpu': "100m" },  
+      'requests': { 'memory': "32Mi",  'cpu': "10m" },  
       'limits'  : { 'memory': "128Mi", 'cpu': "250m" } 
     }
   },
@@ -630,6 +634,10 @@ desktop.pod : {
     'imagePullPolicy': 'IfNotPresent',
     'securityContext': { 'runAsUser': 0 },
     'acl':  { 'permit': [ 'all' ] },
+    'resources': { 
+      'requests': { 'memory': "32Mi",  'cpu': "50m"  },  
+      'limits'  : { 'memory': "256Mi", 'cpu': "500m" } 
+    }, 
     'command':  [ 'sh', '-c',  'chmod 750 ~ && chown {{ uidNumber }}:{{ gidNumber }} ~' ] 
   },
   # 
