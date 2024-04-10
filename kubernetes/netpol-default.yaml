@@ -429,6 +429,9 @@ spec:
     # spawner_service_tcp_port
     - protocol: TCP
       port: 29786
+    # cupsd
+    - protocol: TCP
+      port: 631
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
