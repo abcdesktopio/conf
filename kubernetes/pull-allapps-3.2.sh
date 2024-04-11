@@ -232,11 +232,12 @@ URL="http://localhost:8080/API/manager/image"
 # call HEALTZ
 for app in $ABCDESKTOP_JSON_APPLICATIONS
 do
+      appbasename=$(basename $app)
       # import the json file description for this application $app into abdesktop service
-      kubectl cp -n "$NAMESPACE" "$app" "$PYOS_POD_NAME:/tmp/$app"
+      kubectl cp -n "$NAMESPACE" "$app" "$PYOS_POD_NAME:/tmp/$appbasename"
       display_message_result "Copy $app to $PYOS_POD_NAME:/tmp/$app"
       # import the json file description for this application $app into abdesktop service
-      kubectl exec -n "$NAMESPACE" -t "$PYOS_POD_NAME" -- curl -X PUT -H 'Content-Type: text/javascript' "$URL" -d "@/tmp/$app" 
+      kubectl exec -n "$NAMESPACE" -t "$PYOS_POD_NAME" -- curl -X PUT -H 'Content-Type: text/javascript' "$URL" -d "@/tmp/$appbasename"
       display_message_result "curl -X PUT -H 'Content-Type: text/javascript' $URL -d @$app"
       # abcdesktop will start a pod with label type=pod_application_pull
       # to prefetch container image
@@ -247,6 +248,6 @@ do
       echo "waiting for all pods condition Ready. timeout=-1s (it will take a while)"
       kubectl wait --for=condition=Ready pods --selector=type=pod_application_pull --timeout=-1s -n "$NAMESPACE"
       kubectl delete pod --selector=type=pod_application_pull -n "$NAMESPACE" > /dev/null
-      display_message_result "$app"
+      display_message_result "$appbasename"
 done
 echo "end of pull apps script"
