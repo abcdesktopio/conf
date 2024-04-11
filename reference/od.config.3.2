@@ -607,8 +607,8 @@ desktop.pod : {
     'enable': True,
     'acl': { 'permit': [ 'all' ] },
     'resources': { 
-      'requests': { 'memory': "32Mi",  'cpu': "10m" },  
-      'limits'  : { 'memory': "128Mi", 'cpu': "250m" } 
+      'requests': { 'memory': "8Mi",  'cpu': "5m" },  
+      'limits'  : { 'memory': "32Mi", 'cpu': "10m" } 
     }
   },
   # container sound
@@ -623,7 +623,7 @@ desktop.pod : {
     'tcpport': 4714,
     'acl':  { 'permit': [ 'all' ] },
     'resources': { 
-      'requests': { 'memory': "32Mi",  'cpu': "50m"  },  
+      'requests': { 'memory': "32Mi",  'cpu': "10m"  },  
       'limits'  : { 'memory': "256Mi", 'cpu': "500m" } 
     } 
   },
