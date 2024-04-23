@@ -235,6 +235,13 @@ spec:
       containers:
       - name: mongodb
         image: mongo:4.4
+        resources:
+          limits:
+            cpu: 0.5
+            memory: 512Mi
+          requests:
+            cpu: 0.1
+            memory: 128Mi
         env:
         - name: MONGO_INITDB_ROOT_USERNAME_FILE
           value: /etc/abcdesktop/admin/MONGO_ROOT_USERNAME
@@ -297,7 +304,14 @@ spec:
     spec:
       containers:
       - name: memcached
-        image: memcached 
+        image: memcached
+        resources:
+          limits:
+            cpu: 0.2
+            memory: 64Mi
+          requests:
+            cpu: 0.1
+            memory: 16Mi
         ports:
           - containerPort: 11211
 ---
@@ -360,7 +374,7 @@ spec:
           periodSeconds: 10
         resources:
           limits:
-            cpu: 2
+            cpu: 1
             memory: 1024Mi
           requests:
             cpu: 0.25
@@ -418,6 +432,13 @@ spec:
     spec:
       containers:
       - name: speedtest
+        resources:
+          limits:
+            cpu: 1
+            memory: 128Mi
+          requests:
+            cpu: 0.1
+            memory: 32Mi
         image: abcdesktopio/oc.speedtest:3.0
         ports:
           - containerPort: 80
@@ -487,10 +508,10 @@ spec:
           periodSeconds: 10
         resources:
           limits:
-            cpu: 2
+            cpu: 1
             memory: 1024Mi
           requests:
-            cpu: 0.5
+            cpu: 0.1
             memory: 128Mi
         env:
           - name: NODE_NAME
@@ -646,6 +667,13 @@ spec:
       containers:
       - name: openldap
         image: abcdesktopio/oc.openldap:3.0
+        resources:
+          limits:
+            cpu: 0.5
+            memory: 1024Mi
+          requests:
+            cpu: 0.1
+            memory: 128Mi
         ports:
           - containerPort: 10389
           - containerPort: 10636
