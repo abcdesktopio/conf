@@ -160,6 +160,7 @@ data:
         resolver 'kube-dns.kube-system.svc.cluster.local';
         set $my_speedtest 'speedtest.abcdesktop.svc.cluster.local';
         set $my_proxy 'pyos.abcdesktop.svc.cluster.local';
+        set $my_console 'console.abcdesktop.svc.cluster.local';
         listen 80;
         server_name _;
         root /var/webModules;
@@ -175,7 +176,7 @@ data:
         set $broadcast_tcp_port                 29784;
         set $lync_service_tcp_port              29785;
         set $spawner_service_tcp_port           29786;
-        set $signalling_service_tcp_port        29787; 
+        set $signalling_service_tcp_port        29787;
         
         # uncomment to use env var
         # set_by_lua  $filemanager_bridge_tcp_port 'return os.getenv("FILEMANAGER_BRIDGE_TCP_PORT")';
