@@ -531,8 +531,8 @@ desktop.pod : {
     'acl':  { 'permit': [ 'all' ] },
     'waitportbin' : '/composer/node/wait-port/node_modules/.bin/wait-port',
     'resources': { 
-      'requests': { 'memory': "256Mi", 'cpu': "100m"  },
-      'limits'  : { 'memory': "1Gi",   'cpu': "1000m" } 
+      'requests': { 'memory': "128Mi", 'cpu': "10m"  },
+      'limits'  : { 'memory': "1Gi",   'cpu': "500m" } 
     },
     'securityContext': {
       'readOnlyRootFilesystem': False, 
@@ -573,8 +573,8 @@ desktop.pod : {
     'tcpport': 681,
     'securityContext': { 'runAsUser': 0, 'runAsGroup': 0 },
     'resources': { 
-      'requests': { 'memory': "32Mi", 'cpu': "50m" },  
-      'limits'  : { 'memory': "512Mi",  'cpu': "500m" } 
+      'requests': { 'memory': "32Mi", 'cpu': "5m" },  
+      'limits'  : { 'memory': "512Mi",  'cpu': "50m" } 
     },
     'acl':  { 'permit': [ 'all' ] } 
   },
@@ -594,8 +594,8 @@ desktop.pod : {
     'enable': True,
     'tcpport': 29783,
     'resources': {
-      'requests': { 'memory': "32Mi", 'cpu': "25m" },  
-      'limits'  : { 'memory': "512Mi",  'cpu': "100m" } 
+      'requests': { 'memory': "16Mi", 'cpu': "5m" },  
+      'limits'  : { 'memory': "256Mi",'cpu': "10m" } 
     },
     'acl':  { 'permit': [ 'all' ] }
     },
@@ -608,7 +608,7 @@ desktop.pod : {
     'acl': { 'permit': [ 'all' ] },
     'resources': { 
       'requests': { 'memory': "8Mi",  'cpu': "5m" },  
-      'limits'  : { 'memory': "32Mi", 'cpu': "10m" } 
+      'limits'  : { 'memory': "32Mi", 'cpu': "5m" } 
     }
   },
   # container sound
@@ -623,8 +623,8 @@ desktop.pod : {
     'tcpport': 4714,
     'acl':  { 'permit': [ 'all' ] },
     'resources': { 
-      'requests': { 'memory': "32Mi",  'cpu': "10m"  },  
-      'limits'  : { 'memory': "256Mi", 'cpu': "500m" } 
+      'requests': { 'memory': "32Mi",  'cpu': "5m"  },  
+      'limits'  : { 'memory': "256Mi", 'cpu': "50m" } 
     } 
   },
   # container init
@@ -637,8 +637,8 @@ desktop.pod : {
     'securityContext': { 'runAsUser': 0 },
     'acl':  { 'permit': [ 'all' ] },
     'resources': { 
-      'requests': { 'memory': "32Mi",  'cpu': "50m"  },  
-      'limits'  : { 'memory': "256Mi", 'cpu': "500m" } 
+      'requests': { 'memory': "8Mi",  'cpu': "5m"  },  
+      'limits'  : { 'memory': "32Mi", 'cpu': "10m" } 
     }, 
     'command':  [ 'sh', '-c',  'chmod 750 ~ && chown {{ uidNumber }}:{{ gidNumber }} ~' ] 
   },
