@@ -568,7 +568,7 @@ spec:
     spec:
       containers:
       - name: console
-        image: abcdesktopio/console:main
+        image: abcdesktopio/console:3.3
         ports:
           - containerPort: 80
         env:
