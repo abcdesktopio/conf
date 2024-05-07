@@ -712,6 +712,19 @@ desktop.homedirectorytype: None  # use a empty dir
 
 
 #
+# /composer/overwrite_environment_variable_for_application.sh
+# This script is hosted by the pod in the graphical container.
+# overwrite_environment_variable_for_application.sh must return a list of dict 
+# Then a application starts ( it can be 'ephemeral_container' or 'pod_application' ), 
+# if desktop.overwrite_environment_variable_for_application is set to a string, 
+# then pyos execute the script and expect for a list of dict ( json formatted )
+#  ./overwrite_environment_variable_for_application.sh
+# [ { "SAMPLE_ENV_VAR_NAME" : "samplevalue" } ]
+# It adds or overwrite the variables to the env var list
+# The defautl value for desktop.overwrite_environment_variable_for_application is None
+# desktop.overwrite_environment_variable_for_application : "/composer/overwrite_environment_variable_for_application.sh"
+
+#
 # desktop.hostPathRoot set the hostPath root directory
 # desktop.hostPathRoot is read only if desktop.homedirectorytype: 'hostPath'
 # the user's home directory is located in host '/tmp' directory
