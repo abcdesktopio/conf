@@ -1049,6 +1049,11 @@ logging: {
       'handlers': [ 'console', 'cherrypy_trace' ],
       'level': 'DEBUG',
       'propagate': False
+    },
+    'kubernetes': {
+      'handlers': ['console'],
+      'level': 'ERROR',
+      'propagate': False,
     }
   } }
 # END OF LOGGING SECTION
