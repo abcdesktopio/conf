@@ -598,7 +598,10 @@ spec:
     spec:
       containers:
       - name: openldap
-        image: abcdesktopio/oc.openldap:3.0
+        # abcdesktopio/docker-test-openldap:master
+        # is same as https://github.com/rroemhild/docker-test-openldap
+        # but with posixAccount support
+        image: abcdesktopio/docker-test-openldap:master
         resources:
           limits:
             cpu: 0.5
