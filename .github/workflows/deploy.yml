@@ -18,28 +18,38 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    # runs-on: ubuntu-latest
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
+    # runs-on: self-hosted
     
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
-
-      - name: clone kube-tools branch release
-        uses: actions/checkout@v4
         with:
-          repository: 'jfv-opensource/kube-tools.git'
-          path: 'kube-tools'
-          ref: 'release'
+            ref: main
+
+      # - name: clone kube-tools branch release
+      #   uses: actions/checkout@v4
+      #   with:
+      #     repository: 'jfv-opensource/kube-tools.git'
+      #     path: 'kube-tools'
+      #     ref: 'release'
+
+      - name: Start minikube
+        uses: medyagh/setup-minikube@latest
+        with:
+          cache: false
+
+      - name: Try the cluster!
+        run: kubectl get pods -A
 
       # Install kubernetes cluster 
       # Install abcdesktop 
       # Run postman tests
       # Each step runs in its own process in the runner environment
-      - name: Setup kubernetes
-        run: |
-          cd kube-tools && sudo ./km --apply
+      # - name: Setup kubernetes
+      #   run: |
+      #     cd kube-tools && sudo ./km --apply
 
       - name: Install abcdesktop
         run: |
