@@ -53,25 +53,25 @@ jobs:
 
       - name: Install abcdesktop
         run: |
-          sudo kubernetes/install-3.1.sh --timeout 1800s --force --imagepullpolicy Always
+          kubernetes/install-3.1.sh --timeout 1800s --force --imagepullpolicy Always
           
       - name: get pods
         run: |
-          sudo kubectl get pods -n abcdesktop
-          sudo kubernetes/samples/create_pod.sh
-          sudo kubectl get pods -n abcdesktop
+          kubectl get pods -n abcdesktop
+          kubernetes/samples/create_pod.sh
+          kubectl get pods -n abcdesktop
 
       - name: Pull applications
         run: | 
-          sudo kubernetes/pullapps-3.1.sh
+          kubernetes/pullapps-3.1.sh
 
       - name: Run postman tests
         run: |
-          sudo kubernetes/run_postmantest-3.1.sh
+          kubernetes/run_postmantest-3.1.sh
 
       - name: Uninstall abcdesktop
         run: |
-          sudo kubernetes/uninstall-3.1.sh
+          kubernetes/uninstall-3.1.sh
           sudo rm *.pem
           sudo rm od.config
           sudo rm abcdesktop.yaml
