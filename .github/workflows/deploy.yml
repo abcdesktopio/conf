@@ -62,12 +62,11 @@ jobs:
       - name: Install abcdesktop
         run: |
           kubernetes/install-${{ env.imagetag }}.sh --timeout 1800s --force --imagepullpolicy Always > tmp.txt & 
-          tail -f tmp.txt & 
-          wait
-          URL=$(grep -oP 'http://[0-9.]+:[0-9]+/' tmp.txt| tail -n 1)
+          tail -f tmp.txt 
           
       - name: print current abcdesktop URL
         run: |
+          URL=$(grep -oP 'http://[0-9.]+:[0-9]+/' tmp.txt| tail -n 1)
           echo $URL
       
       - name: get pods
