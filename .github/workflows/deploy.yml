@@ -66,7 +66,7 @@ jobs:
       - name: print current abcdesktop URL
         run: |
           IP=$(hostname -I 2>/dev/null)
-          URL = "http://$IP:30443/"
+          URL="http://$IP:30443/"
           echo $URL
       
       - name: get pods
