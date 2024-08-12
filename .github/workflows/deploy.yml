@@ -62,13 +62,6 @@ jobs:
       - name: Install abcdesktop
         run: |
           kubernetes/install-${{ env.imagetag }}.sh --timeout 1800s --force --imagepullpolicy Always 
-
-      - name: print current abcdesktop URL
-        run: |
-          HOST=$(hostname -I 2>/dev/null)
-          IP=$(echo "$HOST"|awk '{print $1}')
-          URL="http://$IP:30443/"
-          echo "current abcdesktop URL is $URL"
       
       - name: get pods
         run: |
@@ -90,6 +83,10 @@ jobs:
 
       - name: Run selenium tests
         run: |
+          HOST=$(hostname -I 2>/dev/null)
+          IP=$(echo "$HOST"|awk '{print $1}')
+          URL="http://$IP:30443/"
+          echo "current abcdesktop URL is $URL"
           cd tests
           npm run test -- --url="$URL"
 
