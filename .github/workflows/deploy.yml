@@ -65,9 +65,10 @@ jobs:
 
       - name: print current abcdesktop URL
         run: |
-          IP=$(hostname -I 2>/dev/null)
+          HOST=$(hostname -I 2>/dev/null)
+          IP=$(echo "$HOST"|awk '{print $1}')
           URL="http://$IP:30443/"
-          echo $URL
+          echo "current abcdesktop URL is $URL"
       
       - name: get pods
         run: |
@@ -82,6 +83,21 @@ jobs:
       - name: Run postman tests
         run: |
           kubernetes/run_postmantest-3.1.sh
+
+      - name: Install requirements for selenium testing
+        run: |
+          ./tests/install-tests.sh
+
+      - name: Run selenium tests
+        run: |
+          cd tests
+          npm run test -- --url="$URL"
+
+       - name: Upload selenuim webdriver screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: selenium-webdriver-screenshots
+          path: ./tests/screens/
 
       - name: Uninstall abcdesktop
         run: |
