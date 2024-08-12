@@ -14,8 +14,8 @@ options.setBinaryPath('/opt/google/chrome/google-chrome');
 // parsing command line arguments to retrieve the URL to test
 const args = process.argv.slice(2);
 const urlArg = args.find(arg => arg.startsWith('--url='));
-const URL = urlArg ? urlArg.split('=')[1] : null;
-
+//const URL = urlArg ? urlArg.split('=')[1] : null;
+const URL = "http://192.168.7.144:30443"
 
 describe('abcdesktop services tests', function(){
   var driver;
@@ -107,7 +107,10 @@ describe('abcdesktop services tests', function(){
 
     it("add firefox app to abcdesktop", async function(){
       await execPromise('curl https://raw.githubusercontent.com/abcdesktopio/images/main/artifact/3.2/firefox.d.3.2.json --output firefox.json');
+      console.debug(execPromise("cat firefox.json"));
       let { stdout, stderr } = await execPromise(`curl -X PUT -H 'Content-Type: text/javascript' ${URL}/API/manager/image -d @firefox.json`);
+      console.debug(stdout);
+      console.debug(stderr);
       expect(stdout).toContain("Navigator.firefox");
     })
 
@@ -140,7 +143,7 @@ describe('abcdesktop services tests', function(){
     }, 300000)
 
     it("open log-out modal", async function(){
-      let logout_modal_button = await driver.findElement(webdriver.By.id("logout"));
+      let logout_modal_button = await driver.findElement(webdriver.By.id("log-out-name"));
       await logout_modal_button.click();
       await new Promise((r) => setTimeout(r, 1000));
       let logoff_button = await driver.findElement(webdriver.By.className("btn button-log-off")); 
