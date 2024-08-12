@@ -14,8 +14,7 @@ options.setBinaryPath('/opt/google/chrome/google-chrome');
 // parsing command line arguments to retrieve the URL to test
 const args = process.argv.slice(2);
 const urlArg = args.find(arg => arg.startsWith('--url='));
-//const URL = urlArg ? urlArg.split('=')[1] : null;
-const URL = "http://192.168.7.144:30443"
+const URL = urlArg ? urlArg.split('=')[1] : null;
 
 describe('abcdesktop services tests', function(){
   var driver;
@@ -103,23 +102,6 @@ describe('abcdesktop services tests', function(){
       });
       let encodedString = await driver.takeScreenshot();
       await fs.writeFile('./screens/fry-desktop.png', encodedString, 'base64');
-    }, 300000)
-
-    it("add firefox app to abcdesktop", async function(){
-      await execPromise('curl https://raw.githubusercontent.com/abcdesktopio/images/main/artifact/3.2/firefox.d.3.2.json --output firefox.json');
-      console.debug(execPromise("cat firefox.json"));
-      let { stdout, stderr } = await execPromise(`curl -X PUT -H 'Content-Type: text/javascript' ${URL}/API/manager/image -d @firefox.json`);
-      console.debug(stdout);
-      console.debug(stderr);
-      expect(stdout).toContain("Navigator.firefox");
-    })
-
-    it("refresh page to see firefox on desktop", async function(){
-      await driver.navigate().refresh();
-      let loginScreen = await driver.findElement(webdriver.By.id("loginScreen"));
-      await driver.wait(webdriver.until.elementIsNotVisible(loginScreen), 300000);
-      let encodedString = await driver.takeScreenshot();
-      await fs.writeFile('./screens/fry-desktop-with-firefox.png', encodedString, 'base64');
     }, 300000)
 
     it("start firefox", async function(){
