@@ -33,7 +33,7 @@ if [ -z "$url" ]; then
     exit 1
 fi
 
-cd conf
+cd tests
 
 #run the acutal test
 npm run test -- --url="$url"
