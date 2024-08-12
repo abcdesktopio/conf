@@ -93,7 +93,7 @@ jobs:
           cd tests
           npm run test -- --url="$URL"
 
-       - name: Upload selenuim webdriver screenshots
+      - name: Upload selenuim webdriver screenshots
         uses: actions/upload-artifact@v4
         with:
           name: selenium-webdriver-screenshots
