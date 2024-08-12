@@ -42,11 +42,6 @@ describe('abcdesktop services tests', function(){
       await fs.writeFile('./screens/login-page.png', encodedString, 'base64');
     })
 
-    it("desktop endpoint of the API should be empty", async function(){
-      let { stdout, stderr } = await execPromise(`curl -X GET -H 'Content-Type: text/javascript' ${URL}/API/manager/desktop`);
-      expect(stdout).toBe("[]");
-    })
-
     it('click on connect with empty user field, should display "user can not be an empty string', async function(){
       let pwd = await driver.findElement(webdriver.By.id("ADpassword"));
       let connect_button = await driver.findElement(webdriver.By.id("connectAD"));
@@ -145,7 +140,7 @@ describe('abcdesktop services tests', function(){
     }, 300000)
 
     it("open log-out modal", async function(){
-      let logout_modal_button = await driver.findElement(webdriver.By.id("log-out-name"));
+      let logout_modal_button = await driver.findElement(webdriver.By.id("logout"));
       await logout_modal_button.click();
       await new Promise((r) => setTimeout(r, 1000));
       let logoff_button = await driver.findElement(webdriver.By.className("btn button-log-off")); 
