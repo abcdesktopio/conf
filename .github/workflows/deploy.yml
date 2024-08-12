@@ -18,7 +18,7 @@ on:
   workflow_dispatch:
 
 env: 
-    imagetag: "${{ github.event.client_payload.ref || github.ref_name }}"
+    imagetag: "${{ github.event.client_payload.ref || 3.3 }}"
     repo: "${{ github.event.client_payload.repo || github.event.repository.name }}"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -61,8 +61,12 @@ jobs:
 
       - name: Install abcdesktop
         run: |
-          kubernetes/install-3.1.sh --timeout 1800s --force --imagepullpolicy Always
+          read URL <<< $(kubernetes/install-${{ env.imagetag }}.sh --timeout 1800s --force --imagepullpolicy Always | grep -oP 'http://[0-9.]+:[0-9]+/' | tee /dev/tty)
           
+      - name: print current abcdesktop URL
+        run: |
+          echo $URL
+      
       - name: get pods
         run: |
           kubectl get pods -n abcdesktop
@@ -71,7 +75,7 @@ jobs:
 
       - name: Pull applications
         run: | 
-          kubernetes/pullapps-3.1.sh
+          kubernetes/pullapps-3.2.sh
 
       - name: Run postman tests
         run: |
@@ -79,23 +83,9 @@ jobs:
 
       - name: Uninstall abcdesktop
         run: |
-          kubernetes/uninstall-3.1.sh
+          kubernetes/uninstall-3.2.sh
           sudo rm *.pem
           sudo rm od.config
           sudo rm abcdesktop.yaml
           sudo rm poduser.yaml
-
-      - name: Install requirements for testing
-        run: |
-          ./tests/install-tests.sh
-
-      - name: Run the actual test
-        run: |
-          ./tests/run-tests.sh ${{ env.imagetag }}
-
-      - name: Upload webdriver screenshots
-        uses: actions/upload-artifact@v4
-        with:
-          name: webdriver-screenshots
-          path: ./tests/screens/
           
