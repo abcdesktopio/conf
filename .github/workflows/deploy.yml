@@ -10,6 +10,14 @@ on:
   pull_request:
     branches: [ "main" ]
 
+
+  repository_dispatch:
+    types: dispatch-to-conf
+
+  env: 
+    imagetag: "${{ github.event.client_payload.ref || github.ref_name }}"
+    repo: "${{ github.event.client_payload.repo || github.repository.split('/')[1] }}"
+
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -76,4 +84,18 @@ jobs:
           sudo rm od.config
           sudo rm abcdesktop.yaml
           sudo rm poduser.yaml
+
+      - name: Install requirements for testing
+        run: |
+          ./tests/install-tests.sh
+
+      - name: Run the actual test
+        run: |
+          ./tests/run-tests.sh ${{ env.imagetag }}
+
+      - name: Upload webdriver screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: webdriver-screenshots
+          path: ./tests/screens/
           
