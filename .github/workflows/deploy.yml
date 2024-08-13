@@ -102,5 +102,3 @@ jobs:
           sudo rm *.pem
           sudo rm od.config
           sudo rm abcdesktop.yaml
-          sudo rm poduser.yaml
-          
