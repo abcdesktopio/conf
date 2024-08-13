@@ -1,7 +1,4 @@
 // Imports 
-const { exec } = require("child_process");
-const util = require('util');
-const execPromise = util.promisify(exec);
 const fs = require('fs').promises;
 const webdriver = require('selenium-webdriver');
 const Chrome = require('selenium-webdriver/chrome');
