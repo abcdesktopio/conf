@@ -107,12 +107,14 @@ describe('abcdesktop services tests', function(){
     it("start firefox", async function(){
       let { stdout, stderr } = await execPromise(`kubectl get pods -l run=pyos-od -o jsonpath={.items..metadata.name} -n abcdesktop | awk '{print $1}'`);
       let pyos_pod = stdout;
+      let currentState
       let firefox = await driver.findElement(webdriver.By.id("abcdesktopio/firefox.d:3.2"));
       await firefox.click();
       do {
         currentState = await firefox.getAttribute("class");
         console.debug(currentState);
-        console.log(exec(`kubectl logs ${pyos_pod} -n abcdesktop | tail`));
+        let { stdout, stderr } = await execPromise(`kubectl logs ${pyos_pod} -n abcdesktop | tail`);
+        console.log(stdout);
       } while (currentState !== "active");
       await new Promise((r) => setTimeout(r, 5000));
       let encodedString = await driver.takeScreenshot();
