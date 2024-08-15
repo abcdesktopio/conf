@@ -70,7 +70,7 @@ jobs:
 
       - name: Pull applications
         run: | 
-          kubernetes/pullapps-3.2.sh
+          kubernetes/pullapps-${{ env.imagetag }}.sh
 
       - name: Run postman tests
         run: |
