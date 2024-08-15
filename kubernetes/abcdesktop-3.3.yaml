@@ -473,7 +473,7 @@ spec:
       containers:
       - name : pyos
         imagePullPolicy: Always
-        image: abcdesktopio/oc.pyos:3.2
+        image: abcdesktopio/oc.pyos:dev
         command:
             - "/var/pyos/od.py"
         volumeMounts:
