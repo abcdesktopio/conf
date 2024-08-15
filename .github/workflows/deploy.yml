@@ -10,7 +10,6 @@ on:
   pull_request:
     branches: [ "main" ]
 
-
   repository_dispatch:
     types: dispatch-to-conf
 
