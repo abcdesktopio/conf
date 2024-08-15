@@ -15,7 +15,7 @@ sudo npm -g install yarn
 
 echo "install tests packages for conf"
 cd tests
-sudo yarn install --productuon=false 
+sudo yarn install --production=false 
 sudo npm i --package-lock-only 
 sudo npm audit fix
 
