@@ -97,7 +97,7 @@ jobs:
 
       - name: Uninstall abcdesktop
         run: |
-          kubernetes/uninstall-3.2.sh
+          kubernetes/uninstall-${{ env.imagetag }}.sh
           sudo rm *.pem
           sudo rm od.config
           sudo rm abcdesktop.yaml
