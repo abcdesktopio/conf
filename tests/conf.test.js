@@ -17,7 +17,10 @@ describe('abcdesktop services tests', function(){
   var driver;
   
   beforeAll(async function(){
+    // create Chrome driver with specified options 
     driver =  await new webdriver.Builder().forBrowser(webdriver.Browser.CHROME).setChromeOptions(options).build();
+
+    // set up size of the driver window
     await driver.manage().window().setRect({ width: 1400, height: 768 });
   }, 30000);
 
@@ -30,55 +33,69 @@ describe('abcdesktop services tests', function(){
     })
 
     it("the login page should be visible", async function(){
+      // get login screen element 
       let loginScreen = await driver.findElement(webdriver.By.id("loginScreen"));
-      expect( loginScreen ).not.toBeUndefined();
 
-      //
-      // This code can failed
-      // await loginScreen.getAttribute("class").then(function(className){
-      //   expect(className.includes("hide")).toBe(false);
-      // });
-      //
+      // wait for the page tu fully loaded
+      await driver.wait(webdriver.until.elementIsVisible(loginScreen), 300000);
+
+      // check that login screen is not hidden
+      await loginScreen.getAttribute("class").then(function(className){
+        expect(className.includes("hide")).toBe(false);
+      });
+      
       
       let encodedString = await driver.takeScreenshot();
       await fs.writeFile('./screens/login-page.png', encodedString, 'base64');
-    })
+    }, 300000)
 
     it('click on connect with empty user field, should display "user can not be an empty string', async function(){
+      // get password field, connect button and connection status text element
       let pwd = await driver.findElement(webdriver.By.id("ADpassword"));
       let connect_button = await driver.findElement(webdriver.By.id("connectAD"));
       let status_text = await driver.findElement(webdriver.By.id("statusText"));
+
+      // try to login with only a password
       await pwd.sendKeys("toto");
       await connect_button.click();
       await new Promise((r) => setTimeout(r, 1000));
       await status_text.getText().then(function(text){
         expect(text).toBe("user can not be an empty string");
       });
+
       let encodedString = await driver.takeScreenshot();
       await fs.writeFile('./screens/login-page-no-user.png', encodedString, 'base64');
     })
 
     it('click on connect with empty password field, should display "password can not be an empty string', async function(){
       await driver.navigate().refresh();
+      // get username field, connect button and connection status text element
       let login = await driver.findElement(webdriver.By.id("cuid"));
       let connect_button = await driver.findElement(webdriver.By.id("connectAD"));
       let status_text = await driver.findElement(webdriver.By.id("statusText"));
+
+      // try to login with only a username
       await login.sendKeys("toto");
       await connect_button.click();
       await new Promise((r) => setTimeout(r, 1000));
       await status_text.getText().then(function(text){
         expect(text).toBe("password can not be an empty string");
       });
+
       let encodedString = await driver.takeScreenshot();
       await fs.writeFile('./screens/login-page-no-pwd.png', encodedString, 'base64');
     })
 
     it("try to login with bad creditentials", async function(){
       await driver.navigate().refresh();
+
+      // get username field, password field, connect button and connection status text element
       let login = await driver.findElement(webdriver.By.id("cuid"));
       let pwd = await driver.findElement(webdriver.By.id("ADpassword"));
       let connect_button = await driver.findElement(webdriver.By.id("connectAD"));
       let status_text = await driver.findElement(webdriver.By.id("statusText"));
+
+      // try to login with bad creditentials
       await login.sendKeys("toto");
       await pwd.sendKeys("toto");
       await connect_button.click();
@@ -92,10 +109,14 @@ describe('abcdesktop services tests', function(){
 
     it("login as fry", async function(){
       await driver.navigate().refresh();
+
+      // get username field, password field, connect button and connection status text element
       let login = await driver.findElement(webdriver.By.id("cuid"));
       let pwd = await driver.findElement(webdriver.By.id("ADpassword"));
       let connect_button = await driver.findElement(webdriver.By.id("connectAD"));
       let loginScreen = await driver.findElement(webdriver.By.id("loginScreen"));
+
+      // login with fry account
       await login.sendKeys("Philip J. Fry");
       await pwd.sendKeys("fry");
       await connect_button.click();
@@ -109,19 +130,28 @@ describe('abcdesktop services tests', function(){
 
     it("start firefox", async function(){
       let currentState;
+
+      // get firefox icon element
       let firefox = await driver.findElement(webdriver.By.id("abcdesktopio/firefox.d:3.2"));
       await firefox.click();
+
+      // check current state of firefox unitl it is running
       do {
         currentState = await firefox.getAttribute("state");
       } while (currentState !== "running");
+
+      // wait for firefox to start before taking screenshot
       await new Promise((r) => setTimeout(r, 5000));
       let encodedString = await driver.takeScreenshot();
       await fs.writeFile('./screens/fry-desktop-firefox-running.png', encodedString, 'base64');
     }, 300000)
 
     it("open menu", async function(){
+      // get the menu button and the menu itself
       let menu_button = await driver.findElement(webdriver.By.id("name"));
       let menu = await driver.findElement(webdriver.By.id("mainmenu")); 
+
+      // wait for the menu to be open before taking screenshot
       await menu_button.click();
       await driver.wait(webdriver.until.elementIsVisible(menu), 300000);
       let encodedString = await driver.takeScreenshot();
@@ -129,17 +159,25 @@ describe('abcdesktop services tests', function(){
     }, 300000)
 
     it("open log-out modal", async function(){
+      // get logout modal element
       let logout_modal_button = await driver.findElement(webdriver.By.id("log-out-name"));
       await logout_modal_button.click();
+
+      // wait for the logoff button to be dynamicaly created
       await new Promise((r) => setTimeout(r, 1000));
       let logoff_button = await driver.findElement(webdriver.By.className("btn button-log-off")); 
+
+      //wait for the logoff modal to be visible before taking screenshot
       await driver.wait(webdriver.until.elementIsVisible(logoff_button), 300000);
       let encodedString = await driver.takeScreenshot();
       await fs.writeFile('./screens/fry-desktop-logout-modal-open.png', encodedString, 'base64');
     }, 300000)
 
     it("perform logoff", async function(){
+      // get logoff button 
       let logoff_button = await driver.findElement(webdriver.By.className("btn button-log-off")); 
+
+      // disconnect from the session and take a screenshot
       await logoff_button.click();
       await driver.navigate().refresh();
       let encodedString = await driver.takeScreenshot();
