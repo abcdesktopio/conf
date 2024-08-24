@@ -976,19 +976,19 @@ logging: {
   'disable_existing_loggers': False,
   'formatters': {
     'access': {
-      'format': '%%(message)s - user: %%(userid)s',
+      'format': '%%(asctime)s %%(nodename)s %%(threadid)s %%(message)s - user: %%(userid)s',
       'datefmt': '%%Y-%%m-%%d %%H:%%M:%%S'
     },
     'standard': {
-      'format': '%%(asctime)s %%(module)s [%%(levelname)-7s] %%(name)s.%%(funcName)s:%%(userid)s %%(message)s',
+      'format': '%%(asctime)s %%(nodename)s %%(threadid)s %%(module)s [%%(levelname)-7s] %%(name)s.%%(funcName)s:%%(userid)s %%(message)s',
       'datefmt': '%%Y-%%m-%%d %%H:%%M:%%S'
     },
     'syslog': {
-      'format': '%%(asctime)s %%(levelname)s %%(module)s %%(process)d %%(name)s.%%(funcName)s:%%(userid)s %%(message)s',
+      'format': '%%(asctime)s %%(nodename)s %%(threadid)s %%(levelname)s %%(module)s %%(process)d %%(name)s.%%(funcName)s:%%(userid)s %%(message)s',
       'datefmt': '%%Y-%%m-%%d %%H:%%M:%%S'
     },
     'graylog': {
-      'format': '%%(levelname)s %%(module)s %%(process)d %%(name)s.%%(funcName)s:%%(userid)s %%(message)s'      
+      'format': '%%(levelname)s %%(nodename)s %%(threadid)s %%(module)s %%(process)d %%(name)s.%%(funcName)s:%%(userid)s %%(message)s'      
     }
   },
   'filters': {
