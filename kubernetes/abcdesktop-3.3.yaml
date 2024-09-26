@@ -277,19 +277,19 @@ spec:
       namespace: abcdesktop
       labels:
         name: router-od
-        run: router-od
+        run:  router-od
         type: router-od
+        # list netpool to permit router to connect to
         netpol/speedtest: 'true'
-        netpol/memcached: 'true'
         netpol/pyos: 'true'
         netpol/ocuser: 'true'
         netpol/dns: 'true'
-        netpol/website: 'true'
+        netpol/nginx: 'true'
     spec:
       containers:
       - name: nginx-router
         imagePullPolicy: Always
-        image: abcdesktopio/route:main
+        image: abcdesktopio/route:3.3
         volumeMounts:
           - name: jwtsigningkeys
             mountPath: "/config.signing"
@@ -468,6 +468,8 @@ spec:
         netpol/mongodb: 'true'
         netpol/memcached: 'true'
         netpol/graylog: 'true'
+        netpol/router: 'true'
+        netpol/nginx: 'true'
     spec:
       serviceAccountName: pyos-serviceaccount
       containers:
