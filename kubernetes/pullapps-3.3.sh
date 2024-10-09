@@ -233,7 +233,7 @@ display_message "pyos pod has name=$PYOS_POD_NAME" "OK"
 
 # define service URL 
 # inside pyos
-URL="http://localhost:8080/API/manager/image"
+URL="http://localhost:8000/API/manager/image"
 
 # call HEALTZ
 for app in $ABCDESKTOP_JSON_APPLICATIONS
