@@ -85,11 +85,11 @@ server.socket_port: 8000
 #
 # EXTERNAL IP ADDRESS SECTION
 # THIS IS NOT THE BINDING IP ADDR
-# server.default.ipaddr is only used to locate the external ip of the service
-# the server.default.ipaddr is used by geoip and Active Directory site subnet queries
+# server.geolocation_ipaddr is only used to locate the external ip of the service
+# server.geolocation_ipaddr is used by geoip and Active Directory site subnet queries
 # the default value is a dummy value '127.0.0.1'
 # change this value to help geoip to locate your service or for Active Directory site and subnet query 
-server.default.ipaddr: '127.0.0.1'
+server.geolocation_ipaddr: '127.0.0.1'
 # END OF EXTERNAL IP ADDRESS SECTION
 
 # JWT SECTION #
