@@ -578,6 +578,13 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: metadata.namespace
+        resources:
+          limits:
+            cpu: 0.5
+            memory: 128Mi
+          requests:
+            cpu: 0.1
+            memory: 16Mi
 ---
 apiVersion: apps/v1
 kind: Deployment
