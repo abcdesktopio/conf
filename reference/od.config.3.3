@@ -294,15 +294,23 @@ ldapconfig : {
 #
 # OAuthLib will raise an InsecureTransportError if you attempt to use OAuth2 over HTTP, rather than HTTPS. 
 # Setting this environment variable will prevent this error from being raised. 
-# This is mostly useful for local testing, or automated tests. Never set this variable in production.
+# This is mostly useful for local testing, or automated tests.
+# If you set the OAUTHLIB_INSECURE_TRANSPORT environment variable, it will not check for secure HTTPS, 
+# and allow the OAuth dance to continue whether or not it is secure. 
+# Disabling this check is intended only for development, not for production 
+# in production, you must configure secure HTTPS to make sure communication happen securely.
 OAUTHLIB_INSECURE_TRANSPORT: True
 #
 # Prevent "Scope has changed" warning 
 # requests_oauthlib library this generates a Warning, rather than an Exception
 # If a user only approved read only scope but the code is now using different scope.
 # when a scope mismatch occurs, user must be prompted to reauthorize via oauth.
+# Fix request user authorization from a Microsoft account
+# you can (and probably should) set OAUTHLIB_RELAX_TOKEN_SCOPE when running in production.
 OAUTHLIB_RELAX_TOKEN_SCOPE: True
+
 # END OF AUTH SECTION
+
 
 
 ### FAIL2BAN SECTION ###
@@ -460,14 +468,18 @@ webrtc.rtc_constraints: { 'video': False, 'audio': True }
 
 # END OF WebRTC SECTION
 
+# K8S TIMEOUT 
 # Kubernetes timeout
 # default timeout to bound a persistentVolumeClaim
 K8S_BOUND_PVC_TIMEOUT_SECONDS: 60
+K8S_BOUND_PVC_MAX_EVENT: 5
 # default timeout to create a pod
 # include max time to pull users images
 # this can take a while to pull all pod's user images
 # 360 = 6 * 60
 K8S_CREATE_POD_TIMEOUT_SECONDS: 360
+K8S_CREATE_EPHEMERALCONTAINER_TIMEOUT_SECONDS: 5
+# END OF K8S TIMEOUT
 
 #
 # Application execute class defined
