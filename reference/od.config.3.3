@@ -46,6 +46,13 @@ default_host_url : 'http://localhost'
 # END OF DEFAULT HOST URL
 
 
+# THREAD_POOL
+# the default server.thread_pool is 10
+# increase this value to add more cherrypy threads
+# server.thread_pool: 16
+# END OF THREAD_POOL
+
+
 # WEBSOCKETROUTING
 # describe which url is returned by od.py to reach the WebSocket server 
 # the more secured value is default_host_url
@@ -952,6 +959,7 @@ tipsinfo : { 'networkmap': False }
 # timeout A positive long value representing the maximum length of time (in milliseconds) the device is allowed to take in order to return a position. The default value is Infinity, meaning that getCurrentPosition() won't return until the position is available.
 # enableHighAccuracy A boolean value that indicates the application would like to receive the best possible results. If true and if the device is able to provide a more accurate position, it will do so. Note that this can result in slower response times or increased power consumption (with a GPS chip on a mobile device for example). On the other hand, if false, the device can take the liberty to save resources by responding more quickly and/or using less power. Default: false.
 # geolocation : { 'enableHighAccuracy': True, 'timeout': 5000, 'maximumAge': 0 }
+# GEOLOCATION END OPTIONS
 
 #
 # LOGGING SECTION
@@ -960,21 +968,20 @@ tipsinfo : { 'networkmap': False }
 # The syslog and graylog protocol messaging are supported too.
 # The default features for each handlers are :
 # handler Features
-# console log message using a logging.StreamHandler to the stream: ext://sys.stdout formated as standard
-# cherrypy_console log message using a logging.StreamHandler to the stream: ext://sys.stdout formatted as access
-# cherrypy_access  log message using a logging.StreamHandler to the file stream logs/access.log formatted as access
-# cherrypy_trace   log message using a logging.StreamHandler to the stream: logs/trace.log formatted as standard
+# stdout log message using a StreamHandler to the stream: ext://sys.stdout formatted as standard
+# stderr log message using a StreamHandler to the stream: ext://sys.stderr formatted as standard
+# trace  log message using a RotatingFileHandler to the file logs/trace.log formatted as standard 
+# cherrypy_access log message using a RotatingFileHandler to the file logs/access.log formatted as access
 # 
 # Sub modules used by od.py can log information too.
 # 
 # Sub module Default Values
 # docker.utils.config    { 'level': 'INFO' },
 # urllib3.connectionpool { 'level': 'ERROR'},
-# 
-#              
+#         
 # logging configuration 
 # come from https://docs.python.org/3.8/library/logging.config.html
-# need double %% to escape %
+# you need to double %% to escape %
 # 
 # graylog https://github.com/severb/graypy
 # use handler class name as
@@ -983,94 +990,119 @@ tipsinfo : { 'networkmap': False }
 # graypy.GELFTLSHandler - TCP log forwarding with TLS support
 # graypy.GELFHTTPHandler - HTTP log forwarding
 # graypy.GELFRabbitHandler - RabbitMQ log forwarding
+#
+# type socket.SOCK_DGRAM and socket.SOCK_STREAM
+# socket.SOCK_STREAM <SocketKind.SOCK_STREAM: 1>
+# socket.SOCK_DGRAM <SocketKind.SOCK_DGRAM: 2>
+#
+# Add entry in 'handlers' send log to syslog or graylog
+# in 'handlers': {
+#      'gelftcp': {
+#        'class': 'graypy.GELFTCPHandler',
+#        'filters': [ 'odcontext' ],
+#        'level': 'INFO',
+#        'port': '12201',
+#        'host': '192.168.1.6'
+#      },
+#      'syslog': {
+#        'class': 'logging.handlers.SysLogHandler',
+#        'filters': [ 'odcontext' ],
+#        'level': 'INFO',
+#        'formatter': 'syslog',
+#        'socktype': socket.SOCK_STREAM,
+#        'address': [ '192.168.1.7', 5140 ]
+#      }, 
+#      ... }
 
 logging: {
-  'version': 1,
-  'disable_existing_loggers': False,
-  'formatters': {
-    'access': {
-      'format': '%%(asctime)s %%(nodename)s %%(threadid)s %%(message)s - user: %%(userid)s',
-      'datefmt': '%%Y-%%m-%%d %%H:%%M:%%S'
+    "version": 1,
+    "disable_existing_loggers": False,
+    'formatters': {
+      'access': {
+        'format': '%%(message)s - user: %%(userid)s',
+        'datefmt': '%%Y-%%m-%%d %%H:%%M:%%S'
+      },
+      'standard': {
+        'format': '%%(asctime)s %%(nodename)s %%(thread)d %%(module)s [%%(levelname)-7s] %%(name)s.%%(funcName)s:%%(userid)s %%(message)s',
+        'datefmt': '%%Y-%%m-%%d %%H:%%M:%%S'
+      },
+      'syslog': {
+        'format': '%%(asctime)s %%(nodename)s %%(thread)s %%(levelname)s %%(module)s %%(process)d %%(name)s.%%(funcName)s:%%(userid)s %%(message)s',
+        'datefmt': '%%Y-%%m-%%d %%H:%%M:%%S'
+      },
+      'graylog': {
+        'format': '%%(levelname)s %%(nodename)s %%(thread)s %%(module)s %%(process)d %%(name)s.%%(funcName)s:%%(userid)s %%(message)s'
+      }
     },
-    'standard': {
-      'format': '%%(asctime)s %%(nodename)s %%(threadid)s %%(module)s [%%(levelname)-7s] %%(name)s.%%(funcName)s:%%(userid)s %%(message)s',
-      'datefmt': '%%Y-%%m-%%d %%H:%%M:%%S'
+    'filters': {
+      'odcontext': {
+        '()': 'oc.logging.OdContextFilter'
+      }
     },
-    'syslog': {
-      'format': '%%(asctime)s %%(nodename)s %%(threadid)s %%(levelname)s %%(module)s %%(process)d %%(name)s.%%(funcName)s:%%(userid)s %%(message)s',
-      'datefmt': '%%Y-%%m-%%d %%H:%%M:%%S'
+    'handlers': {
+      'stdout': {
+        'class': 'logging.StreamHandler',
+        'filters': [ 'odcontext' ],
+        'level': 'DEBUG',
+        'formatter': 'standard',
+        'stream': 'ext://sys.stdout'
+      },
+      'stderr': {
+        'class': 'logging.StreamHandler',
+        'filters': [ 'odcontext' ],
+        'level': 'ERROR',
+        'formatter': 'standard',
+        'stream': 'ext://sys.stderr'
+      },
+      'trace': {
+        'class': 'logging.handlers.RotatingFileHandler',
+        'level': 'DEBUG',
+        'filters': [ 'odcontext' ],
+        'formatter': 'standard',
+        'filename': 'logs/trace.log',
+        'maxBytes': 10485760,
+        'backupCount': 20,
+        'encoding': 'utf8',
+        'mode': 'w'
+      },
+      'cherrypy_access': {
+        'class': 'logging.handlers.RotatingFileHandler',
+        'filters': [ 'odcontext' ],
+        'formatter': 'access',
+        'filename': 'logs/access.log',
+        'maxBytes': 10485760,
+        'backupCount': 20,
+        'encoding': 'utf8'
+      }
     },
-    'graylog': {
-      'format': '%%(levelname)s %%(nodename)s %%(threadid)s %%(module)s %%(process)d %%(name)s.%%(funcName)s:%%(userid)s %%(message)s'      
-    }
-  },
-  'filters': {
-    'odcontext': {
-      '()': 'oc.logging.OdContextFilter'
-    }
-  },
-  'handlers': {
-    'console': {
-      'class': 'logging.StreamHandler',
-      'filters': [ 'odcontext' ],
-      'formatter': 'standard',
-      'stream': 'ext://sys.stdout'
+    'loggers': {
+      # dedicated python modules 
+      'urllib3.connectionpool': {
+        'level': 'ERROR',
+      },
+      'kubernetes': {
+        'handlers': [ 'stderr', 'stdout',  'trace' ],
+        'level': 'ERROR',
+        'propagate': False
+      },
+      'cherrypy.access': {
+        'handlers': [ 'cherrypy_access' ],
+        'level': 'INFO',
+        'propagate': False
+      },
+      'requests_oauthlib' : {
+        'handlers': [ 'stderr', 'stdout',  'trace' ],
+        'level': 'ERROR',
+        'propagate': False
+      },
+      'cherrypy' : {
+        'handlers': [ 'stderr', 'stdout',  'trace' ],
+        'level': 'ERROR',
+      }
     },
-    'cherrypy_console': {
-      'class': 'logging.StreamHandler',
-      'filters': [ 'odcontext' ],
-      'formatter': 'access',
-      'stream': 'ext://sys.stdout'
-    },
-    'cherrypy_access': {
-      'class': 'logging.handlers.RotatingFileHandler',
-      'filters': [ 'odcontext' ],
-      'formatter': 'access',
-      'filename': 'logs/access.log',
-      'maxBytes': 10485760,
-      'backupCount': 20,
-      'encoding': 'utf8'
-    },
-    'cherrypy_trace': {
-      'class': 'logging.handlers.RotatingFileHandler',
-      'filters': [ 'odcontext' ],
-      'formatter': 'standard',
-      'filename': 'logs/trace.log',
-      'maxBytes': 10485760,
-      'backupCount': 20,
-      'encoding': 'utf8',
-      'mode': 'w'
-    }
-  },
-  'loggers': {
-    '': {
-      'handlers': [ 'console', 'cherrypy_trace'  ],
-      'level': 'DEBUG'
-    },
-    'docker.utils.config': {
-      'level': 'INFO'
-    },
-    'urllib3.connectionpool': {
-      'level': 'ERROR'
-    },
-    'cherrypy.access': {
-      'handlers': [ 'cherrypy_access' ],
-      'level': 'INFO',
-      'propagate': False
-    },
-    'cherrypy.error': {
-      'handlers': [ 'console', 'cherrypy_trace' ],
+    'root': {
+      # put the level to 'DEBUG', each handler fix the level value
       'level': 'DEBUG',
-      'propagate': False
-    },
-    'kubernetes': {
-      'handlers': ['console'],
-      'level': 'ERROR',
-      'propagate': False,
-    }
-  } }
-# END OF LOGGING SECTION
-
-[/]
-[/img]
+      'handlers': [ 'stderr', 'stdout',  'trace' ]
+    }}
 
