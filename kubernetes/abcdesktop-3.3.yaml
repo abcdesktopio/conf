@@ -285,6 +285,7 @@ spec:
         netpol/ocuser: 'true'
         netpol/dns: 'true'
         netpol/nginx: 'true'
+        netpol/console: 'true'
     spec:
       containers:
       - name: nginx-router
