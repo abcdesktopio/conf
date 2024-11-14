@@ -476,7 +476,7 @@ spec:
       containers:
       - name : pyos
         imagePullPolicy: Always
-        image: abcdesktopio/oc.pyos:dev
+        image: abcdesktopio/oc.pyos:3.3
         command:
             - "/var/pyos/od.py"
         volumeMounts:
@@ -512,8 +512,8 @@ spec:
             cpu: 1
             memory: 1024Mi
           requests:
-            cpu: 0.1
-            memory: 128Mi
+            cpu: 0.5
+            memory: 256Mi
         env:
           - name: NODE_NAME
             valueFrom:
