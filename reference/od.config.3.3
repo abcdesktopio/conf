@@ -549,15 +549,14 @@ desktop.pod : {
   },  
   # graphical is the main abcdesktop container 
   # include x11 service 
-  'graphical' : { 
-    # 'image': { 'default': 'abcdesktopio/oc.user.ubuntu:3.2' },
-    'image': { 'default': 'abcdesktopio/oc.user.sudo:3.2' },
+  'graphical' : {
+    'image': { 'default': 'abcdesktopio/oc.user.ubuntu.sudo.24.04:3.3' },
     'imagePullPolicy':  'IfNotPresent',
     'enable': True,
     'acl':  { 'permit': [ 'all' ] },
     'waitportbin' : '/composer/node/wait-port/node_modules/.bin/wait-port',
     'resources': { 
-      'requests': { 'memory': "128Mi", 'cpu': "10m"  },
+      'requests': { 'memory': "256Mi", 'cpu': "100m"  },
       'limits'  : { 'memory': "1Gi",   'cpu': "500m" } 
     },
     'securityContext': {
