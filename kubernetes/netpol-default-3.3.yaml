@@ -105,6 +105,46 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
+  name: console-rights
+  namespace: abcdesktop
+spec:
+  podSelector:
+    matchLabels:
+      run: console-od
+  policyTypes:
+  - Ingress
+  ingress:
+  - ports:
+    - protocol: TCP
+      port: 80
+    from:
+    - podSelector:
+        matchLabels:
+          netpol/console: 'true'
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: console-permits
+  namespace: abcdesktop
+spec:
+  podSelector:
+    matchLabels:
+      netpol/console: 'true'
+  policyTypes:
+  - Egress
+  egress:
+  - ports:
+    - protocol: TCP
+      port: 80
+    to:
+    - podSelector:
+        matchLabels:
+          run: console-od
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
   name: speedtest-rights
   namespace: abcdesktop
 spec:
@@ -383,19 +423,12 @@ spec:
     - protocol: TCP
       port: 29787
   egress:
-  # pod user can run dns query to all kube-system 
+  # pod user can run dns query 
   - ports:
     - protocol: TCP
       port: 53
     - protocol: UDP
       port: 53
-    to:
-    - namespaceSelector:
-        matchLabels:
-          name: kube-system
-      podSelector:
-        matchLabels:
-          k8s-app: kube-dns
 # stream from pulseaudio to webrtc external gateway
 #  - ports:
 #    - protocol: UDP
