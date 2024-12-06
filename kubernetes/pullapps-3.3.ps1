@@ -199,7 +199,7 @@ display_message "pyos pod name=$PYOS_POD_NAME" "OK"
 
 # define service URL 
 # inside pyos
-$URL="http://localhost:8080/API/manager/image"
+$URL="http://localhost:$port/API/manager/image"
 
 # call HEALTZ
 foreach ($app in $ABCDESKTOP_JSON_APPLICATIONS -split ','){
