@@ -477,8 +477,6 @@ spec:
       - name : pyos
         imagePullPolicy: Always
         image: abcdesktopio/oc.pyos:3.3
-        command:
-            - "/var/pyos/od.py"
         volumeMounts:
           - name: jwtsigningkeys
             mountPath: "/config.signing"
@@ -741,7 +739,6 @@ metadata:
   labels:
     abcdesktop/role: nginx
 spec:
-  type: NodePort
   selector:
     run: nginx-od
   ports:
