@@ -1,0 +1,795 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: abcdesktop-rights
+  namespace: abcdesktop
+spec:
+  podSelector: {}
+  policyTypes:
+  - Egress
+  - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: memcached-rights
+  namespace: abcdesktop
+spec:
+  podSelector:
+    matchLabels:
+      run: memcached-od
+  policyTypes:
+  - Ingress
+  ingress:
+  - ports:
+    - protocol: TCP
+      port: 11211
+    from:
+    - podSelector:
+        matchLabels:
+          netpol/memcached: 'true'
+    - namespaceSelector:
+        matchLabels:
+          name: kube-monitor
+      podSelector:
+        matchLabels:
+          netpol/metrics: 'true'
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: memcached-permits
+  namespace: abcdesktop
+spec:
+  podSelector:
+    matchLabels:
+      netpol/memcached: 'true'
+  policyTypes:
+  - Egress
+  egress:
+  - ports:
+    - protocol: TCP
+      port: 11211
+    to:
+    - podSelector:
+        matchLabels:
+          run: memcached-od
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: mongodb-rights
+  namespace: abcdesktop
+spec:
+  podSelector:
+    matchLabels:
+      run: mongodb-od
+  policyTypes:
+  - Ingress
+  ingress:
+  - ports:
+    - protocol: TCP
+      port: 27017
+    from:
+    - podSelector:
+        matchLabels:
+          netpol/mongodb: 'true'
+    - namespaceSelector:
+        matchLabels:
+          name: kube-monitor
+      podSelector:
+        matchLabels:
+          netpol/metrics: 'true'
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: mongodb-permits
+  namespace: abcdesktop
+spec:
+  podSelector:
+    matchLabels:
+      netpol/mongodb: 'true'
+  policyTypes:
+  - Egress
+  egress:
+  - ports:
+    - protocol: TCP
+      port: 27017
+    to:
+    - podSelector:
+        matchLabels:
+          run: mongodb-od
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: console-rights
+  namespace: abcdesktop
+spec:
+  podSelector:
+    matchLabels:
+      run: console-od
+  policyTypes:
+  - Ingress
+  ingress:
+  - ports:
+    - protocol: TCP
+      port: 80
+    from:
+    - podSelector:
+        matchLabels:
+          netpol/console: 'true'
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: console-permits
+  namespace: abcdesktop
+spec:
+  podSelector:
+    matchLabels:
+      netpol/console: 'true'
+  policyTypes:
+  - Egress
+  egress:
+  - ports:
+    - protocol: TCP
+      port: 80
+    to:
+    - podSelector:
+        matchLabels:
+          run: console-od
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: speedtest-rights
+  namespace: abcdesktop
+spec:
+  podSelector:
+    matchLabels:
+      run: speedtest-od
+  policyTypes:
+  - Ingress
+  ingress:
+  - ports:
+    - protocol: TCP
+      port: 80
+    from:
+    - podSelector:
+        matchLabels:
+          netpol/speedtest: 'true'
+    - namespaceSelector:
+        matchLabels:
+          name: kube-monitor
+      podSelector:
+        matchLabels:
+          netpol/metrics: 'true'
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: speedtest-permits
+  namespace: abcdesktop
+spec:
+  podSelector:
+    matchLabels:
+      netpol/speedtest: 'true'
+  policyTypes:
+  - Egress
+  egress:
+  - ports:
+    - protocol: TCP
+      port: 80
+    to:
+    - podSelector:
+        matchLabels:
+          run: speedtest-od
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: pyos-rights
+  namespace: abcdesktop
+spec:
+  podSelector:
+    matchLabels:
+      run: pyos-od
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - ports:
+    - protocol: TCP
+      port: 8000
+    from:
+    - podSelector:
+        matchLabels:
+          netpol/pyos: 'true'
+    - namespaceSelector:
+        matchLabels:
+          name: kube-monitor
+      podSelector:
+        matchLabels:
+          netpol/metrics: 'true'
+  egress:
+  # permit pyos to connect to pyos for self syncing 
+  - ports:
+    - protocol: TCP
+      port: 8000
+    to:
+    - podSelector:
+        matchLabels:
+          netpol/pyos: 'true'
+# permit oauth from pyos
+# pyos can connect to all ip address port 443
+  - ports:
+    - protocol: TCP
+      port: 443
+# permit webrtc management port from pyos
+# pyos can connect to all ip adress port 8088
+  - ports:
+    - protocol: TCP
+      port: 8088
+# permit pyos to connect to kubernetes api server
+  - ports:
+    - protocol: TCP
+      port: 6443
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: pyos-permits
+  namespace: abcdesktop
+spec:
+  podSelector:
+    matchLabels:
+      netpol/pyos: 'true'
+  policyTypes:
+  - Egress
+  egress:
+  - ports:
+    - protocol: TCP
+      port: 8000
+    to:
+    - podSelector:
+        matchLabels:
+          run: pyos-od
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: router-rights
+  namespace: abcdesktop
+spec:
+  podSelector:
+    matchLabels:
+      run: router-od
+  policyTypes:
+  - Ingress
+  ingress:
+  - ports:
+    - protocol: TCP
+      port: 443
+    - protocol: TCP
+      port: 80
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: abcdesktop
+      podSelector:
+        matchLabels:
+          netpol/nginx: 'true'
+    - namespaceSelector:
+        matchLabels:
+          name: kube-monitor
+      podSelector:
+        matchLabels:
+          netpol/metrics: 'true'
+    ports:
+    - protocol: TCP
+      port: 443
+    - protocol: TCP
+      port: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: router-permits
+  namespace: abcdesktop
+spec:
+  podSelector:
+    matchLabels:
+      netpol/router: 'true'
+  policyTypes:
+  - Egress
+  egress:
+  - ports:
+    - protocol: TCP
+      port: 443
+    - protocol: TCP
+      port: 80
+    to:
+    - podSelector:
+        matchLabels:
+          run: nginx-od
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: nginx-rights
+  namespace: abcdesktop
+spec:
+  podSelector:
+    matchLabels:
+      run: nginx-od
+  policyTypes:
+  - Ingress
+  ingress:
+  - ports:
+    - protocol: TCP
+      port: 443
+    - protocol: TCP
+      port: 80
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: abcdesktop
+      podSelector:
+        matchLabels:
+          netpol/nginx: 'true'
+    - namespaceSelector:
+        matchLabels:
+          name: kube-monitor
+      podSelector:
+        matchLabels:
+          netpol/metrics: 'true'
+    ports:
+    - protocol: TCP
+      port: 443
+    - protocol: TCP
+      port: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: nginx-permits
+  namespace: abcdesktop
+spec:
+  podSelector:
+    matchLabels:
+      netpol/nginx: 'true'
+  policyTypes:
+  - Egress
+  egress:
+  - ports:
+    - protocol: TCP
+      port: 443
+    - protocol: TCP
+      port: 80
+    to:
+    - podSelector:
+        matchLabels:
+          run: nginx-od
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ocuser-rights
+  namespace: abcdesktop
+spec:
+  podSelector:
+    matchLabels:
+      type: 'x11server'
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          netpol/ocuser: 'true'
+    ports:
+    # default pulseaudio websocket audio without webrtc gateway
+    - protocol: TCP
+      port: 4714
+    # vnc websockify
+    - protocol: TCP
+      port: 6081
+    # reserved
+    - protocol: TCP
+      port: 29780
+    # xterm_tcp_port
+    - protocol: TCP
+      port: 29781
+    # printerfile_service_tcp_port
+    - protocol: TCP
+      port: 29782
+    # file_service_tcp_port
+    - protocol: TCP
+      port: 29783
+    # broadcast_tcp_port 
+    - protocol: TCP
+      port: 29784
+    # reserved
+    - protocol: TCP
+      port: 29785
+    # spawner_service_tcp_port
+    - protocol: TCP
+      port: 29786
+    # signalling_service_tcp_port
+    - protocol: TCP
+      port: 29787
+    # sound_service_tcp_port
+    - protocol: TCP
+      port: 29788
+    # microphone_service_tcp_port
+    - protocol: TCP
+      port: 29789
+  egress:
+  # pod user can run dns query 
+  - ports:
+    - protocol: TCP
+      port: 53
+    - protocol: UDP
+      port: 53
+# stream from pulseaudio to webrtc external gateway
+#  - ports:
+#    - protocol: UDP
+#    to:
+#    - ipBlock:
+#        # webrtc servers
+#        # set here the ip address (of ip networks) of the webrtc gateways 
+#        cidr: IP_OF_WEBRTC_GATEWAY/32 
+  - ports:
+    - protocol: UDP
+      port: 3478 # STUN servers UDP
+  - ports:
+    - protocol: TCP
+      port: 3478 # STUN servers TCP
+  - ports:
+    - protocol: UDP
+      port: 3479 # TURN servers UDP
+  - ports:
+    - protocol: TCP
+      port: 3479 # TURN servers TCP
+  - ports:
+    - protocol: UDP
+      port: 5349 # TURN servers UDP
+  - ports:
+    - protocol: TCP
+      port: 5349 # TURN servers TCP
+  - ports:
+    - protocol: UDP
+      port: 5350 # TURN servers UDP
+  - ports:
+    - protocol: TCP
+      port: 5350 # TURN servers TCP
+  - ports:
+    - protocol: UDP
+      port: 19302 # STUN servers UDP stun://stun.l.google.com:19302
+  - ports:
+    - protocol: TCP
+      port: 19302 # STUN servers TCP stun://stun.l.google.com:19302
+# permit www website
+  - ports:
+    - protocol: TCP
+      port: 443
+    - protocol: TCP
+      port: 80
+# permit kerberos
+  - ports: 
+    - protocol: UDP
+      port: 88
+    - protocol: TCP
+      port: 88
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ocuser-permits
+  namespace: abcdesktop
+spec:
+  podSelector:
+    matchLabels:
+      netpol/ocuser: 'true'
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          type: 'x11server'
+    ports:
+    # default pulseaudio websocket audio without webrtc gateway
+    - protocol: TCP
+      port: 4714
+    # vnc websockify
+    - protocol: TCP
+      port: 6081
+    # reserved
+    - protocol: TCP
+      port: 29780
+    # xterm_tcp_port
+    - protocol: TCP
+      port: 29781
+    # printerfile_service_tcp_port
+    - protocol: TCP
+      port: 29782
+    # file_service_tcp_port
+    - protocol: TCP
+      port: 29783
+    # broadcast_tcp_port 
+    - protocol: TCP
+      port: 29784
+    # reserved
+    - protocol: TCP
+      port: 29785
+    # spawner_service_tcp_port
+    - protocol: TCP
+      port: 29786
+    # signalling_service_tcp_port 
+    - protocol: TCP
+      port: 29787
+    # sound_service_tcp_port
+    - protocol: TCP
+      port: 29788
+    # microphone_service_tcp_port
+    - protocol: TCP
+      port: 29789
+    # cupsd
+    - protocol: TCP
+      port: 631
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: authentication-permits
+  namespace: abcdesktop
+spec:
+  podSelector:
+    matchLabels:
+      netpol/auth: 'true'
+  policyTypes:
+  - Egress
+  egress:
+  - ports:
+    # HTTPS for OAuth external provider
+    - protocol: TCP
+      port: 443
+    # KERBEROS TCP
+    - protocol: TCP
+      port: 88
+    # KERBEROS UDP
+    - protocol: UDP
+      port: 88
+    # # NETBIOS 
+    # # - protocol: TCP
+    # #  port: 135
+#    to:
+#     # this list must be more restrictive
+#     # customise the podSelector value
+#     - podSelector: {} 
+#    - ipBlock:
+#        cidr: 0.0.0.0/0
+#        except:
+#        - 10.244.0.0/16
+#        - 192.168.0.0/16
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ldap-permits
+  namespace: abcdesktop
+spec:
+  podSelector:
+    matchLabels:
+      netpol/ldaps: 'true'
+  policyTypes:
+  - Egress
+  egress:
+  - ports:
+    # LDAP
+    - protocol: TCP
+      port: 389
+    # only for demo openldap
+    - protocol: TCP
+      port: 10389
+    # LDAPS 
+    - protocol: TCP
+      port: 636
+    # only for demo openldap
+    - protocol: TCP
+      port: 10636
+# 
+# this list must be more restrictive.
+# customise the podSelector value
+#    to:
+#     - podSelector: {} 
+#    - ipBlock:
+#        cidr: 0.0.0.0/0
+#        except:
+#        - 10.244.0.0/16
+#        - 192.168.0.0/16
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ldap-rights
+  namespace: abcdesktop
+spec:
+  podSelector:
+    matchLabels:
+      run: openldap-od 
+  policyTypes:
+  - Ingress
+  ingress:
+  - ports:
+    - protocol: TCP
+      port: 389
+    - protocol: TCP
+      port: 636
+    # Only for openldap demo
+    - protocol: TCP
+      port: 10389
+    # Only for openldap demo
+    - protocol: TCP
+      port: 10636
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: smtp-permits
+  namespace: abcdesktop
+spec:
+  podSelector:
+    matchLabels:
+      netpol/smtp: 'true'
+  policyTypes:
+  - Egress
+  egress:
+  - ports:
+    - protocol: TCP
+      port: 25
+    - protocol: TCP
+      port: 587
+    - protocol: TCP
+      port: 465
+#    to:
+#    - ipBlock:
+#       cidr: 0.0.0.0/0
+#        except:
+#        - 10.244.0.0/16
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: https-permits
+  namespace: abcdesktop
+spec:
+  podSelector:
+    matchLabels:
+      netpol/https: 'true'
+  policyTypes:
+  - Egress
+  egress:
+  - ports:
+    - protocol: TCP
+      port: 443
+    to:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+#        except:
+#        - 10.244.0.0/16
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: storage-permits
+  namespace: abcdesktop
+spec:
+  podSelector:
+    matchLabels:
+      netpol/cifs: 'true'
+  policyTypes:
+  - Egress
+  egress:
+  - ports:
+    - protocol: UDP
+      port: 137
+    - protocol: UDP
+      port: 138
+    - protocol: TCP
+      port: 139
+    - protocol: TCP
+      port: 445
+    - protocol: TCP
+      port: 2049
+    to:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+#        except:
+#        - 10.244.0.0/16
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: coredns-permits
+  namespace: abcdesktop
+spec:
+  podSelector:
+    matchLabels:
+      netpol/dns: 'true'
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+      - podSelector:
+          matchLabels:
+            k8s-app: kube-dns
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: kube-system  
+    ports:
+      - protocol: TCP
+        port: 53
+      - protocol: UDP
+        port: 53   
+#    - podSelector:
+#        matchLabels:
+#          k8s-app: kube-dns
+#    - ipBlock:
+#        cidr: 10.96.0.0/12
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: apiserver-permits
+  namespace: abcdesktop
+spec:
+  podSelector:
+    matchLabels:
+      netpol/api: 'true'
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+    ports:
+    - protocol: TCP
+      port: 6443
+  - to:
+    - ipBlock:
+        cidr: 10.96.0.0/12
+    ports:
+    - protocol: TCP
+      port: 443
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: graylog-permits
+  namespace: abcdesktop
+spec:
+  podSelector:
+    matchLabels:
+      netpol/graylog: 'true'
+  policyTypes:
+  - Egress
+  egress:
+  - ports:
+    - protocol: UDP
+      port: 1514
+    - protocol: TCP
+      port: 12201
+    to:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-monitor
+      podSelector:
+        matchLabels:
+          k8s-app: graylog
+---
