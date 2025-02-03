@@ -476,7 +476,7 @@ spec:
       containers:
       - name : pyos
         imagePullPolicy: Always
-        image: abcdesktopio/oc.pyos:3.3
+        image: abcdesktopio/oc.pyos:3.4
         volumeMounts:
           - name: jwtsigningkeys
             mountPath: "/config.signing"
