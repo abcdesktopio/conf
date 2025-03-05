@@ -908,6 +908,7 @@ dock : {
     'name': u'WebShell',
     'acl': { 'permit': [ 'all' ] },
     'keyword': u'terminal,shell,webshell,bash,cmd',
+    'showinview': u'dock',
     'launch': u'frontendjs.webshell',
     'displayname': u'Web Shell',
     'execmode': u'frontendjs',
