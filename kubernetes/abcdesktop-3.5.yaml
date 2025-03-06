@@ -534,6 +534,8 @@ spec:
               secretKeyRef:
                 name: secret-mongodb
                 key: MONGODB_URL
+          - name: OAUTHLIB_RELAX_TOKEN_SCOPE
+            value: "1"
       volumes:
         - name: jwtusersigningkeys
           secret:
