@@ -752,9 +752,6 @@ spec:
         - name: volume-abcdesktop-config
           configMap:
             name: abcdesktop-config
-        - name: volume-abcdesktop-config
-          configMap:
-            name: abcdesktop-config
         - name: volume-abcdesktop-passwd-templatefile
           configMap:
             name: abcdesktop-passwd-templatefile
