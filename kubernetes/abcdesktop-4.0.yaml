@@ -246,6 +246,7 @@ data:
     kvm:x:109:
     render:x:110:
     _ssh:x:111:
+    rdma:x:112:
     polkitd:x:999:
     nogroup:x:65534:
     ssh:x:4095:
@@ -340,6 +341,7 @@ data:
     kvm:!::
     render:!::
     polkitd:!::
+    rdma:!::
     {{ gid }}:!::{{ uid }}
 ---
 apiVersion: apps/v1
