@@ -556,7 +556,7 @@ desktop.pod : {
   # graphical is the main abcdesktop container 
   # include x11 service 
   'graphical' : {
-    'image': { 'default': 'abcdesktopio/oc.user.ubuntu.sudo.24.04:4.0' },
+    'image': { 'default': 'ghcr.io/abcdesktopio/oc.user.ubuntu.sudo.24.04:4.0' },
     'imagePullPolicy':  'Always',
     'enable': True,
     'acl':  { 'permit': [ 'all' ] },
@@ -598,7 +598,7 @@ desktop.pod : {
   # container printer
   # printer is a cupsd service 
   'printer' : { 
-    'image': 'abcdesktopio/oc.cupsd:3.3',
+    'image': 'ghcr.io/abcdesktopio/oc.cupsd:4.0',
     'imagePullPolicy': 'IfNotPresent',
     'enable': True,
     'tcpport': 681,
@@ -620,7 +620,7 @@ desktop.pod : {
   # container filer
   # filer provide upload and download files features
   'filer' : { 
-    'image': 'abcdesktopio/oc.filer:3.3',
+    'image': 'ghcr.io/abcdesktopio/oc.filer:4.0',
     'imagePullPolicy':  'IfNotPresent',
     'enable': True,
     'tcpport': 29783,
@@ -648,7 +648,7 @@ desktop.pod : {
   # http stream can have glitch and does not proviede image and sound sync
   # webrtc gateway with rtp sound stream is better
   'sound': { 
-    'image': 'abcdesktopio/oc.pulseaudio:3.4',
+    'image': 'ghcr.io/abcdesktopio/oc.pulseaudio:4.0',
     'imagePullPolicy': 'IfNotPresent',
     'enable': True,
     'tcpport': 29788,
