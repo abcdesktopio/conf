@@ -366,7 +366,7 @@ spec:
     spec:
       containers:
       - name: mongodb
-        image: mongo:4.4
+        image: ghcr.io/abcdesktopio/mongo:4.4
         resources:
           limits:
             cpu: 0.5
@@ -436,7 +436,7 @@ spec:
     spec:
       containers:
       - name: memcached
-        image: memcached
+        image: ghcr.io/abcdesktopio/memcached
         resources:
           limits:
             cpu: 0.2
