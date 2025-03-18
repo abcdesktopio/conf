@@ -834,7 +834,7 @@ desktop.nodeselector: {}
 # Only static variables are defined here.
 # Dynamics values are set by python code 
 #
-desktop.envlocal: { 'WEBSOCKIFY_HEARTBEAT':'30', 'STUN_SERVER': 'stun://stun.l.google.com:19302', 'LIBOVERLAY_SCROLLBAR':'0', 'UBUNTU_MENUPROXY':'0', 'X11LISTEN':'tcp', 'ABCDESKTOP_BG_COLOR': '#6ec6f0' }
+desktop.envlocal: { 'WEBSOCKIFY_HEARTBEAT':'30', 'LIBOVERLAY_SCROLLBAR':'0', 'UBUNTU_MENUPROXY':'0', 'X11LISTEN':'tcp', 'ABCDESKTOP_BG_COLOR': '#7fb3cf' }
 
 # 
 # to update session timeout 
