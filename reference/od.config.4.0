@@ -491,8 +491,8 @@ executeclasses : {
   'default':{
     'nodeSelector':None,
     'resources':{
-      'requests':{'memory':"64Mi",'cpu':"100m"},       
-      'limits':  {'memory':"1Gi",'cpu':"1000m"}
+      'requests':{'memory':"128Mi",'cpu':"100m"},       
+      'limits':  {'memory':"2Gi",'cpu':"2000m"}
     }
   },
   'bronze':{
@@ -506,14 +506,14 @@ executeclasses : {
     'nodeSelector':None,
     'resources':{
       'requests':{'memory':"64Mi",'cpu':"100m"},       
-      'limits':  {'memory':"4Gi",'cpu':"1000m"}
+      'limits':  {'memory':"4Gi",'cpu':"2000m"}
     }
   },
   'gold':{
     'nodeSelector':None,
     'resources':{
       'requests':{'memory':"128Mi",'cpu':"100m"},       
-      'limits':{'memory':"8Gi",'cpu':"1000m"} } } }
+      'limits':{'memory':"8Gi",'cpu':"4000m"} } } }
 
 
 # features_permissions
@@ -563,7 +563,7 @@ desktop.pod : {
     'waitportbin' : '/composer/node/wait-port/node_modules/.bin/wait-port',
     'resources': { 
       'requests': { 'memory': "256Mi", 'cpu': "100m"  },
-      'limits'  : { 'memory': "1Gi",   'cpu': "1000m" } 
+      'limits'  : { 'memory': "2Gi",   'cpu': "2000m" } 
     },
     'securityContext': {
       'readOnlyRootFilesystem': False, 
