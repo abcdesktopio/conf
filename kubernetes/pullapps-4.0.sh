@@ -63,6 +63,7 @@ writer.d.$ABCDESKTOP_RELEASE.json
 firefox.d.$ABCDESKTOP_RELEASE.json
 nautilus.d.$ABCDESKTOP_RELEASE.json
 geany.d.$ABCDESKTOP_RELEASE.json
+terminal.d.$ABCDESKTOP_RELEASE.json
 qterminalpod.d.$ABCDESKTOP_RELEASE.json
 evince.d.$ABCDESKTOP_RELEASE.json
 edge.d.$ABCDESKTOP_RELEASE.json
