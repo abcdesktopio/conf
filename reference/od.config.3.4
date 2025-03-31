@@ -558,6 +558,28 @@ desktop.pod : {
       'runAsGroup': '{{ gidNumber }}'
     },
     'tolerations': []
+  },
+  'default_volumes': {
+    'shm': { 'name': 'shm', 'emptyDir': { 'medium': 'Memory', 'sizeLimit': '512Mi' } },
+    'run': { 'name': 'run', 'emptyDir': { 'medium': 'Memory', 'sizeLimit': '1M'    } },
+    'tmp': { 'name': 'tmp', 'emptyDir': { 'medium': 'Memory', 'sizeLimit': '8Gi'   } },
+    'log': { 'name': 'log', 'emptyDir': { 'medium': 'Memory', 'sizeLimit': '8Gi'   } },
+    'rundbus': { 'name': 'rundbus',  'emptyDir': { 'medium': 'Memory', 'sizeLimit': '8M' } },
+    'runuser': { 'name': 'runuser',  'emptyDir': { 'medium': 'Memory', 'sizeLimit': '8M' } },
+    'x11socket': { 'name': 'x11socket',  'emptyDir': { 'medium': 'Memory' } },
+    'pulseaudiosocket' :  { 'name': 'pulseaudiosocket',  'emptyDir': { 'medium': 'Memory' } },
+    'cupsdsocket': { 'name': 'cupsdsocket',  'emptyDir': { 'medium': 'Memory' } }
+  },
+  'default_volumes_mount': {
+    'shm': { 'name': 'shm', 'mountPath' : '/dev/shm' },
+    'run': { 'name': 'run',  'mountPath': '/var/run/desktop' },
+    'tmp': { 'name': 'tmp',  'mountPath': '/tmp' },
+    'log': { 'name': 'log',  'mountPath': '/var/log/desktop' },
+    'rundbus': { 'name': 'rundbus',  'mountPath': '/var/run/dbus' },
+    'runuser': { 'name': 'runuser',  'mountPath': '/run/user/' },
+    'x11socket': { 'name': 'x11socket',  'mountPath': '/tmp/.X11-unix' },
+    'pulseaudiosocket':  { 'name': 'pulseaudiosocket',  'mountPath': '/tmp/.pulseaudio' },
+    'cupsdsocket': { 'name': 'cupsdsocket',  'mountPath': '/tmp/.cupsd' }
   },  
   # graphical is the main abcdesktop container 
   # include x11 service 
