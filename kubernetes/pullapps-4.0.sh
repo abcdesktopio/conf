@@ -32,7 +32,7 @@ FORCE=0
 # ABCDESKTOP_YAML=abcdesktop.yaml 
 
 # current release
-ABCDESKTOP_RELEASE=3.4
+ABCDESKTOP_RELEASE=4.0
 
 # docker hub prefix
 # REGISTRY_DOCKERHUB="docker.io/abcdesktopio"
@@ -57,14 +57,16 @@ ABCDESKTOP_RELEASE=3.4
 URL_APPLICATION_CONF_SOURCE="https://raw.githubusercontent.com/abcdesktopio/images/main/artifact/$ABCDESKTOP_RELEASE/"
 # list of json default applications to prefetch
 ABCDESKTOP_JSON_APPLICATIONS="
-2048-alpine.d.$ABCDESKTOP_RELEASE.json
+2048-ubuntu.d.$ABCDESKTOP_RELEASE.json
 xterm.d.$ABCDESKTOP_RELEASE.json
 writer.d.$ABCDESKTOP_RELEASE.json
 firefox.d.$ABCDESKTOP_RELEASE.json
 nautilus.d.$ABCDESKTOP_RELEASE.json
 geany.d.$ABCDESKTOP_RELEASE.json
+terminal.d.$ABCDESKTOP_RELEASE.json
 qterminalpod.d.$ABCDESKTOP_RELEASE.json
 evince.d.$ABCDESKTOP_RELEASE.json
+edge.d.$ABCDESKTOP_RELEASE.json
 "
 
 if [ -z "${LOG_FILE}" ];

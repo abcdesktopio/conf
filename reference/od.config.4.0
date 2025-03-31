@@ -491,8 +491,8 @@ executeclasses : {
   'default':{
     'nodeSelector':None,
     'resources':{
-      'requests':{'memory':"64Mi",'cpu':"100m"},       
-      'limits':  {'memory':"1Gi",'cpu':"1000m"}
+      'requests':{'memory':"128Mi",'cpu':"100m"},       
+      'limits':  {'memory':"2Gi",'cpu':"2000m"}
     }
   },
   'bronze':{
@@ -506,14 +506,14 @@ executeclasses : {
     'nodeSelector':None,
     'resources':{
       'requests':{'memory':"64Mi",'cpu':"100m"},       
-      'limits':  {'memory':"4Gi",'cpu':"1000m"}
+      'limits':  {'memory':"4Gi",'cpu':"2000m"}
     }
   },
   'gold':{
     'nodeSelector':None,
     'resources':{
       'requests':{'memory':"128Mi",'cpu':"100m"},       
-      'limits':{'memory':"8Gi",'cpu':"1000m"} } } }
+      'limits':{'memory':"8Gi",'cpu':"4000m"} } } }
 
 
 # features_permissions
@@ -545,25 +545,46 @@ desktop.pod : {
   'spec' : {
     'shareProcessNamespace': False,
     'shareProcessMemory': True,
-    'shareProcessMemorySize': '256Mi',
     'securityContext': {
       'supplementalGroups': [ '{{ supplementalGroups }}' ],
       'runAsUser': '{{ uidNumber }}',
       'runAsGroup': '{{ gidNumber }}'
     },
     'tolerations': []
-  },  
+  },
+  'default_volumes': {
+    'shm': { 'name': 'shm', 'emptyDir': { 'medium': 'Memory', 'sizeLimit': '512Mi' } },
+    'run': { 'name': 'run', 'emptyDir': { 'medium': 'Memory', 'sizeLimit': '1M'    } },
+    'tmp': { 'name': 'tmp', 'emptyDir': { 'medium': 'Memory', 'sizeLimit': '8Gi'   } },
+    'log': { 'name': 'log', 'emptyDir': { 'medium': 'Memory', 'sizeLimit': '8Gi'   } },
+    'rundbus': { 'name': 'rundbus',  'emptyDir': { 'medium': 'Memory', 'sizeLimit': '8M' } },
+    'runuser': { 'name': 'runuser',  'emptyDir': { 'medium': 'Memory', 'sizeLimit': '8M' } },
+    'x11socket': { 'name': 'x11socket',  'emptyDir': { 'medium': 'Memory' } },
+    'pulseaudiosocket' :  { 'name': 'pulseaudiosocket',  'emptyDir': { 'medium': 'Memory' } },
+    'cupsdsocket': { 'name': 'cupsdsocket',  'emptyDir': { 'medium': 'Memory' } }
+  },
+  'default_volumes_mount': {
+    'shm': { 'name': 'shm', 'mountPath' : '/dev/shm' },
+    'run': { 'name': 'run',  'mountPath': '/var/run/desktop' },
+    'tmp': { 'name': 'tmp',  'mountPath': '/tmp' },
+    'log': { 'name': 'log',  'mountPath': '/var/log/desktop' },
+    'rundbus': { 'name': 'rundbus',  'mountPath': '/var/run/dbus' },
+    'runuser': { 'name': 'runuser',  'mountPath': '/run/user/' },
+    'x11socket': { 'name': 'x11socket',  'mountPath': '/tmp/.X11-unix' },
+    'pulseaudiosocket':  { 'name': 'pulseaudiosocket',  'mountPath': '/tmp/.pulseaudio' },
+    'cupsdsocket': { 'name': 'cupsdsocket',  'mountPath': '/tmp/.cupsd' }
+  },
   # graphical is the main abcdesktop container 
   # include x11 service 
   'graphical' : {
-    'image': { 'default': 'abcdesktopio/oc.user.ubuntu.sudo.24.04:4.0' },
+    'image': { 'default': 'ghcr.io/abcdesktopio/oc.user.ubuntu.sudo.24.04:4.0' },
     'imagePullPolicy':  'Always',
     'enable': True,
     'acl':  { 'permit': [ 'all' ] },
     'waitportbin' : '/composer/node/wait-port/node_modules/.bin/wait-port',
     'resources': { 
       'requests': { 'memory': "256Mi", 'cpu': "100m"  },
-      'limits'  : { 'memory': "1Gi",   'cpu': "2000m" } 
+      'limits'  : { 'memory': "4Gi",   'cpu': "2000m" } 
     },
     'securityContext': {
       'readOnlyRootFilesystem': False, 
@@ -598,7 +619,7 @@ desktop.pod : {
   # container printer
   # printer is a cupsd service 
   'printer' : { 
-    'image': 'abcdesktopio/oc.cupsd:3.3',
+    'image': 'ghcr.io/abcdesktopio/oc.cupsd:4.0',
     'imagePullPolicy': 'IfNotPresent',
     'enable': True,
     'tcpport': 681,
@@ -620,7 +641,7 @@ desktop.pod : {
   # container filer
   # filer provide upload and download files features
   'filer' : { 
-    'image': 'abcdesktopio/oc.filer:3.3',
+    'image': 'ghcr.io/abcdesktopio/oc.filer:4.0',
     'imagePullPolicy':  'IfNotPresent',
     'enable': True,
     'tcpport': 29783,
@@ -648,7 +669,7 @@ desktop.pod : {
   # http stream can have glitch and does not proviede image and sound sync
   # webrtc gateway with rtp sound stream is better
   'sound': { 
-    'image': 'abcdesktopio/oc.pulseaudio:3.4',
+    'image': 'ghcr.io/abcdesktopio/oc.pulseaudio:4.0',
     'imagePullPolicy': 'IfNotPresent',
     'enable': True,
     'tcpport': 29788,
@@ -834,7 +855,7 @@ desktop.nodeselector: {}
 # Only static variables are defined here.
 # Dynamics values are set by python code 
 #
-desktop.envlocal: { 'WEBSOCKIFY_HEARTBEAT':'30', 'STUN_SERVER': 'stun://stun.l.google.com:19302', 'LIBOVERLAY_SCROLLBAR':'0', 'UBUNTU_MENUPROXY':'0', 'X11LISTEN':'tcp', 'ABCDESKTOP_BG_COLOR': '#6ec6f0' }
+desktop.envlocal: { 'WEBSOCKIFY_HEARTBEAT':'30', 'LIBOVERLAY_SCROLLBAR':'0', 'UBUNTU_MENUPROXY':'0', 'X11LISTEN':'tcp', 'ABCDESKTOP_BG_COLOR': '#7fb3cf' }
 
 # 
 # to update session timeout 

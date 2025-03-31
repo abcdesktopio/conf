@@ -366,7 +366,7 @@ spec:
     spec:
       containers:
       - name: mongodb
-        image: mongo:4.4
+        image: ghcr.io/abcdesktopio/mongo:4.4
         resources:
           limits:
             cpu: 0.5
@@ -436,7 +436,7 @@ spec:
     spec:
       containers:
       - name: memcached
-        image: memcached
+        image: ghcr.io/abcdesktopio/memcached
         resources:
           limits:
             cpu: 0.2
@@ -477,7 +477,7 @@ spec:
       containers:
       - name: nginx-router
         imagePullPolicy: Always
-        image: abcdesktopio/route:3.4
+        image: ghcr.io/abcdesktopio/route:4.0
         volumeMounts:
           - name: jwtsigningkeys
             mountPath: "/config.signing"
@@ -574,7 +574,7 @@ spec:
       containers:
       - name: nginx
         imagePullPolicy: Always
-        image: abcdesktopio/oc.nginx:4.0
+        image: ghcr.io/abcdesktopio/oc.nginx:4.0
         ports:
           - containerPort: 80
             name: http
@@ -625,7 +625,7 @@ spec:
           requests:
             cpu: 0.1
             memory: 32Mi
-        image: abcdesktopio/oc.speedtest:3.0
+        image: ghcr.io/abcdesktopio/oc.speedtest:4.0
         ports:
           - containerPort: 80
 ---
@@ -663,7 +663,7 @@ spec:
       containers:
       - name : pyos
         imagePullPolicy: Always
-        image: abcdesktopio/oc.pyos:4.0
+        image: ghcr.io/abcdesktopio/oc.pyos:4.0
         volumeMounts:
           - name: jwtsigningkeys
             mountPath: "/config.signing"
@@ -786,7 +786,7 @@ spec:
     spec:
       containers:
       - name: console
-        image: abcdesktopio/console:3.3
+        image: ghcr.io/abcdesktopio/console:4.0
         ports:
           - containerPort: 80
         env:
@@ -826,7 +826,7 @@ spec:
         # abcdesktopio/docker-test-openldap:master
         # is same as https://github.com/rroemhild/docker-test-openldap
         # but with posixAccount support
-        image: abcdesktopio/docker-test-openldap:master
+        image: ghcr.io/abcdesktopio/docker-test-openldap:master
         resources:
           limits:
             cpu: 0.5
