@@ -509,7 +509,7 @@ executeclasses : {
     'nodeSelector':None,
     'resources':{
       'requests':{'memory':"64Mi",'cpu':"100m"},       
-      'limits':  {'memory':"4Gi",'cpu':"2000m"}
+      'limits':  {'memory':"4Gi",'cpu':"2000m", 'nvidia.com/gpu':'1' }
     }
   },
   'gold':{
@@ -517,7 +517,7 @@ executeclasses : {
     'nodeSelector':None,
     'resources':{
       'requests':{'memory':"128Mi",'cpu':"100m"},       
-      'limits':{'memory':"8Gi",'cpu':"4000m"} } } }
+      'limits':{'memory':"8Gi",'cpu':"4000m", 'nvidia.com/gpu':'1' } } } }
 
 # features_permissions
 # read executeclasses and permit a user to set a dedicated class name as desktop features
