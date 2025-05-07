@@ -489,20 +489,23 @@ K8S_CREATE_EPHEMERALCONTAINER_TIMEOUT_SECONDS: 120
 # then map executeclasses to application
 executeclasses : {
   'default':{
-    'nodeSelector':None,
-    'resources':{
-      'requests':{'memory':"128Mi",'cpu':"100m"},       
-      'limits':  {'memory':"2Gi",'cpu':"2000m"}
-    }
-  },
-  'bronze':{
+    'description': '1 CPU cores and 2Gi',
     'nodeSelector':None,
     'resources':{
       'requests':{'memory':"64Mi",'cpu':"100m"},       
-      'limits':  {'memory':"512Mi",'cpu':"500m"}
+      'limits':  {'memory':"2Gi",'cpu':"1000m"}
+    }
+  },
+  'bronze':{
+    'description': '1 core / 2 Gi / 0 GPU',
+    'nodeSelector':None,
+    'resources':{
+      'requests':{'memory':"64Mi",'cpu':"100m"},       
+      'limits':  {'memory':"2Gi",'cpu':"1000m"}
     }
   },
   'silver':{
+    'description': '2 cores / 4 Gi / 1 GPU',
     'nodeSelector':None,
     'resources':{
       'requests':{'memory':"64Mi",'cpu':"100m"},       
@@ -510,11 +513,11 @@ executeclasses : {
     }
   },
   'gold':{
+    'description': '4 cores / 8 Gi / 1 GPU',
     'nodeSelector':None,
     'resources':{
       'requests':{'memory':"128Mi",'cpu':"100m"},       
       'limits':{'memory':"8Gi",'cpu':"4000m"} } } }
-
 
 # features_permissions
 # read executeclasses and permit a user to set a dedicated class name as desktop features
