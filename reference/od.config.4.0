@@ -594,7 +594,10 @@ desktop.pod : {
       'allowPrivilegeEscalation': True
      },
     'tcpport': 6081,
-    'secrets_requirement' : [ 'abcdesktop/vnc', 'abcdesktop/kerberos']
+    'secrets_requirement' : [ 'abcdesktop/vnc', 'abcdesktop/kerberos'],
+    'waitfor_services' : [ 'xserver', 'novnc', 'spawner-service' ],
+    'waitfor_processes' : [ 'plasmashell', 'xfwm4', 'kded5', 'kglobalaccel5' ],
+    'waitfor_listeningservices': [ 'graphical', 'spawner' ]
   },
   # spawner core service to configure desktop
   # run inside graphical container  
