@@ -595,8 +595,8 @@ desktop.pod : {
      },
     'tcpport': 6081,
     'secrets_requirement' : [ 'abcdesktop/vnc', 'abcdesktop/kerberos'],
-    'waitfor_services' : [ 'xserver', 'novnc', 'spawner-service' ],
-    'waitfor_processes' : [ 'plasmashell', 'xfwm4', 'kded5', 'kglobalaccel5' ],
+    'waitfor_services' : [ 'xserver', 'novnc', 'spawner-service', 'plasmashell' ],
+    'waitfor_processes' : [ 'kwin_x11', 'plasmashell', 'kactivitymanagerd', 'kded5', 'kscreen_backend_launcher' ], 
     'waitfor_listeningservices': [ 'graphical', 'spawner' ]
   },
   # spawner core service to configure desktop
