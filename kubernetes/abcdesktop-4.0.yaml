@@ -593,10 +593,10 @@ spec:
         resources:
           limits:
             cpu: 0.5
-            memory: 128Mi
+            memory: 256Mi
           requests:
             cpu: 0.1
-            memory: 8Mi
+            memory: 32Mi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -711,7 +711,7 @@ spec:
         resources:
           limits:
             cpu: 1
-            memory: 1024Mi
+            memory: 2048Mi
           requests:
             cpu: 0.5
             memory: 256Mi
@@ -830,7 +830,7 @@ spec:
         resources:
           limits:
             cpu: 0.5
-            memory: 1024Mi
+            memory: 2048Mi
           requests:
             cpu: 0.1
             memory: 128Mi
