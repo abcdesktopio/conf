@@ -32,10 +32,10 @@
 # data 
 [global]
 
-# default abcdesktop namespace 
 # abcdesktop is the default namespace
-# if you change it, you must update the abcdesktop.yaml file
-namespace: 'abcdesktop'
+# pyos read the environment variable POD_NAMESPACE
+# in most case, you don't need to override the environment variable POD_NAMESPACE
+# namespace: 'abcdesktop'
 
 # DEFAULT HOST URL 
 # public host url of the service
