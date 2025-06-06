@@ -13,7 +13,6 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: pyos-role
-  namespace: abcdesktop
 rules:
 - apiGroups: ['']
   resources: ['pods']
@@ -50,11 +49,9 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: pyos-rbac
-  namespace: abcdesktop
 subjects:
 - kind: ServiceAccount
   name: pyos-serviceaccount
-  namespace: abcdesktop
 roleRef:
   kind: Role
   name: pyos-role
@@ -64,12 +61,10 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: pyos-serviceaccount
-  namespace: abcdesktop
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  namespace: abcdesktop
   name: configmap-mongodb-scripts
   labels:
     abcdesktop/role: mongodb-config
@@ -143,7 +138,6 @@ data:
 apiVersion: v1
 kind: Secret
 metadata:
-  namespace: abcdesktop
   name: secret-mongodb
   labels:
     abcdesktop/role: secret-mongodb
@@ -155,13 +149,12 @@ stringData:
   MONGO_PASSWORD: 'Az4MeYWUjZDg4Zjhk'
   MONGO_USERS_LIST: 'pyos:readWrite:Az4MeYWUjZDg4Zjhk'
   MONGO_DBS_LIST: 'image,fail2ban,loginHistory,applications,profiles,desktop'
-  MONGODB_URL: 'mongodb://pyos:Az4MeYWUjZDg4Zjhk@mongodb.abcdesktop.svc.cluster.local'
+  MONGODB_URL: 'mongodb://pyos:Az4MeYWUjZDg4Zjhk@mongodb'
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: abcdesktop-passwd-templatefile
-  namespace: abcdesktop
 data:
   passwd: |
     root:x:0:0:root:/root:/bin/bash
@@ -193,7 +186,6 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: abcdesktop-group-templatefile
-  namespace: abcdesktop
 data:
   group: |
     root:x:0:
@@ -256,7 +248,6 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: abcdesktop-shadow-templatefile
-  namespace: abcdesktop
 data:
   shadow: |
     root:*:19020:0:99999:7:::
@@ -288,7 +279,6 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: abcdesktop-gshadow-templatefile
-  namespace: abcdesktop
 data:
   gshadow: |
     root:*::
@@ -348,7 +338,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mongodb-od
-  namespace: abcdesktop
   labels:
     run: mongodb-od
     type: database
@@ -419,7 +408,6 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: abcdesktop
   name: memcached-od 
   labels:
     abcdesktop/role: memcached
@@ -450,7 +438,6 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: abcdesktop
   name: router-od
   labels:
     abcdesktop/role: router
@@ -461,7 +448,6 @@ spec:
       name: router-od
   template:
     metadata:
-      namespace: abcdesktop
       labels:
         name: router-od
         run:  router-od
@@ -554,7 +540,6 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: abcdesktop
   name: nginx-od
   labels:
     abcdesktop/role: nginx
@@ -565,7 +550,6 @@ spec:
       name: nginx-od
   template:
     metadata:
-      namespace: abcdesktop
       labels:
         name: nginx-od
         run: nginx-od
@@ -601,7 +585,6 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: abcdesktop
   name: speedtest-od
   labels:
     abcdesktop/role: speedtest
@@ -612,7 +595,6 @@ spec:
   replicas: 1
   template:
     metadata:
-      namespace: abcdesktop
       labels:
         run: speedtest-od 
     spec:
@@ -632,7 +614,6 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: abcdesktop
   name: pyos-od
   labels:
     abcdesktop/role: pyos
@@ -643,7 +624,6 @@ spec:
       name: pyos-od
   template:
     metadata:
-      namespace: abcdesktop
       labels:
         name: pyos-od
         run: pyos-od
@@ -769,7 +749,6 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: abcdesktop
   name: console-od
   labels:
     abcdesktop/role: console
@@ -805,7 +784,6 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: abcdesktop
   name: openldap-od
   labels:
     abcdesktop/role: openldap
@@ -816,7 +794,6 @@ spec:
   replicas: 1
   template:
     metadata:
-      namespace: abcdesktop
       labels:
         run: openldap-od
         netpol/dns: 'true'
@@ -847,7 +824,6 @@ apiVersion: v1
 kind: Service 
 metadata: 
   name: desktop
-  namespace: abcdesktop 
   labels:
     abcdesktop/role: desktop
 spec: 
@@ -859,7 +835,6 @@ kind: Service
 apiVersion: v1
 metadata:
   name: memcached
-  namespace: abcdesktop
   labels:
     abcdesktop/role: memcached
 spec:
@@ -874,7 +849,6 @@ kind: Service
 apiVersion: v1
 metadata:
   name: mongodb
-  namespace: abcdesktop
   labels:
     abcdesktop/role: mongodb
 spec:
@@ -889,7 +863,6 @@ kind: Service
 apiVersion: v1
 metadata:
   name: speedtest
-  namespace: abcdesktop
   labels:
     abcdesktop/role: speedtest
 spec:
@@ -904,7 +877,6 @@ kind: Service
 apiVersion: v1
 metadata:
   name: pyos
-  namespace: abcdesktop
   labels:
     abcdesktop/role: pyos
 spec:
@@ -919,7 +891,6 @@ kind: Service
 apiVersion: v1
 metadata:
   name: console
-  namespace: abcdesktop
   labels:
     abcdesktop/role: console
 spec:
@@ -934,7 +905,6 @@ kind: Service
 apiVersion: v1
 metadata:
   name: http-router
-  namespace: abcdesktop
   labels:
     abcdesktop/role: router-od
 spec:
@@ -952,7 +922,6 @@ kind: Service
 apiVersion: v1
 metadata:
   name: website
-  namespace: abcdesktop
   labels:
     abcdesktop/role: nginx
 spec:
@@ -967,7 +936,6 @@ kind: Service
 apiVersion: v1
 metadata:
   name: openldap
-  namespace: abcdesktop
   labels:
     abcdesktop/role: openldap
 spec:

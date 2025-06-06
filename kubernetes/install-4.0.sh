@@ -136,13 +136,13 @@ Parameters:
  --imagepullpolicy          Update image pull policy on all pods
  
 Examples:
-    abcdesktop-install
+    install-${VERSION}.sh
     Install an abcdesktop service on a kubernetes cluster.
 
-    abcdesktop-install --namespace=superdesktop
+    install-${VERSION}.sh --namespace=superdesktop
     Install an abcdesktop service in the superdesktop namespace on a kubernetes cluster
 
-    abcdesktop-install --force
+    install-${VERSION}.sh --force
     Continue if a system or a kubernetes error occurs
 
   
@@ -156,8 +156,7 @@ EOF
 
 
 function clean() {
-  rm -f od.config abcdesktop.yaml
-  rm -f *.pem
+  rm -f od.config abcdesktop.yaml ./*.pem
   display_message_result "remove files"
 }
 
@@ -308,23 +307,6 @@ else
    fi
 fi
 
-# Patching file is namespace has changed
-if [ "$NAMESPACE" != "abcdesktop" ]; then
-   # abcdesktop.yaml
-   # replace namespace: abcdesktop -> namespace: $NAMESPACE 
-   sed -i'' -e "s|namespace: abcdesktop|namespace: $NAMESPACE|g" abcdesktop.yaml
-   display_message_result "updated abcdesktop.yaml file with new namespace $NAMESPACE"
-   # replace .abcdesktop.svc.cluster.local -> .$NAMESPACE.svc.cluster.local
-   sed -i'' -e "s|abcdesktop.svc.cluster.local|$NAMESPACE.svc.cluster.local|g" abcdesktop.yaml
-   display_message_result "updated abcdesktop.yaml file with new fqdn $NAMESPACE.svc.cluster.local"
-   # od.config
-   # replace namespace: 'abcdesktop' -> namespace: '$NAMESPACE'
-   sed -i'' -e "s|namespace: 'abcdesktop'|namespace: '$NAMESPACE'|g" od.config
-   display_message_result "updated od.config file with new namespace $NAMESPACE"
-   sed -i'' -e "s|abcdesktop.svc.cluster.local|$NAMESPACE.svc.cluster.local|g" od.config
-   display_message_result "updated od.config file with new fqdn $NAMESPACE.svc.cluster.local"
-fi
-
 #
 # create configmap from od.config file
 kubectl create configmap abcdesktop-config --from-file=od.config -n "$NAMESPACE" > /dev/null
@@ -350,7 +332,7 @@ fi
 
 
 # main yaml file 
-create_message=$(kubectl create -f $ABCDESKTOP_YAML)
+create_message=$(kubectl create -f "${ABCDESKTOP_YAML}" -n "${NAMESPACE}")
 display_message_result "$create_message"
 
 # ensure service account pyos-serviceaccount
