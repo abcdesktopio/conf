@@ -66,7 +66,6 @@ geany.d.$ABCDESKTOP_RELEASE.json
 terminal.d.$ABCDESKTOP_RELEASE.json
 qterminalpod.d.$ABCDESKTOP_RELEASE.json
 evince.d.$ABCDESKTOP_RELEASE.json
-edge.d.$ABCDESKTOP_RELEASE.json
 "
 
 if [ -z "${LOG_FILE}" ];
