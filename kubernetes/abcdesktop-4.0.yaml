@@ -497,8 +497,6 @@ spec:
           #
           # overwrite default values for development
           # you should not change the default values
-          # the docker-entrypoint.sh script
-          # look for FQDN is vars are not set
           #
           # - name: SPEEDTEST_FQDN
           #  value: speedtest.abcdesktop.svc.cluster.local
