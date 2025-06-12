@@ -424,7 +424,7 @@ spec:
     spec:
       containers:
       - name: memcached
-        image: ghcr.io/abcdesktopio/memcached
+        image: memcached
         resources:
           limits:
             cpu: 0.2
