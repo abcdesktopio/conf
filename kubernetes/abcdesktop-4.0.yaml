@@ -355,7 +355,7 @@ spec:
     spec:
       containers:
       - name: mongodb
-        image: ghcr.io/abcdesktopio/mongo:4.4
+        image: mongo:4.4
         resources:
           limits:
             cpu: 0.5
