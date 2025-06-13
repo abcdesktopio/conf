@@ -605,9 +605,9 @@ spec:
           requests:
             cpu: 0.1
             memory: 32Mi
-        image: ghcr.io/abcdesktopio/oc.speedtest:4.0
+        image: ghcr.io/librespeed/speedtest:latest
         ports:
-          - containerPort: 80
+          - containerPort: 8080
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -869,7 +869,7 @@ spec:
   ports:
   - protocol: TCP
     port: 80
-    targetPort: 80
+    targetPort: 8080
 ---
 kind: Service
 apiVersion: v1
