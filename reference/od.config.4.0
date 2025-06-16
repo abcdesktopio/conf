@@ -161,6 +161,7 @@ controllers: { 'ManagerController': { 'permitip': [ '10.0.0.0/8', '172.16.0.0/12
 #    'providers': {
 #      'google': { 
 #        'displayname': 'Google', 
+#	 'textcolor': '#000000',
 #	 'backgroundcolor': '#FFFFFF',
 #	 'icon': 'img/auth/google_icon.svg',
 #        'enabled': True,
