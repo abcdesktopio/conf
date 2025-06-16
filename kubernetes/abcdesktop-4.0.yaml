@@ -424,7 +424,7 @@ spec:
     spec:
       containers:
       - name: memcached
-        image: memcached
+        image: memcached:alpine
         resources:
           limits:
             cpu: 0.2
