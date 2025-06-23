@@ -763,6 +763,7 @@ spec:
     spec:
       containers:
       - name: console
+        imagePullPolicy: Always
         image: ghcr.io/abcdesktopio/console:4.1
         ports:
           - containerPort: 80
@@ -801,7 +802,8 @@ spec:
         # abcdesktopio/docker-test-openldap:master
         # is same as https://github.com/rroemhild/docker-test-openldap
         # but with posixAccount support
-        image: ghcr.io/abcdesktopio/docker-test-openldap:master
+        image: ghcr.io/abcdesktopio/docker-test-openldap:4.1
+        imagePullPolicy: Always
         resources:
           limits:
             cpu: 0.5
@@ -810,8 +812,8 @@ spec:
             cpu: 0.1
             memory: 128Mi
         ports:
-          - containerPort: 10389
-          - containerPort: 10636
+          - containerPort: 389
+          - containerPort: 636
 ---
 kind: Endpoints
 apiVersion: v1
@@ -943,8 +945,8 @@ spec:
   - name: ldap
     protocol: TCP
     port: 389
-    targetPort: 10389
+    targetPort: 389
   - name: ldaps
     protocol: TCP
     port: 636
-    targetPort: 10636
+    targetPort: 636
