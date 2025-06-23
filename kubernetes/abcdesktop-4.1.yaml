@@ -641,7 +641,7 @@ spec:
       containers:
       - name : pyos
         imagePullPolicy: Always
-        image: ghcr.io/abcdesktopio/pyos:4.1
+        image: ghcr.io/abcdesktopio/pyos:4.1.alpine_latest
         volumeMounts:
           - name: jwtsigningkeys
             mountPath: "/config.signing"
