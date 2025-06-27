@@ -195,7 +195,7 @@ do
 done
 
 display_message  "abcdesktop install script namespace=${NAMESPACE}" "INFO"
-if [ ! -z "$IMAGEPULLPOLICY" ];
+if [ -n "$IMAGEPULLPOLICY" ];
 then
      display_message "imagePullPolcy is set to $IMAGEPULLPOLICY" "INFO"
 fi
