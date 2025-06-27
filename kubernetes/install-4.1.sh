@@ -226,10 +226,12 @@ if [ -n "$DEBUG" ]; then
 fi
 
 # RSA keys
-# build rsa kay pairs for jwt payload 
+# build rsa kay pairs for jwt payload
+# define common RSA key length 
+RSALENGTH=2048 
 # 1024 bits is a smallest value, change here if need but use more than 1024
 if [ ! -f abcdesktop_jwt_desktop_payload_private_key.pem ]; then
-	openssl genrsa -out abcdesktop_jwt_desktop_payload_private_key.pem 1024 
+	openssl genrsa -out abcdesktop_jwt_desktop_payload_private_key.pem ${RSALENGTH} 
 	openssl rsa    -in  abcdesktop_jwt_desktop_payload_private_key.pem -outform PEM -pubout -out  _abcdesktop_jwt_desktop_payload_public_key.pem 
 	openssl rsa    -pubin -in _abcdesktop_jwt_desktop_payload_public_key.pem -RSAPublicKey_out -out abcdesktop_jwt_desktop_payload_public_key.pem 
 	display_message_result "abcdesktop_jwt_desktop_payload keys create"
@@ -237,14 +239,14 @@ fi
 
 # build rsa kay pairs for the desktop jwt signing
 if [ ! -f abcdesktop_jwt_desktop_signing_private_key.pem ]; then
-	openssl genrsa -out abcdesktop_jwt_desktop_signing_private_key.pem 1024 
+	openssl genrsa -out abcdesktop_jwt_desktop_signing_private_key.pem ${RSALENGTH}
 	openssl rsa    -in  abcdesktop_jwt_desktop_signing_private_key.pem -outform PEM -pubout -out abcdesktop_jwt_desktop_signing_public_key.pem 
 	display_message_result "abcdesktop_jwt_desktop_signing keys create"
 fi
 
 # build rsa kay pairs for the user jwt signing 
 if [ ! -f abcdesktop_jwt_user_signing_private_key.pem ]; then
-	openssl genrsa -out abcdesktop_jwt_user_signing_private_key.pem 1024
+	openssl genrsa -out abcdesktop_jwt_user_signing_private_key.pem ${RSALENGTH}
 	openssl rsa    -in  abcdesktop_jwt_user_signing_private_key.pem -outform PEM -pubout -out abcdesktop_jwt_user_signing_public_key.pem 
 	display_message_result "abcdesktop_jwt_user_signing keys create"
 fi
