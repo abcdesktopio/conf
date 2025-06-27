@@ -289,7 +289,7 @@ if [ -f abcdesktop.yaml ]; then
 else
    curl --progress-bar "$ABCDESKTOP_YAML_SOURCE" --output abcdesktop.yaml
    display_message_result "downloaded source $ABCDESKTOP_YAML_SOURCE"
-   if [ ! -z "$IMAGEPULLPOLICY" ];
+   if [ -n "$IMAGEPULLPOLICY" ];
    then
      sed -i "s/IfNotPresent/$IMAGEPULLPOLICY/g" abcdesktop.yaml
      display_message_result "update imagePullPolcy to $IMAGEPULLPOLICY"
@@ -302,7 +302,7 @@ if [ -f od.config ]; then
 else
    curl --progress-bar "$OD_CONFIG_SOURCE" --output od.config
    display_message_result "downloaded source $OD_CONFIG_SOURCE"
-   if [ ! -z "$IMAGEPULLPOLICY" ];
+   if [ -n "$IMAGEPULLPOLICY" ];
    then
      sed -i "s/IfNotPresent/$IMAGEPULLPOLICY/g" od.config
      display_message_result "update imagePullPolcy to $IMAGEPULLPOLICY"
