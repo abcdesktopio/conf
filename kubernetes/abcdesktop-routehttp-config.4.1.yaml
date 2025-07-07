@@ -1,0 +1,89 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata: 
+  name: abcdesktop-routehttp-config
+data:       
+  routehttp.conf: |
+    ##
+    # You should look at the following URL's in order to grasp a solid understanding
+    # of Nginx configuration files in order to fully unleash the power of Nginx.
+    # http://wiki.nginx.org/Pitfalls
+    # http://wiki.nginx.org/QuickStart
+    # http://wiki.nginx.org/Configuration
+    #
+    # Generally, you will want to move this file somewhere, and start with a clean
+    # file but keep this around for reference. Or just disable in sites-enabled.
+    #
+    # Please see /usr/share/doc/nginx-doc/examples/ for more detailed examples.
+    ##
+    
+    # set lua path
+    lua_package_path "/usr/local/share/lua/5.1/?.lua;;";
+
+    # read env vars in init_by_lua_block
+    init_by_lua_block {
+      pyos_fqdn = os.getenv("PYOS_FQDN")
+      if pyos_fqdn == nil or pyos_fqdn == ''  then
+         pyos_fqdn = "pyos"
+      end
+      pyos_service_port = os.getenv("PYOS_SERVICE_PORT")
+      if pyos_service_port == nil or pyos_service_port == '' then
+         pyos_service_port = "8000"
+      end
+    }
+
+    # nginx server config
+    server {
+        # replace the default resolver ip addr
+        # This file /tmp/resolver.conf is created by docker-entrypoint.sh 
+        # Read nameserver in /etc/resolv.conf and create /tmp/resolver.conf
+        include /tmp/resolver.conf;
+        # server_tokens to off, the server header will only indicate Nginx
+        server_tokens off;
+
+        listen 80 default_server;
+        listen [::]:80 default_server;
+
+        ###### 
+        # uncomment this to enable https  
+        #
+        # listen 443 ssl http2 default_server;
+        # listen [::]:443 ssl http2 default_server;
+        # server_name YOUR_SERVER_NAME_AND_DOMAIN; # change this too
+        # ssl_certificate     /etc//nginx/ssl/tls.crt;
+        # ssl_certificate_key /etc/nginx/ssl/tls.key;	
+        #
+        # end of https section 
+        ######
+
+        index index.html index.htm;
+
+        # default desktop oc.user tcp port 
+        set $pulseaudio_http_port               4714;
+        set $ws_tcp_bridge_tcp_port             6081;
+        set $xterm_tcp_port                     29781;
+        set $printerfile_service_tcp_port       29782;
+        set $file_service_tcp_port              29783;
+        set $broadcast_tcp_port                 29784;
+        set $lync_service_tcp_port              29785;
+        set $spawner_service_tcp_port           29786;
+        set $signalling_service_tcp_port        29787; 
+        set $sound_service_tcp_port        	29788;
+        set $microphone_service_tcp_port        29789;
+
+        # use env vars to read pyos_fqdn and pyos_service_port from ENV
+        # env MUST be define in nginx.conf 
+        # must use init_by_lua_block to read env vars
+        set_by_lua_block $pyos_fqdn 		{ return pyos_fqdn  }	
+        set_by_lua_block $pyos_service_port   	{ return pyos_service_port  }	
+
+        # add header 
+        add_header X-Frame-Options "SAMEORIGIN";
+        add_header X-XSS-Protection "1; mode=block";
+
+        # abcdesktop routing 
+        include route.conf;
+    }
+---
+
