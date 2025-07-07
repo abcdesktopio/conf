@@ -51,7 +51,7 @@ data:
         # listen 443 ssl http2 default_server;
         # listen [::]:443 ssl http2 default_server;
         # server_name YOUR_SERVER_NAME_AND_DOMAIN; # change this too
-        # ssl_certificate     /etc//nginx/ssl/tls.crt;
+        # ssl_certificate     /etc/nginx/ssl/tls.crt;
         # ssl_certificate_key /etc/nginx/ssl/tls.key;	
         #
         # end of https section 
