@@ -605,7 +605,7 @@ spec:
           requests:
             cpu: 0.1
             memory: 32Mi
-        image: ghcr.io/librespeed/speedtest:master-alpine
+        image: ghcr.io/abcdesktopio/oc.speedtest:4.1
         ports:
           - containerPort: 8080
 ---
