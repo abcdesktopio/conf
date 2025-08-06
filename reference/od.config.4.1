@@ -730,6 +730,7 @@ desktop.pod : {
   'ephemeral_container': {
     'enable': True,
     'acl':  { 'permit': [ 'all' ] },
+    'imagePullPolicy': 'IfNotPresent',
     'securityContext': { 
         'supplementalGroups': [ '{{ supplementalGroups }}' ] ,
         'readOnlyRootFilesystem': False, 
@@ -740,7 +741,8 @@ desktop.pod : {
   },
   'pod_application' : {
     'enable': True,
-    # 'imagePullSecrets': [ { 'name': name_of_secret } ]
+    'imagePullPolicy': 'IfNotPresent',
+    # the 'imagePullSecrets' is defined in the desktop pod specs 
     'securityContext': {
         'supplementalGroups': [ '{{ supplementalGroups }}' ] ,
         'readOnlyRootFilesystem': False,
