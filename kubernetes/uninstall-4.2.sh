@@ -104,13 +104,13 @@ Parameters:
  --force                    Continue if an error occurs
  
 Examples:
-    abcdesktop-uninstall
+    uninstall-${VERSION}.sh
     Uninstall abcdesktop service on a kubernetes cluster.
 
-    abcdesktop-uninstall --namespace=superdesktop
-    Uninstallnstall abcdesktop service in the superdesktop namespace on a kubernetes cluster
+    uninstall-${VERSION}.sh --namespace=superdesktop
+    Uninstall abcdesktop service in the superdesktop namespace on a kubernetes cluster
 
-    abcdesktop-uninstall --force=1
+    uninstall-${VERSION}.sh --force=1
     Continue if a system or a kubernetes error occurs
 
   
@@ -201,17 +201,8 @@ else
    display_message_result "downloaded source $ABCDESKTOP_YAML_SOURCE"
 fi
 
-
-# Patching file is namespace has changed
-if [ "$NAMESPACE" != "abcdesktop" ]; then
-   # abcdesktop.yaml
-   # replace namespace: abcdesktop -> namespace: $NAMESPACE 
-   sed -i'' -e "s|namespace: abcdesktop|namespace: $NAMESPACE|g" abcdesktop.yaml
-   display_message_result "updated abcdesktop.yaml file with new namespace $NAMESPACE"
-fi
-
-kubectl delete -f abcdesktop.yaml
-display_message_result "kubectl delete -f abcdesktop.yaml"
+kubectl delete -f abcdesktop.yaml -n "${NAMESPACE}"
+display_message_result "kubectl delete -f abcdesktop.yaml -n ${NAMESPACE}"
 # delete cluster roles if updated
 kubectl delete -f "$ABCDESKTOP_CLUSTER_ROLE" > /dev/null 2>/dev/null
 kubectl delete secrets --all -n "$NAMESPACE" > /dev/null
