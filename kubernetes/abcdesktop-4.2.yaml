@@ -355,7 +355,7 @@ spec:
     spec:
       containers:
       - name: mongodb
-        image: mongo:4.4
+        image: ghcr.io/abcdesktopio/mongo:safemain
         resources:
           limits:
             cpu: 0.5
