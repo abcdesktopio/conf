@@ -666,7 +666,7 @@ desktop.pod : {
   # container storage
   # storage is just a pause go get all volumes
   'storage' : { 
-    'image': 'k8s.gcr.io/pause:3.8',
+    'image': 'registry.k8s.io/pause:3.10.1',
     'imagePullPolicy':  'IfNotPresent',
     'enable': True,
     'acl': { 'permit': [ 'all' ] },
