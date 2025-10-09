@@ -38,7 +38,7 @@ spec:
           - name: volume-routehttp-config
             mountPath: "/etc/nginx/sites-enabled/routehttp.conf"
             subPath: routehttp.conf
-          - name: volume-http-router-cert
+          - name: volume-http-router-certificat
             mountPath: "/etc/nginx/ssl"
         ports:
           - containerPort: 80
