@@ -41,7 +41,7 @@ spec:
           - name: volume-http-router-certificat
             mountPath: "/etc/nginx/ssl"
           #
-          # remove comment to enable auth in locationslash.conf file and use .htpasswd
+          # remove comment to enable auth in locationslash.conf file
           # - name: volume-htpasswd
           #   mountPath: /etc/nginx/.htpasswd
           #   subPath: .htpasswd
@@ -104,7 +104,7 @@ spec:
               fieldRef:
                 fieldPath: status.podIP
       volumes:
-          # remove comment to enale auth in locationslash.conf file
+          # remove comment to enable auth in locationslash.conf file
           #
           # to create the abcdesktop-router-htpasswd configmap run the command line 
           # htpasswd .htpasswd my_user
