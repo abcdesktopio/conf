@@ -40,6 +40,14 @@ spec:
             subPath: routehttp.conf
           - name: volume-http-router-certificat
             mountPath: "/etc/nginx/ssl"
+          #
+          # remove comment to enable auth in locationslash.conf file and use .htpasswd
+          # - name: volume-htpasswd
+          #   mountPath: /etc/nginx/.htpasswd
+          #   subPath: .htpasswd
+          # - name: volume-locationslash
+          #   mountPath: /etc/nginx/locationslash.conf
+          #   subPath: locationslash.conf
         ports:
           - containerPort: 80
             name: http
@@ -96,6 +104,23 @@ spec:
               fieldRef:
                 fieldPath: status.podIP
       volumes:
+          # remove comment to enale auth in locationslash.conf file
+          #
+          # to create the abcdesktop-router-htpasswd configmap run the command line 
+          # htpasswd .htpasswd my_user
+          #
+          # kubectl create configmap abcdesktop-router-htpasswd --from-file=.htpasswd -n abcdesktop
+          # - name: volume-htpasswd
+          #   configMap:
+          #     name: abcdesktop-router-htpasswd
+          #
+          # to create the abcdesktop-router-locationslash configmap run the command line
+          # echo -e "auth_basic \"Restricted Content\";\nauth_basic_user_file /etc/nginx/.htpasswd;" > locationslash.conf 
+          # kubectl create configmap abcdesktop-router-locationslash --from-file=locationslash.conf -n abcdesktop
+          #
+          # - name: volume-locationslash
+          #   configMap:
+          #     name: abcdesktop-router-locationslash
           - name: volume-routehttp-config
             configMap:
               name: abcdesktop-routehttp-config
