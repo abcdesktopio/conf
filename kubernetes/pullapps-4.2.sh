@@ -66,6 +66,10 @@ geany.d.$ABCDESKTOP_RELEASE.json
 terminal.d.$ABCDESKTOP_RELEASE.json
 qterminalpod.d.$ABCDESKTOP_RELEASE.json
 evince.d.$ABCDESKTOP_RELEASE.json
+eog.d.$ABCDESKTOP_RELEASE.json
+gimp.d.$ABCDESKTOP_RELEASE.json
+calc.d.$ABCDESKTOP_RELEASE.json
+impress.d.$ABCDESKTOP_RELEASE.json
 "
 
 if [ -z "${LOG_FILE}" ];
