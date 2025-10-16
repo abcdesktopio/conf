@@ -70,6 +70,8 @@ eog.d.$ABCDESKTOP_RELEASE.json
 gimp.d.$ABCDESKTOP_RELEASE.json
 calc.d.$ABCDESKTOP_RELEASE.json
 impress.d.$ABCDESKTOP_RELEASE.json
+notepadqq.d.$ABCDESKTOP_RELEASE.json
+pinta.d.$ABCDESKTOP_RELEASE.json
 "
 
 if [ -z "${LOG_FILE}" ];
