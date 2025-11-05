@@ -587,6 +587,7 @@ desktop.pod : {
   # include x11 service 
   'graphical' : {
     'image': { 'default': 'ghcr.io/abcdesktopio/oc.user.ubuntu.sudo.24.04:4.2' },
+	'volumes': [ 'x11socket', 'pulseaudiosocket', 'cupsdsocket', 'tmp', 'run', 'log', 'rundbus', 'runuser' ],
     'imagePullPolicy':  'Always',
     'enable': True,
     'acl':  { 'permit': [ 'all' ] },
@@ -706,30 +707,14 @@ desktop.pod : {
     }, 
     'command':  [ 'sh', '-c',  'chmod 750 ~ && chown {{ uidNumber }}:{{ gidNumber }} ~' ] 
   },
-  # 
-  # container x11overlay
-  # uncomment this section to add wartermarking on X11 display
-  # it creates a X11 window stay on top as root
-  # 'x11overlay': { 
-  #  'image': 'abcdesktopio/x11-overlay:main',
-  #  'pullpolicy': 'IfNotPresent',
-  #  'enable': True,
-  #  'securityContext': { 'runAsUser':   0, 'runAsGroup':  0  },
-  #  'acl':  { 'permit': [ 'all' ] },
-  #  'resources': { 
-  #      'requests': { 'memory': "12Mi", 'cpu': "50m"  },  
-  #      'limits'  : { 'memory': "64Mi", 'cpu': '500m"  } 
-  #  } 
-  # },
-  # application can run 
-  # as ephemeral_container 
-  # ephemeral_container are binded to graphical_container
-  # as pod_application
-  # pod_application run as pod
-  # 
+  #
+  # application can run as ephemeral_container or as pod_application
+  # - ephemeral_container is linked to graphical_container
+  # - pod_application run as pod
+  #
   'ephemeral_container': {
     'enable': True,
-    'show_event_notification': True,  # display kubernetes event in frontweb, like pulling
+	'volumes': [ 'x11socket', 'pulseaudiosocket', 'cupsdsocket', 'tmp', 'run', 'log', 'rundbus', 'runuser' ],
     'acl':  { 'permit': [ 'all' ] },
     'securityContext': { 
         'supplementalGroups': [ '{{ supplementalGroups }}' ] ,
@@ -741,7 +726,7 @@ desktop.pod : {
   },
   'pod_application' : {
     'enable': True,
-    'show_event_notification': True,  # display kubernetes event in frontweb, like pulling
+	'volumes': [ 'tmp', 'run', 'log', 'rundbus', 'runuser' ],
     # 'imagePullSecrets': [ { 'name': name_of_secret } ]
     'securityContext': {
         'supplementalGroups': [ '{{ supplementalGroups }}' ] ,
@@ -981,8 +966,8 @@ front.menuconfig  : { 'settings': True, 'appstore': True, 'screenshot':True, 'do
 
 # show a notification when image takes time to create 
 # like pulling, pulled, 
-# this does not include the top bar status, but only notifications
-front.imagenotification : { 'ephemeral_container' : True, 'pod_application' : True }
+# this does not include the top bar status, but only notifications popup 
+front.imagenotification : { 'ephemeral_container' : False, 'pod_application' : False }
 
 #
 # desktop.defaultbackgroundcolors
