@@ -678,9 +678,6 @@ desktop.pod : {
   },
   # container sound
   # sound is a pulseaudio service instance
-  # can forword sound to webrtc gateway or as http stream
-  # http stream can have glitch and does not proviede image and sound sync
-  # webrtc gateway with rtp sound stream is better
   'sound': { 
     'image': 'ghcr.io/abcdesktopio/oc.pulseaudio:4.2',
     'imagePullPolicy': 'IfNotPresent',
@@ -755,9 +752,8 @@ desktop.policies: { 'rules': { } }
 # read https://www.abcdesktopio.io/3.1/config/persistentvolumes/ to get more informations about pv and pvc 
 #
 # values can be :
-# desktop.homedirectorytype: None 
+# desktop.homedirectorytype: None  # use a empty dir 
 # desktop.homedirectorytype: 'persistentVolumeClaim' 
-# desktop.homedirectorytype: 'hostPath'
 # desktop.homedirectorytype: 'hostPath'
 desktop.homedirectorytype: None  # use a empty dir 
 
