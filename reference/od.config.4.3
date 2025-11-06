@@ -562,6 +562,7 @@ desktop.pod : {
     'tolerations': []
   },
   'default_volumes': {
+    # 'input': { 'name': 'input', 'hostPath': { 'path': '/dev/input' } }, # uncomment this line to use gamepad 
     'shm': { 'name': 'shm', 'emptyDir': { 'medium': 'Memory', 'sizeLimit': '512Mi' } },
     'run': { 'name': 'run', 'emptyDir': { 'medium': 'Memory', 'sizeLimit': '1M'    } },
     'tmp': { 'name': 'tmp', 'emptyDir': { 'medium': 'Memory', 'sizeLimit': '8Gi'   } },
@@ -573,6 +574,7 @@ desktop.pod : {
     'cupsdsocket': { 'name': 'cupsdsocket',  'emptyDir': { 'medium': 'Memory' } }
   },
   'default_volumes_mount': {
+  	# 'input' :  { 'name': 'input',  'mountPath': '/dev/input'  }, # uncomment this line to use gamepad 
     'shm': { 'name': 'shm', 'mountPath' : '/dev/shm' },
     'run': { 'name': 'run',  'mountPath': '/var/run/desktop' },
     'tmp': { 'name': 'tmp',  'mountPath': '/tmp' },
@@ -587,6 +589,8 @@ desktop.pod : {
   # include x11 service 
   'graphical' : {
     'image': { 'default': 'ghcr.io/abcdesktopio/oc.user.ubuntu.sudo.24.04:4.2' },
+	# replace this line to use gamepad, by adding 'input' device entrie
+    # 'volumes': [ 'x11socket', 'pulseaudiosocket', 'cupsdsocket', 'tmp', 'run', 'log', 'rundbus', 'runuser', 'input' ],
 	'volumes': [ 'x11socket', 'pulseaudiosocket', 'cupsdsocket', 'tmp', 'run', 'log', 'rundbus', 'runuser' ],
     'imagePullPolicy':  'Always',
     'enable': True,
@@ -597,6 +601,7 @@ desktop.pod : {
       'limits'  : { 'memory': "4Gi",   'cpu': "2000m" } 
     },
     'securityContext': {
+      # 'privileged': True, # uncomment this line to use gamepad, by default should be 'privileged': False,
       'readOnlyRootFilesystem': False, 
       'allowPrivilegeEscalation': True
      },
