@@ -583,7 +583,7 @@ desktop.pod : {
   # graphical is the main abcdesktop container 
   # include x11 service 
   'graphical' : {
-    'image': { 'default': 'ghcr.io/abcdesktopio/oc.user.ubuntu.sudo.24.04:4.2' },
+    'image': { 'default': 'ghcr.io/abcdesktopio/oc.user.ubuntu.sudo.24.04:4.3' },
 	# replace this line to use gamepad, by adding 'input' device entrie
     # 'volumes': [ 'sudoers', 'extrausers', 'x11socket', 'pulseaudiosocket', 'cupsdsocket', 'tmp', 'run', 'log', 'rundbus', 'runuser', 'input' ],
 	'volumes': [ 'sudoers', 'extrausers', 'x11socket', 'pulseaudiosocket', 'cupsdsocket', 'tmp', 'run', 'log', 'rundbus', 'runuser' ],
@@ -635,7 +635,7 @@ desktop.pod : {
   # container printer
   # printer is a cupsd service 
   'printer' : { 
-    'image': 'ghcr.io/abcdesktopio/oc.cupsd:4.2',
+    'image': 'ghcr.io/abcdesktopio/oc.cupsd:4.3',
     'imagePullPolicy': 'IfNotPresent',
     'enable': True,
     'tcpport': 681,
@@ -658,7 +658,7 @@ desktop.pod : {
   # filer provide upload and download files features
   'filer' : { 
     'volumes': [ 'extrausers', 'tmp', 'home', 'log' ],
-    'image': 'ghcr.io/abcdesktopio/oc.filer:4.2',
+    'image': 'ghcr.io/abcdesktopio/oc.filer:4.3',
     'imagePullPolicy':  'IfNotPresent',
     'enable': True,
     'tcpport': 29783,
@@ -684,7 +684,7 @@ desktop.pod : {
   # container sound
   # sound is a pulseaudio service instance
   'sound': { 
-    'image': 'ghcr.io/abcdesktopio/oc.pulseaudio:4.2',
+    'image': 'ghcr.io/abcdesktopio/oc.pulseaudio:4.3',
     'imagePullPolicy': 'IfNotPresent',
     'enable': True,
     'tcpport': 29788,
