@@ -450,7 +450,7 @@ spec:
       containers:
       - name: memcached
         # like image: memcached:alpine 
-        image: ghcr.io/abcdesktopio/oc.memcached:4.2
+        image: ghcr.io/abcdesktopio/oc.memcached:4.3
         resources:
           limits:
             cpu: 0.2
@@ -489,7 +489,7 @@ spec:
       containers:
       - name: nginx-router
         imagePullPolicy: Always
-        image: ghcr.io/abcdesktopio/route:4.2
+        image: ghcr.io/abcdesktopio/route:4.3
         volumeMounts:
           - name: jwtsigningkeys
             mountPath: "/config.signing"
@@ -582,7 +582,7 @@ spec:
       containers:
       - name: nginx
         imagePullPolicy: Always
-        image: ghcr.io/abcdesktopio/oc.nginx:4.2
+        image: ghcr.io/abcdesktopio/oc.nginx:4.3
         ports:
           - containerPort: 80
             name: http
@@ -632,7 +632,7 @@ spec:
             cpu: 0.1
             memory: 32Mi
         # like image: ghcr.io/librespeed/speedtest:master-alpine 
-        image: ghcr.io/abcdesktopio/oc.speedtest:4.2
+        image: ghcr.io/abcdesktopio/oc.speedtest:4.3
         ports:
           - containerPort: 8080
 ---
@@ -668,7 +668,7 @@ spec:
       containers:
       - name : pyos
         imagePullPolicy: Always
-        image: ghcr.io/abcdesktopio/pyos:4.2.alpine_latest
+        image: ghcr.io/abcdesktopio/pyos:4.3.alpine_latest
         volumeMounts:
           - name: jwtsigningkeys
             mountPath: "/config.signing"
@@ -791,7 +791,7 @@ spec:
       containers:
       - name: console
         imagePullPolicy: Always
-        image: ghcr.io/abcdesktopio/console:4.2
+        image: ghcr.io/abcdesktopio/console:4.3
         ports:
           - containerPort: 80
         env:
@@ -829,7 +829,7 @@ spec:
         # abcdesktopio/docker-test-openldap:master
         # is same as https://github.com/rroemhild/docker-test-openldap
         # but with posixAccount support
-        image: ghcr.io/abcdesktopio/docker-test-openldap:4.2
+        image: ghcr.io/abcdesktopio/docker-test-openldap:4.3
         imagePullPolicy: Always
         resources:
           limits:
