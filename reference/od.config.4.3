@@ -684,6 +684,7 @@ desktop.pod : {
   # container sound
   # sound is a pulseaudio service instance
   'sound': { 
+    'volumes': [ 'extrausers', 'tmp', 'home', 'log' ],
     'image': 'ghcr.io/abcdesktopio/oc.pulseaudio:4.3',
     'imagePullPolicy': 'IfNotPresent',
     'enable': True,
