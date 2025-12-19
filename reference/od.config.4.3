@@ -632,7 +632,7 @@ desktop.pod : {
     'volumes': [ 'tmp', 'cupsdsocket' ],
     'image': 'ghcr.io/abcdesktopio/oc.cupsd:4.3',
     'imagePullPolicy': 'IfNotPresent',
-    'enable': True,
+    'enable': False,
     'tcpport': 681,
     'securityContext': { 'runAsUser': 0, 'runAsGroup': 0 },
     'resources': { 
@@ -662,19 +662,6 @@ desktop.pod : {
       'limits'  : { 'memory': "256Mi",'cpu': "100m" } 
     },
     'acl':  { 'permit': [ 'all' ] }
-    },
-  # container storage
-  # storage is just a pause go get all volumes
-  'storage' : { 
-    'volumes': [ 'tmp', 'home', 'log' ],
-    'image': 'registry.k8s.io/pause:3.10.1',
-    'imagePullPolicy':  'IfNotPresent',
-    'enable': True,
-    'acl': { 'permit': [ 'all' ] },
-    'resources': { 
-      'requests': { 'memory': "8Mi",  'cpu': "5m" },  
-      'limits'  : { 'memory': "32Mi", 'cpu': "5m" } 
-    }
   },
   # container sound
   # sound is a pulseaudio service instance
