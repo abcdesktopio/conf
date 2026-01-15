@@ -549,6 +549,8 @@ desktop.pod : {
   # value inside mustrache like {{ uidNumber }} is replaced by context run value
   # for example {{ uidNumber }} is the uid number define in ldap server 
   'spec' : {
+    # change runtimeClassName for nvidia 
+    # 'runtimeClassName': 'nvidia', 
     'shareProcessNamespace': False,
     'shareProcessMemory': True,
     'shareProcessMemorySize': '256Mi',
