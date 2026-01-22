@@ -1,0 +1,137 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: router-od
+  labels:
+    abcdesktop/role: router
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: router-od
+  template:
+    metadata:
+      labels:
+        name: router-od
+        run:  router-od
+        type: router-od
+        # list netpool to permit router to connect to
+        netpol/speedtest: 'true'
+        netpol/pyos: 'true'
+        netpol/ocuser: 'true'
+        netpol/dns: 'true'
+        netpol/nginx: 'true'
+        netpol/console: 'true'
+    spec:
+      containers:
+      - name: nginx-router
+        imagePullPolicy: Always
+        image: ghcr.io/abcdesktopio/route:4.3
+        volumeMounts:
+          - name: jwtsigningkeys
+            mountPath: "/config.signing"
+            readOnly: true
+          - name: jwtpayloadkeys
+            mountPath: "/config.payload"
+            readOnly: true
+          - name: volume-routehttp-config
+            mountPath: "/etc/nginx/sites-enabled/routehttp.conf"
+            subPath: routehttp.conf
+          - name: volume-http-router-certificat
+            mountPath: "/etc/nginx/ssl"
+          #
+          # remove comment to enable auth in locationslash.conf file
+          # - name: volume-htpasswd
+          #   mountPath: /etc/nginx/.htpasswd
+          #   subPath: .htpasswd
+          # - name: volume-locationslash
+          #   mountPath: /etc/nginx/locationslash.conf
+          #   subPath: locationslash.conf
+        ports:
+          - containerPort: 80
+            name: http
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 80
+          failureThreshold: 1
+          periodSeconds: 10
+        startupProbe:
+          httpGet:
+            path: /healthz
+            port: 80
+          failureThreshold: 5
+          periodSeconds: 5
+        resources:
+          limits:
+            cpu: 0.5
+            memory: 512Mi
+          requests:
+            cpu: 0.25
+            memory: 16Mi
+        env:
+          #
+          # overwrite default values for development
+          # you should not change the default values
+          #
+          # - name: SPEEDTEST_FQDN
+          #  value: speedtest.abcdesktop.svc.cluster.local
+          # - name: PYOS_FQDN
+          #  value: pyos.abcdesktop.svc.cluster.local
+          # - name: CONSOLE_FQDN
+          #  value: console.abcdesktop.svc.cluster.local
+          # - name: WEBSITE_FQDN
+          #  value: website.abcdesktop.svc.cluster.local
+          - name: JWT_DESKTOP_PAYLOAD_PRIVATE_KEY
+            value: "/config.payload/abcdesktop_jwt_desktop_payload_private_key.pem"
+          - name: JWT_DESKTOP_SIGNING_PUBLIC_KEY
+            value: "/config.signing/abcdesktop_jwt_desktop_signing_public_key.pem"
+          - name: NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+      volumes:
+          # remove comment to enable auth in locationslash.conf file
+          #
+          # to create the abcdesktop-router-htpasswd configmap run the command line 
+          # htpasswd .htpasswd my_user
+          #
+          # kubectl create configmap abcdesktop-router-htpasswd --from-file=.htpasswd -n abcdesktop
+          # - name: volume-htpasswd
+          #   configMap:
+          #     name: abcdesktop-router-htpasswd
+          #
+          # to create the abcdesktop-router-locationslash configmap run the command line
+          # echo -e "auth_basic \"Restricted Content\";\nauth_basic_user_file /etc/nginx/.htpasswd;" > locationslash.conf 
+          # kubectl create configmap abcdesktop-router-locationslash --from-file=locationslash.conf -n abcdesktop
+          #
+          # - name: volume-locationslash
+          #   configMap:
+          #     name: abcdesktop-router-locationslash
+          - name: volume-routehttp-config
+            configMap:
+              name: abcdesktop-routehttp-config
+          - name: jwtsigningkeys
+            secret:
+              secretName: abcdesktopjwtdesktopsigning
+          - name: jwtpayloadkeys
+            secret:
+              secretName: abcdesktopjwtdesktoppayload
+          - name: volume-http-router-certificat
+            secret:
+              secretName: http-router-certificat
+      dnsPolicy: ClusterFirst
+---
