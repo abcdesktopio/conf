@@ -1409,11 +1409,6 @@ spec:
           - containerPort: 389
           - containerPort: 636
 ---
-kind: Endpoints
-apiVersion: v1
-metadata:
-  name: desktop
----
 apiVersion: v1 
 kind: Service 
 metadata: 
