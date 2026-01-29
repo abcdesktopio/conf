@@ -89,7 +89,7 @@ jobs:
           echo "current abcdesktop URL is $URL"
           echo "current abcdesktop version is $VERSION"
           cd tests
-          npm run test -- --url="$URL --version="$VERSION"
+          npm run test -- --url="$URL" --version="$VERSION"
 
       - name: Upload selenuim webdriver screenshots
         uses: actions/upload-artifact@v4
