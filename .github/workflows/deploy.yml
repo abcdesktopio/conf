@@ -85,9 +85,11 @@ jobs:
           HOST=$(hostname -I 2>/dev/null)
           IP=$(echo "$HOST"|awk '{print $1}')
           URL="http://$IP:30443/"
+          VERSION=$(echo ${{ env.imagetag }} | cut -d "." -f 1)
           echo "current abcdesktop URL is $URL"
+          echo "current abcdesktop version is $VERSION"
           cd tests
-          npm run test -- --url="$URL"
+          npm run test -- --url="$URL --version="$VERSION"
 
       - name: Upload selenuim webdriver screenshots
         uses: actions/upload-artifact@v4

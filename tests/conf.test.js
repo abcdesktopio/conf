@@ -10,8 +10,23 @@ options.setBinaryPath('/opt/google/chrome/google-chrome');
 
 // parsing command line arguments to retrieve the URL to test
 const args = process.argv.slice(2);
-const urlArg = args.find(arg => arg.startsWith('--url='));
-const URL = urlArg ? urlArg.split('=')[1] : null;
+const getArg = (name) => {
+  const arg = args.find(arg => arg.startsWith(`--${name}=`));
+  return arg ? arg.split('=')[1] : null;
+};
+
+const URL = getArg('url');
+const VERSION = getArg('version');
+
+if (!URL) {
+  throw new Error('Missing required --url= argument');
+}
+if (!VERSION) {
+  throw new Error('Missing required --version= argument');
+}
+
+console.log(`Testing URL: ${URL}`);
+console.log(`Testing VERSION: ${VERSION}`);
 
 describe('abcdesktop services tests', function(){
   var driver;
@@ -128,22 +143,41 @@ describe('abcdesktop services tests', function(){
       await fs.writeFile('./screens/fry-desktop.png', encodedString, 'base64');
     }, 300000)
 
-    it("start firefox", async function(){
-      let currentState;
+    it("open menu", async function(){
+      let notification1 = await driver.findElement(webdriver.By.id("notification1"));
+      await driver.wait(webdriver.until.elementIsNotVisible(notification1), 300000);
+      
+      // get the menu button and the menu itself
+      let menu_button = await driver.findElement(webdriver.By.id("name"));
+      let menu = await driver.findElement(webdriver.By.id("mainmenu")); 
 
+      // wait for the menu to be open before taking screenshot
+      await menu_button.click();
+      await driver.wait(webdriver.until.elementIsVisible(menu), 300000);
+      let encodedString = await driver.takeScreenshot();
+      await fs.writeFile('./screens/fry-desktop-menu-open.png', encodedString, 'base64');
+    }, 300000)
+
+    it("open application menu", async function(){
+      // get aplications button element
+      let application_menu_button = await driver.findElement(webdriver.By.id("applications-name"));
+      await application_menu_button.click();
+
+      // wait for the application menu to be dynamicaly created
+      await new Promise((r) => setTimeout(r, 1000));
+      let encodedString = await driver.takeScreenshot();
+      await fs.writeFile('./screens/fry-desktop-application-menu-open.png', encodedString, 'base64');
+    }, 300000)
+
+    it("start firefox", async function(){
       // get firefox icon element
-      let firefox = await driver.findElement(webdriver.By.id("abcdesktopio/firefox.d:3.2"));
+      let firefox = await driver.findElement(webdriver.By.id(`ghcr.io/abcdesktopio/firefox.d:${VERSION}`)); 
       await firefox.click();
 
-      // check current state of firefox unitl it is running
-      do {
-        currentState = await firefox.getAttribute("state");
-      } while (currentState !== "running");
-
-      // wait for firefox to start before taking screenshot
-      await new Promise((r) => setTimeout(r, 5000));
+      let applicationstatus = await driver.findElement(webdriver.By.id("applicationstatus"));
+      await driver.wait(webdriver.until.elementIsVisible(applicationstatus), 3000);
       let encodedString = await driver.takeScreenshot();
-      await fs.writeFile('./screens/fry-desktop-firefox-running.png', encodedString, 'base64');
+      await fs.writeFile('./screens/fry-desktop-firefox-houglass-visible.png', encodedString, 'base64');
     }, 300000)
 
     it("open menu", async function(){
