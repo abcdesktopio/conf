@@ -878,7 +878,7 @@ spec:
             else
               echo "Not primary pod, keeping sidecar alive...";
             fi
-            tail -f /dev/null;
+            sleep infinity;
         env:
           - name: NAMESPACE
             valueFrom:
