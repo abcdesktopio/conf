@@ -593,7 +593,6 @@ desktop.pod : {
     'rundbus': { 'name': 'rundbus',  'emptyDir': { 'medium': 'Memory', 'sizeLimit': '8Mi' } },
     'runuser': { 'name': 'runuser',  'emptyDir': { 'medium': 'Memory', 'sizeLimit': '8Mi' } },
     'x11socket': { 'name': 'x11socket',  'emptyDir': { 'medium': 'Memory', 'sizeLimit': '1Ki' } },
-    'cupsdsocket': { 'name': 'cupsdsocket',  'emptyDir': { 'medium': 'Memory', 'sizeLimit': '1Ki' } },
     'extrausers': { 'name': 'extrausers',  'emptyDir': { 'medium': 'Memory', 'sizeLimit': '1Mi' } },
     'sudoers': { 'name': 'sudoers',  'emptyDir': { 'medium': 'Memory', 'sizeLimit': '1Mi' } }
   },
@@ -605,7 +604,6 @@ desktop.pod : {
     'rundbus': { 'name': 'rundbus',  'mountPath': '/var/run/dbus' },
     'runuser': { 'name': 'runuser',  'mountPath': '/run/user/' },
     'x11socket': { 'name': 'x11socket',  'mountPath': '/tmp/.X11-unix' },
-    'cupsdsocket': { 'name': 'cupsdsocket',  'mountPath': '/tmp/.cupsd' },
     'extrausers': { 'name': 'extrausers',  'mountPath': '/var/lib/extrausers' },
     'sudoers': { 'name': 'sudoers', 'mountPath': '/etc/sudoers.d' }
   },
@@ -613,7 +611,7 @@ desktop.pod : {
   # include x11 service 
   'graphical' : {
     'image': { 'default': 'ghcr.io/abcdesktopio/oc.user.ubuntu.sudo.26.04:4.4' },
-    'volumes': [ 'sudoers', 'extrausers', 'x11socket', 'cupsdsocket', 'tmp', 'run', 'log', 'rundbus', 'runuser' ],
+    'volumes': [ 'sudoers', 'extrausers', 'x11socket', 'tmp', 'run', 'log', 'rundbus', 'runuser' ],
     'imagePullPolicy': 'Always',
     'enable': True,
     'acl': { 'permit': [ 'all' ] },
@@ -658,7 +656,7 @@ desktop.pod : {
   # container printer
   # printer is a cupsd service 
   'printer' : { 
-    'volumes': [ 'tmp', 'cupsdsocket' ],
+    'volumes': [ 'tmp' ],
     'image': 'ghcr.io/abcdesktopio/oc.cupsd:4.3',
     'imagePullPolicy': 'IfNotPresent',
     'enable': False,
@@ -732,7 +730,7 @@ desktop.pod : {
   'ephemeral_container': {
     'enable': True,
     'imagePullPolicy': 'IfNotPresent',
-    'volumes': [ 'sudoers', 'extrausers', 'x11socket', 'cupsdsocket', 'tmp', 'run', 'log', 'rundbus', 'runuser' ],
+    'volumes': [ 'sudoers', 'extrausers', 'x11socket', 'tmp', 'run', 'log', 'rundbus', 'runuser' ],
     'acl':  { 'permit': [ 'all' ] },
     'securityContext': { 
         'supplementalGroups': [ '{{ supplementalGroups }}' ],
