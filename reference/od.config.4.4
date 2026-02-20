@@ -685,7 +685,7 @@ desktop.pod : {
   'sound': { 
     'volumes': [ 'extrausers', 'tmp', 'home', 'log' ],
     'image': 'ghcr.io/abcdesktopio/oc.pulseaudio:4.4',
-    'imagePullPolicy': 'IfNotPresent',
+    'imagePullPolicy': 'Always',
     'enable': True,
     'tcpport': 29788,
     'acl':  { 'permit': [ 'all' ] }
