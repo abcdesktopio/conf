@@ -62,6 +62,17 @@ metadata:
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  name: abcdesktop-version-config
+data:
+  versionConfig.json: |-
+    {
+      "ABCDESKTOP_VERSION": "4.4",
+      "ABCDESKTOP_APPLICATIONS_LIST_URL": "https://raw.githubusercontent.com/abcdesktopio/images/refs/heads/main/appLists/appList.4.4.json"
+    }
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
   name: configmap-mongodb-scripts
   labels:
     abcdesktop/role: mongodb
@@ -1355,7 +1366,7 @@ spec:
       containers:
       - name: console
         imagePullPolicy: Always
-        image: ghcr.io/abcdesktopio/console:4.3
+        image: ghcr.io/abcdesktopio/console:4.4
         ports:
           - containerPort: 80
         env:
@@ -1370,6 +1381,16 @@ spec:
           requests:
             cpu: 0.1
             memory: 16Mi
+        volumeMounts:
+          - name: version-config-volume
+            mountPath: /usr/share/nginx/html/config/versionConfig.json
+            subPath: versionConfig.json
+            readOnly: true
+      volumes:
+        - name: version-config-volume
+          configMap:
+            name: version-config
+
 ---
 apiVersion: apps/v1
 kind: Deployment
