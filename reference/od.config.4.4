@@ -610,7 +610,7 @@ desktop.pod : {
   # graphical is the main abcdesktop container 
   # include x11 service 
   'graphical' : {
-    'image': { 'default': 'ghcr.io/abcdesktopio/oc.user.ubuntu.sudo.26.04:4.4' },
+    'image': { 'default': 'ghcr.io/abcdesktopio/oc.user.ubuntu.sudo.24.04:4.3' },
     'volumes': [ 'sudoers', 'extrausers', 'x11socket', 'tmp', 'run', 'log', 'rundbus', 'runuser' ],
     'imagePullPolicy': 'Always',
     'enable': True,
@@ -686,7 +686,7 @@ desktop.pod : {
   # sound is a pulseaudio service instance
   'sound': { 
     'volumes': [ 'extrausers', 'tmp', 'home', 'log' ],
-    'image': 'ghcr.io/abcdesktopio/oc.pulseaudio:4.4',
+    'image': 'ghcr.io/abcdesktopio/oc.pulseaudio:4.3',
     'imagePullPolicy': 'Always',
     'enable': True,
     'tcpport': 29788,
