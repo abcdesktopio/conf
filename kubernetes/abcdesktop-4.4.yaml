@@ -618,7 +618,7 @@ data:
     sudo:x:27:{{ uid }}
     lpadmin:x:101:root,{{ uid }}
     {{ gid }}:x:{{ gidNumber }}:{{ uid }}
-    ---
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
