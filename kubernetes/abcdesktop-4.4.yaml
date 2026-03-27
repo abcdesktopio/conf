@@ -907,7 +907,7 @@ spec:
       containers:
       - name: nginx-router
         imagePullPolicy: Always
-        image: ghcr.io/abcdesktopio/route:4.3
+        image: ghcr.io/abcdesktopio/route:4.4
         volumeMounts:
           - name: jwtsigningkeys
             mountPath: "/config.signing"
