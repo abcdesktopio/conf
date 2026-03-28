@@ -909,8 +909,8 @@ spec:
       - name: nginx-router
         imagePullPolicy: Always
         image: ghcr.io/abcdesktopio/route:4.4
-        securityContext:
-          readOnlyRootFilesystem: true
+        # securityContext:
+        #  readOnlyRootFilesystem: true
         ports:
           - containerPort: 80
             name: http
@@ -975,55 +975,55 @@ spec:
             mountPath: "/config.payload"
             readOnly: true
           # non-persistent volumes for nginx
-          - name: etc-nginx-scgi-temp
-            mountPath: /etc/nginx/scgi_temp
-            readOnly: false
-          - name: etc-nginx-uwsgi-temp
-            mountPath: /etc/nginx/uwsgi_temp
-            readOnly: false
-          - name: etc-nginx-fastcgi-temp
-            mountPath: /etc/nginx/fastcgi_temp
-            readOnly: false
-          - name: usr-local-openresty-log
-            mountPath: /usr/local/openresty/nginx/logs
-            readOnly: false
-          - name: etc-nginx-client-body-temp
-            mountPath: /etc/nginx/client_body_temp 
-            readOnly: false
-          - name: etc-nginx-proxy-temp
-            mountPath: /etc/nginx/proxy_temp
-            readOnly: false
-          - name: var-log-nginx
-            mountPath: /var/log/nginx
-            readOnly: false
-          - name: tmp
-            mountPath: /tmp
-            readOnly: false
+          # - name: etc-nginx-scgi-temp
+          #  mountPath: /etc/nginx/scgi_temp
+          #  readOnly: false
+          #- name: etc-nginx-uwsgi-temp
+          #  mountPath: /etc/nginx/uwsgi_temp
+          #  readOnly: false
+          #- name: etc-nginx-fastcgi-temp
+          #  mountPath: /etc/nginx/fastcgi_temp
+          #  readOnly: false
+          #- name: usr-local-openresty-log
+          #  mountPath: /usr/local/openresty/nginx/logs
+          #  readOnly: false
+          #- name: etc-nginx-client-body-temp
+          #  mountPath: /etc/nginx/client_body_temp 
+          #  readOnly: false
+          #- name: etc-nginx-proxy-temp
+          #  mountPath: /etc/nginx/proxy_temp
+          #  readOnly: false
+          #- name: var-log-nginx
+          #  mountPath: /var/log/nginx
+          #  readOnly: false
+          #- name: tmp
+          #  mountPath: /tmp
+          #  readOnly: false
       volumes:
-      - name: etc-nginx-scgi-temp
-        emptyDir: {}
-      - name: etc-nginx-uwsgi-temp
-        emptyDir: {}
-      - name: etc-nginx-fastcgi-temp
-        emptyDir: {}
-      - name: usr-local-openresty-log
-        emptyDir: {}
-      - name: etc-nginx-client-body-temp
-        emptyDir: {}
-      - name: var-nginx-log
-        emptyDir: {}
-      - name: etc-nginx-proxy-temp
-        emptyDir: {}
-      - name: var-log-nginx
-        emptyDir: {}
-      - name: tmp
-        emptyDir: {}
-      - name: jwtsigningkeys
-        secret:
-          secretName: abcdesktopjwtdesktopsigning
-      - name: jwtpayloadkeys
-        secret:
-          secretName: abcdesktopjwtdesktoppayload
+        - name: jwtsigningkeys
+          secret:
+            secretName: abcdesktopjwtdesktopsigning
+        - name: jwtpayloadkeys
+          secret:
+            secretName: abcdesktopjwtdesktoppayload
+        #- name: etc-nginx-scgi-temp
+        #emptyDir: {}
+        #- name: etc-nginx-uwsgi-temp
+        #emptyDir: {}
+        #- name: etc-nginx-fastcgi-temp
+        #emptyDir: {}
+        #- name: usr-local-openresty-log
+        #emptyDir: {}
+        #- name: etc-nginx-client-body-temp
+        #emptyDir: {}
+        #- name: var-nginx-log
+        #emptyDir: {}
+        #- name: etc-nginx-proxy-temp
+        #emptyDir: {}
+        #- name: var-log-nginx
+        #emptyDir: {}
+        #- name: tmp
+        #emptyDir: {}
 ---
 apiVersion: apps/v1
 kind: Deployment
