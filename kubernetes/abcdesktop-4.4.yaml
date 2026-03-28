@@ -904,17 +904,13 @@ spec:
         netpol/nginx: 'true'
         netpol/console: 'true'
     spec:
+      dnsPolicy: ClusterFirst
       containers:
       - name: nginx-router
         imagePullPolicy: Always
         image: ghcr.io/abcdesktopio/route:4.4
-        volumeMounts:
-          - name: jwtsigningkeys
-            mountPath: "/config.signing"
-            readOnly: true
-          - name: jwtpayloadkeys
-            mountPath: "/config.payload"
-            readOnly: true
+        securityContext:
+          readOnlyRootFilesystem: true
         ports:
           - containerPort: 80
             name: http
@@ -970,14 +966,64 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: status.podIP
-      volumes:
+        volumeMounts:
+          # keys for JWT signing and payload
           - name: jwtsigningkeys
-            secret:
-              secretName: abcdesktopjwtdesktopsigning
+            mountPath: "/config.signing"
+            readOnly: true
           - name: jwtpayloadkeys
-            secret:
-              secretName: abcdesktopjwtdesktoppayload
-      dnsPolicy: ClusterFirst
+            mountPath: "/config.payload"
+            readOnly: true
+          # non-persistent volumes for nginx
+          - name: etc-nginx-scgi-temp
+            mountPath: /etc/nginx/scgi_temp
+            readOnly: false
+          - name: etc-nginx-uwsgi-temp
+            mountPath: /etc/nginx/uwsgi_temp
+            readOnly: false
+          - name: etc-nginx-fastcgi-temp
+            mountPath: /etc/nginx/fastcgi_temp
+            readOnly: false
+          - name: usr-local-openresty-log
+            mountPath: /usr/local/openresty/nginx/logs
+            readOnly: false
+          - name: etc-nginx-client-body-temp
+            mountPath: /etc/nginx/client_body_temp 
+            readOnly: false
+          - name: etc-nginx-proxy-temp
+            mountPath: /etc/nginx/proxy_temp
+            readOnly: false
+          - name: var-log-nginx
+            mountPath: /var/log/nginx
+            readOnly: false
+          - name: tmp
+            mountPath: /tmp
+            readOnly: false
+      volumes:
+      - name: etc-nginx-scgi-temp
+        emptyDir: {}
+      - name: etc-nginx-uwsgi-temp
+        emptyDir: {}
+      - name: etc-nginx-fastcgi-temp
+        emptyDir: {}
+      - name: usr-local-openresty-log
+        emptyDir: {}
+      - name: etc-nginx-client-body-temp
+        emptyDir: {}
+      - name: var-nginx-log
+        emptyDir: {}
+      - name: etc-nginx-proxy-temp
+        emptyDir: {}
+      - name: var-log-nginx
+        emptyDir: {}
+      - name: tmp
+        emptyDir: {}
+      - name: jwtsigningkeys
+        secret:
+          secretName: abcdesktopjwtdesktopsigning
+      - name: jwtpayloadkeys
+        secret:
+          secretName: abcdesktopjwtdesktoppayload
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -1001,6 +1047,8 @@ spec:
       - name: nginx
         imagePullPolicy: Always
         image: ghcr.io/abcdesktopio/oc.nginx:4.4
+        securityContext:
+          readOnlyRootFilesystem: true
         ports:
           - containerPort: 80
             name: http
@@ -1023,6 +1071,25 @@ spec:
           requests:
             cpu: 0.1
             memory: 8Mi
+        volumeMounts:
+          # read-write volumes for nginx
+          - name: var-log-volume
+            mountPath: /var/log/nginx
+            readOnly: false
+          - name: var-cache-volume
+            mountPath: /var/cache/nginx
+            readOnly: false
+          - name: var-run-volume
+            mountPath: /var/run
+            readOnly: false
+      volumes:
+        # read-write volumes for nginx
+        - name: var-log-volume
+          emptyDir: {}
+        - name: var-cache-volume
+          emptyDir: {}
+        - name: var-run-volume
+          emptyDir: {}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -1094,6 +1161,7 @@ spec:
                 sleep 2;
               done
       serviceAccountName: pyos-serviceaccount
+      dnsPolicy: ClusterFirst
       containers:
       - name : pyos
         imagePullPolicy: Always
@@ -1198,7 +1266,6 @@ spec:
         - name: volume-abcdesktop-gshadow-templatefile
           configMap:
             name: abcdesktop-gshadow-templatefile
-      dnsPolicy: ClusterFirst
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -1221,6 +1288,8 @@ spec:
       - name: console
         imagePullPolicy: Always
         image: ghcr.io/abcdesktopio/console:4.4
+        securityContext:
+          readOnlyRootFilesystem: true
         ports:
           - containerPort: 80
         env:
@@ -1240,11 +1309,27 @@ spec:
             mountPath: /usr/share/nginx/html/config/versionConfig.json
             subPath: versionConfig.json
             readOnly: true
+          # read-write volumes for nginx
+          - name: var-log-volume
+            mountPath: /var/log/nginx
+            readOnly: false
+          - name: var-cache-volume
+            mountPath: /var/cache/nginx
+            readOnly: false
+          - name: var-run-volume
+            mountPath: /var/run
+            readOnly: false
       volumes:
+        # read-write volumes for nginx
+        - name: var-log-volume
+          emptyDir: {}
+        - name: var-cache-volume
+          emptyDir: {}
+        - name: var-run-volume
+          emptyDir: {}
         - name: version-config-volume
           configMap:
             name: version-config
-
 ---
 apiVersion: apps/v1
 kind: Deployment
