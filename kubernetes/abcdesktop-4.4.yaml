@@ -987,6 +987,9 @@ spec:
           #- name: usr-local-openresty-log
           #  mountPath: /usr/local/openresty/nginx/logs
           #  readOnly: false
+          #- name: var-run-openresty
+          #  mountPath: /var/run/openresty
+          #  readOnly: false
           #- name: etc-nginx-client-body-temp
           #  mountPath: /etc/nginx/client_body_temp 
           #  readOnly: false
