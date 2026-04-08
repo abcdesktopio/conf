@@ -645,7 +645,6 @@ metadata:
     run: mongodb-od
     type: database
     abcdesktop/role: mongodb
-    netpol/mongodb: 'true'
 spec:
   serviceName: mongodb
   replicas: 1
@@ -657,6 +656,8 @@ spec:
       labels:
         run: mongodb-od
         type: database
+        netpol/mongodb: 'true'
+        netpol/dns: 'true'
     spec:
       terminationGracePeriodSeconds: 10
 
