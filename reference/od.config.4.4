@@ -404,60 +404,6 @@ language : [  'de_AT', 'de_BE', 'de_CH', 'de_DE', 'de_LI', 'de_LU', 'en_AG', 'en
 
 
 # WebRTC configuration 
-#
-#
-webrtc.enable : False # by default no sound
-# 
-# install a coturn server first with TLS support
-# /etc/turnserver.conf
-# # minimal configurtion file for /etc/turnserver.conf
-# # use TLS/SSL
-# lt-cred-mech
-# use-auth-secret
-# static-auth-secret=SUPERSECRETFORABCDESKTOPUSERS
-# # Certificate file.
-# # Use an absolute path or path relative to the
-# # configuration file.
-# # Use PEM file format.
-# cert=/etc/certs/fullchain.pem
-# # Private key file.
-# # Use an absolute path or path relative to the
-# # configuration file.
-# # Use PEM file format.
-# pkey=/etc/certs/privkey.pem
-#
-# in most cases, you need a stun and turn servers
-# 
-# webrtc.rtc_configuration:{ 'iceServers':[ {'urls':'stun:stun.l.google.com:19302'} ] }
-# webrtc.coturn: { 
-#  'coturn_static_auth_secret': 'SUPERSECRETFORABCDESKTOPUSERS', 
-#  'ttl':3600, 
-#  'protocol': 'turns',
-#  'url': 'turnserver.domain.local:3478' }
-#  
-#  'coturn_static_auth_secret' is the sahred secret with coturn server
-#  'ttl' : ttl for auth
-#  'protocol': can be 'turn' or 'turns'
-#  'url': turn server or turns server for the web browser 
-#
-# pyos will build the rtc_configuration json conf 
-#
-# webrtc.rtc_configuration becomes
-# # {
-# #   "iceServers": [
-# #       {
-# #           "urls": "stun:stun.l.google.com:19302"
-# #      },
-# #       {
-# #           "urls": "turns:nturns.domain.local:3478",
-# #           "username": "1703086872",
-# #           "credential": "+BuFkb0hFf8pAoFwpp0A0UbO+1k="
-# #       }
-# #   ]
-# # }
-
-
-#
 # webrtc.rtc_constraints
 # webrtc.rtc_constraints: { 'video': False, 'audio': True }
 # For both video and audio, its value is either a boolean or an object. 
@@ -552,9 +498,6 @@ executeclasses : {
 # 'submit' features_permissions can be set to create a desktop
 # uncomment this section to allow frontweb resources user's choice 
 # desktop.features_permissions : [ 'read', 'submit' ]
-
-desktop.appendpathtomounthomevolume: ''
-
 
 # choose theme
 # desktop.theme: [ 'auto', 'linux', 'macosx', 'windows' ]
@@ -690,6 +633,10 @@ desktop.pod : {
   # container init
   # a simple busybox to chowner and chmod of homedir
   # by defaul homedir belongs to root
+  # replace  
+  # 'command':  [ 'sh', '-c', 'chmod 750 ~ && chown {{ uidNumber }}:{{ gidNumber }} ~' ] 
+  # if you disable sudo command into to your user pods, and remove 'sudoers' volume
+  #
   'init': { 
     'volumes': [ 'sudoers', 'tmp', 'home' ],
     'image': 'busybox',
@@ -811,6 +758,43 @@ desktop.homedirectorytype: None  # use a empty dir
 #            'accessModes': [ 'ReadWriteOnce' ] } }
 #
 
+#
+# only if you need to append a path to mounthomevolume
+# the defaut value is ''
+# it can be appendpathtomounthomevolume: '..'
+# the path is always normalized 
+# source code
+# user_homedirectory = os.path.join( self.get_user_homedirectory(authinfo, userinfo), oc.od.settings.desktop.get('appendpathtomounthomevolume','') )
+# user_homedirectory = os.path.normpath( user_homedirectory )
+desktop.appendpathtomounthomevolume: ''
+#
+
+
+#
+# Cache home directory entries
+# 
+# To reduce I/O to the storage backend, or to prevent abcdesktop to rewrite data in '.config' user directory
+# you can defined entries in the desktop.directorytomemoryemptydir option.
+# 
+# The volumes are an an emptyDir (a temporary directory that shares a pod's lifetime) of Memory with a SizeLimit to 8Gi, by default.
+# desktop.directorytomemoryemptydir: [ '.cache', '.config' ]
+# desktop.directorytomemory: { 'emptyDir': { 'medium': 'Memory', 'sizeLimit': '8Gi' } }
+# Mounts:
+#  /home/fry/.cache from cache (rw)
+#  /home/fry/.config from config (rw)
+#   
+# Volumes:
+#   cache:
+#     Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+#     Medium:     Memory
+#     SizeLimit:  8Gi
+#   config:
+#     Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+#     Medium:     Memory
+#     SizeLimit:  8Gi
+#
+# the default value is desktop.directorytomemoryemptydir: []
+# 
 
 #
 # desktop.nodeselector
@@ -858,7 +842,7 @@ desktop.nodeselector: {}
 # desktop.envlocal contains a (key,value) added by default as environment variables to oc.user.
 # Only static variables are defined here.
 # Dynamics values are set by python code 
-#
+# 
 desktop.envlocal: { 'WEBSOCKIFY_HEARTBEAT':'30', 'LIBOVERLAY_SCROLLBAR':'0', 'X11LISTEN':'tcp', 'XDG_RUNTIME_DIR': '/tmp/runtime', 'DISABLE_RTKIT': 'y', 'ABCDESKTOP_FORCE_OVERWRITE_PLASMA_CONFIG': 'true' }
 
 # 
@@ -879,22 +863,19 @@ desktop.removehomedirectory : False
 
 # remove persistent volume default value 
 desktop.removepersistentvolume: False
+
 # remove persistent volume claim default value 
 desktop.removepersistentvolumeclaim: False
 
 
 #
 # desktop default generic user
+#
+# if abcdesktop can't get uid number or gid number
+# we MUST create a posix account 
+# user when anonymous is selected or if the OpenID provider does give this information
+#
 # balloon is the default generic user name.
-# The user is created inside the oc.user container
-# this user MUST exist in the oc.user image
-# If you change this value, you have to rebuild your own oc.user file
-# The script oc.user in Dockerfile oc.user :
-# oc.user Dockerfile commands extract
-#   ENV BUSER balloon
-#   RUN groupadd --gid 4096 $BUSER
-#   RUN useradd --create-home --shell /bin/bash --uid 4096 -g $BUSER --groups lpadmin,sudo $BUSER
-# 
 desktop.username : 'balloon'
 # default user id of desktop.username
 desktop.userid : 4096
