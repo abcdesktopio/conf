@@ -71,6 +71,7 @@ data:
         set $signalling_service_tcp_port        29787; 
         set $sound_service_tcp_port             29788;
         set $microphone_service_tcp_port        29789;
+        set $gamepad_service_tcp_port        	  29790;
 
         # use env vars to read pyos_fqdn and pyos_service_port from ENV
         # env MUST be define in nginx.conf 
