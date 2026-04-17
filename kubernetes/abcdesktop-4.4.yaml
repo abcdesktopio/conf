@@ -663,28 +663,35 @@ spec:
 
       # --- InitContainer to prepare configuration
       initContainers:
-        - name: prepare-config
-          image: ghcr.io/abcdesktopio/mongo:safe8.0
-          imagePullPolicy: Always
-          command:
-            - sh
-            - -c
-            - /scripts/init-container.sh
-          volumeMounts:
-            - name: init-container-script
-              mountPath: /scripts/init-container.sh
-              subPath: init-container.sh
-              readOnly: true          
-            - name: config
-              mountPath: /input/mongod.conf
-              subPath: mongod.conf
-            - name: keyfile
-              mountPath: /input/mongod.keyfile
-              subPath: mongod.keyfile
-            - name: prepared-config
-              mountPath: /work/config
-            - name: logs
-              mountPath: /var/log/mongodb
+      - name: prepare-config
+        image: ghcr.io/abcdesktopio/mongo:safe8.0
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        command:
+          - sh
+          - -c
+          - /scripts/init-container.sh
+        volumeMounts:
+          - name: init-container-script
+            mountPath: /scripts/init-container.sh
+            subPath: init-container.sh
+            readOnly: true
+          - name: config
+            mountPath: /input/mongod.conf
+            subPath: mongod.conf
+          - name: keyfile
+            mountPath: /input/mongod.keyfile
+            subPath: mongod.keyfile
+          - name: prepared-config
+            mountPath: /work/config
+          - name: logs
+            mountPath: /var/log/mongodb
 
       # --- Main MongoDB container
       containers:
@@ -1154,22 +1161,29 @@ spec:
         netpol/nginx: 'true'
     spec:
       initContainers:
-        - name: wait-for-mongo
-          image: ghcr.io/abcdesktopio/mongo:safe8.0
-          command:
-            - sh
-            - -c
-            - |
-              until mongosh --host mongodb --eval "db.adminCommand('ping')" --quiet; do
-                echo "Waiting for MongoDB...";
-                sleep 2;
-              done
+      - name: wait-for-mongo
+        image: ghcr.io/abcdesktopio/mongo:safe8.0
+        resources:
+          limits:
+            cpu: 0.5
+            memory: 512Mi
+          requests:
+            cpu: 0.1
+            memory: 256Mi
+        command:
+          - sh
+          - -c
+          - |
+            until mongosh --host mongodb --eval "db.adminCommand('ping')" --quiet; do
+              echo "Waiting for MongoDB...";
+              sleep 2;
+            done
       serviceAccountName: pyos-serviceaccount
       dnsPolicy: ClusterFirst
       containers:
       - name : pyos
         imagePullPolicy: Always
-        image: ghcr.io/abcdesktopio/pyos:4.4.alpine_latest
+        image: ghcr.io/abcdesktopio/pyos:dev.alpine_latest
         volumeMounts:
           - name: jwtsigningkeys
             mountPath: "/config.signing"
