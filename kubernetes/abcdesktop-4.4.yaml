@@ -876,7 +876,7 @@ spec:
       - name: memcached
         # like image: memcached:alpine 
         imagePullPolicy: Always
-        image: ghcr.io/abcdesktopio/oc.memcached:4.3
+        image: ghcr.io/abcdesktopio/oc.memcached:4.4
         resources:
           limits:
             cpu: 0.2
@@ -1128,7 +1128,7 @@ spec:
             cpu: 0.1
             memory: 32Mi
         # like image: ghcr.io/librespeed/speedtest:master-alpine 
-        image: ghcr.io/abcdesktopio/oc.speedtest:4.3
+        image: ghcr.io/abcdesktopio/oc.speedtest:4.4
         ports:
           - containerPort: 8080
 ---
@@ -1183,7 +1183,7 @@ spec:
       containers:
       - name : pyos
         imagePullPolicy: Always
-        image: ghcr.io/abcdesktopio/pyos:dev.alpine_latest
+        image: ghcr.io/abcdesktopio/pyos:4.4.alpine_latest
         volumeMounts:
           - name: jwtsigningkeys
             mountPath: "/config.signing"
@@ -1371,7 +1371,7 @@ spec:
         # abcdesktopio/docker-test-openldap:master
         # is same as https://github.com/rroemhild/docker-test-openldap
         # but with posixAccount support
-        image: ghcr.io/abcdesktopio/docker-test-openldap:4.3
+        image: ghcr.io/abcdesktopio/docker-test-openldap:4.4
         imagePullPolicy: Always
         resources:
           limits:
