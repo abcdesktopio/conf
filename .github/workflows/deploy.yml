@@ -17,7 +17,7 @@ on:
   workflow_dispatch:
 
 env: 
-    imagetag: "${{ github.event.client_payload.ref || 4.3 }}"
+    imagetag: "${{ vars.ABCDESKTOP_LATEST_RELEASE }}"
     repo: "${{ github.event.client_payload.repo || github.event.repository.name }}"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
