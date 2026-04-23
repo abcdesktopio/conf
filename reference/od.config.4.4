@@ -526,7 +526,7 @@ desktop.pod : {
     'tolerations': []
   },
   'default_volumes': {
-    'shm': { 'name': 'shm', 'emptyDir': { 'medium': 'Memory', 'sizeLimit': '512Mi' } },
+    'shm': { 'name': 'shm', 'emptyDir': { 'medium': 'Memory', 'sizeLimit': '2Gi' } },
     'run': { 'name': 'run', 'emptyDir': { 'medium': 'Memory', 'sizeLimit': '1Mi'    } },
     'tmp': { 'name': 'tmp', 'emptyDir': { 'medium': 'Memory', 'sizeLimit': '8Gi'   } },
     'log': { 'name': 'log', 'emptyDir': { 'medium': 'Memory', 'sizeLimit': '8Gi'   } },
@@ -549,7 +549,7 @@ desktop.pod : {
   # include x11 service 
   'graphical' : {
     'image': { 'default': 'ghcr.io/abcdesktopio/oc.user.ubuntu.sudo.24.04:4.4' },
-    'volumes': [ 'sudoers', 'x11socket', 'tmp', 'run', 'log', 'rundbus', 'runuser' ],
+    'volumes': [ 'sudoers', 'x11socket', 'tmp', 'run', 'log', 'rundbus', 'runuser', 'shm' ],
     'imagePullPolicy': 'Always',
     'enable': True,
     'acl': { 'permit': [ 'all' ] },
@@ -623,7 +623,7 @@ desktop.pod : {
   # container sound
   # sound is a pulseaudio service instance
   'sound': { 
-    'volumes': [ 'tmp', 'home', 'log' ],
+    'volumes': [ 'tmp', 'home', 'log', 'shm' ],
     'image': 'ghcr.io/abcdesktopio/oc.pulseaudio:4.4',
     'imagePullPolicy': 'Always',
     'enable': True,
@@ -663,7 +663,7 @@ desktop.pod : {
   'ephemeral_container': {
     'enable': True,
     'imagePullPolicy': 'IfNotPresent',
-    'volumes': [ 'sudoers', 'x11socket', 'tmp', 'run', 'log', 'rundbus', 'runuser' ],
+    'volumes': [ 'sudoers', 'x11socket', 'tmp', 'run', 'log', 'rundbus', 'runuser', 'shm' ],
     'acl':  { 'permit': [ 'all' ] },
     'securityContext': { 
         'supplementalGroups': [ '{{ supplementalGroups }}' ],
