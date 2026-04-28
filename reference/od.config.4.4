@@ -869,11 +869,11 @@ desktop.removepersistentvolumeclaim: False
 
 
 #
-# desktop default generic user
+# desktop default generic user like guest
 #
-# if abcdesktop can't get uid number or gid number
-# we MUST create a posix account 
-# user when anonymous is selected or if the OpenID provider does give this information
+# if auth manager can't get uid number or gid number
+# This is a default posix account 
+# when anonymous user is selected or if the OpenID provider doesn't provide this information
 #
 # balloon is the default generic user name.
 desktop.username : 'balloon'
@@ -883,7 +883,10 @@ desktop.userid : 4096
 desktop.groupid : 4096
 # default home directory of desktop.username
 desktop.userhomedirectory : '/home/balloon'
+# default password if provider is implicit or external
+desktop.userpasswd : 'lmdpocpetit'
 # END OF DESKTOP OPTIONS
+
 
 
 # 
