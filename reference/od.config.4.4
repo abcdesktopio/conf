@@ -449,7 +449,13 @@ executeclasses : {
     'resources':{
       'requests':{'memory':"576Mi",'cpu':"220m"},
       'limits':  {'memory':"8Gi",'cpu':"4000m"}
-    }
+    },
+   # 'containers': {
+   #  'graphical': { 'resources': { 'requests':{'memory':"256Mi",'cpu':"200m"}, 'limits':  {'memory':"4Gi",   'cpu':"1000m" }} },
+   #  'sound':     { 'resources': { 'requests':{'memory':"64Mi",'cpu':"200m"},  'limits':  {'memory':"256Mi", 'cpu':"400m"  }} },
+   #  'filer':     { 'resources': { 'requests':{'memory':"64Mi",'cpu':"200m"},  'limits':  {'memory':"256Mi", 'cpu':"300m"  }} },
+   #  'printer':   { 'resources': { 'requests':{'memory':"64Mi", 'cpu':"200m"}, 'limits':  {'memory':"256Mi", 'cpu':"300m"  }} }
+   # }
   },
   'bronze':{
     'nodeSelector':None,
