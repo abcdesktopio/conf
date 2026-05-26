@@ -1473,13 +1473,11 @@ metadata:
   labels:
     abcdesktop/role: router
 spec:
-  type: NodePort
   selector:
     run: router-od
   ports:
   - protocol: TCP
     port: 80
-    nodePort: 30443
     targetPort: 80
     name: http
 ---
