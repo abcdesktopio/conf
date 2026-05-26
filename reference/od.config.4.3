@@ -574,10 +574,10 @@ desktop.pod : {
     'tolerations': []
   },
   'default_volumes': {
-    'shm': { 'name': 'shm', 'emptyDir': { 'medium': 'Memory', 'sizeLimit': '512Mi' } },
-    'run': { 'name': 'run', 'emptyDir': { 'medium': 'Memory', 'sizeLimit': '1Mi'    } },
-    'tmp': { 'name': 'tmp', 'emptyDir': { 'medium': 'Memory', 'sizeLimit': '8Gi'   } },
-    'log': { 'name': 'log', 'emptyDir': { 'medium': 'Memory', 'sizeLimit': '8Gi'   } },
+    'shm': { 'name': 'shm', 'emptyDir': { 'medium': 'Memory', 'sizeLimit': '1Gi' } },
+    'run': { 'name': 'run', 'emptyDir': { 'medium': 'Memory', 'sizeLimit': '1Mi' } },
+    'tmp': { 'name': 'tmp', 'emptyDir': { 'medium': 'Memory', 'sizeLimit': '8Gi' } },
+    'log': { 'name': 'log', 'emptyDir': { 'medium': 'Memory', 'sizeLimit': '8Gi' } },
     'rundbus': { 'name': 'rundbus',  'emptyDir': { 'medium': 'Memory', 'sizeLimit': '8Mi' } },
     'runuser': { 'name': 'runuser',  'emptyDir': { 'medium': 'Memory', 'sizeLimit': '8Mi' } },
     'x11socket': { 'name': 'x11socket',  'emptyDir': { 'medium': 'Memory', 'sizeLimit': '1Ki' } },
@@ -601,7 +601,7 @@ desktop.pod : {
   # include x11 service 
   'graphical' : {
     'image': { 'default': 'ghcr.io/abcdesktopio/oc.user.ubuntu.sudo.24.04:4.3' },
-    'volumes': [ 'sudoers', 'extrausers', 'x11socket', 'cupsdsocket', 'tmp', 'run', 'log', 'rundbus', 'runuser' ],
+    'volumes': [ 'sudoers', 'extrausers', 'x11socket', 'cupsdsocket', 'tmp', 'run', 'log', 'rundbus', 'runuser', 'shm' ],
     'imagePullPolicy': 'Always',
     'enable': True,
     'acl': { 'permit': [ 'all' ] },
@@ -675,7 +675,7 @@ desktop.pod : {
   # container sound
   # sound is a pulseaudio service instance
   'sound': { 
-    'volumes': [ 'extrausers', 'tmp', 'home', 'log' ],
+    'volumes': [ 'extrausers', 'tmp', 'home', 'log', 'shm' ],
     'image': 'ghcr.io/abcdesktopio/oc.pulseaudio:4.3',
     'imagePullPolicy': 'IfNotPresent',
     'enable': True,
@@ -720,7 +720,7 @@ desktop.pod : {
   'ephemeral_container': {
     'enable': True,
     'imagePullPolicy': 'IfNotPresent',
-    'volumes': [ 'sudoers', 'extrausers', 'x11socket', 'cupsdsocket', 'tmp', 'run', 'log', 'rundbus', 'runuser' ],
+    'volumes': [ 'sudoers', 'extrausers', 'x11socket', 'cupsdsocket', 'tmp', 'run', 'log', 'rundbus', 'runuser', 'shm' ],
     'acl':  { 'permit': [ 'all' ] },
     'securityContext': { 
         'supplementalGroups': [ '{{ supplementalGroups }}' ],

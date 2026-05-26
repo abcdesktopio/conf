@@ -136,6 +136,7 @@ jwt_token_desktop : {
 # CONTROLLERS SECTION #
 #
 controllers: { 'ManagerController': { 'permitip': [ '10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', 'fd00::/8', '169.254.0.0/16', '127.0.0.0/8' ] },
+               'AccountingController': { 'apikey': [ 'demo' ], 'permitip': [  '10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', 'fd00::/8', '169.254.0.0/16', '127.0.0.0/8' ] },
                'StoreController':   { 'wrapped_key': {} },
                'ComposerController' : { 'requestsallowed' : { 'getdesktopdescription': False } },
                'DesktopController' :  { 'requestsallowed' : { 'dns': False }, 'permitip': [  '10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', 'fd00::/8', '169.254.0.0/16', '127.0.0.0/8' ] } } 
@@ -532,7 +533,7 @@ desktop.pod : {
     'tolerations': []
   },
   'default_volumes': {
-    'shm': { 'name': 'shm', 'emptyDir': { 'medium': 'Memory', 'sizeLimit': '512Mi' } },
+    'shm': { 'name': 'shm', 'emptyDir': { 'medium': 'Memory', 'sizeLimit': '2Gi' } },
     'run': { 'name': 'run', 'emptyDir': { 'medium': 'Memory', 'sizeLimit': '1Mi'    } },
     'tmp': { 'name': 'tmp', 'emptyDir': { 'medium': 'Memory', 'sizeLimit': '8Gi'   } },
     'log': { 'name': 'log', 'emptyDir': { 'medium': 'Memory', 'sizeLimit': '8Gi'   } },
@@ -554,8 +555,8 @@ desktop.pod : {
   # graphical is the main abcdesktop container 
   # include x11 service 
   'graphical' : {
-    'image': { 'default': 'ghcr.io/abcdesktopio/oc.user.ubuntu.sudo.24.04:4.3' },
-    'volumes': [ 'sudoers', 'x11socket', 'tmp', 'run', 'log', 'rundbus', 'runuser' ],
+    'image': { 'default': 'ghcr.io/abcdesktopio/oc.user.ubuntu.sudo.24.04:4.4' },
+    'volumes': [ 'sudoers', 'x11socket', 'tmp', 'run', 'log', 'rundbus', 'runuser', 'shm' ],
     'imagePullPolicy': 'Always',
     'enable': True,
     'acl': { 'permit': [ 'all' ] },
@@ -601,7 +602,7 @@ desktop.pod : {
   # printer is a cupsd service 
   'printer' : { 
     'volumes': [ 'tmp' ],
-    'image': 'ghcr.io/abcdesktopio/oc.cupsd:4.3',
+    'image': 'ghcr.io/abcdesktopio/oc.cupsd:4.4',
     'imagePullPolicy': 'IfNotPresent',
     'enable': False,
     'tcpport': 681,
@@ -620,7 +621,7 @@ desktop.pod : {
   # filer provide upload and download files features
   'filer' : { 
     'volumes': [ 'tmp', 'home', 'log' ],
-    'image': 'ghcr.io/abcdesktopio/oc.filer:4.3',
+    'image': 'ghcr.io/abcdesktopio/oc.filer:4.4',
     'imagePullPolicy':  'IfNotPresent',
     'enable': True,
     'tcpport': 29783,
@@ -629,8 +630,8 @@ desktop.pod : {
   # container sound
   # sound is a pulseaudio service instance
   'sound': { 
-    'volumes': [ 'tmp', 'home', 'log' ],
-    'image': 'ghcr.io/abcdesktopio/oc.pulseaudio:4.3',
+    'volumes': [ 'tmp', 'home', 'log', 'shm' ],
+    'image': 'ghcr.io/abcdesktopio/oc.pulseaudio:4.4',
     'imagePullPolicy': 'Always',
     'enable': True,
     'tcpport': 29788,
@@ -669,7 +670,7 @@ desktop.pod : {
   'ephemeral_container': {
     'enable': True,
     'imagePullPolicy': 'IfNotPresent',
-    'volumes': [ 'sudoers', 'x11socket', 'tmp', 'run', 'log', 'rundbus', 'runuser' ],
+    'volumes': [ 'sudoers', 'x11socket', 'tmp', 'run', 'log', 'rundbus', 'runuser', 'shm' ],
     'acl':  { 'permit': [ 'all' ] },
     'securityContext': { 
         'supplementalGroups': [ '{{ supplementalGroups }}' ],
@@ -875,11 +876,11 @@ desktop.removepersistentvolumeclaim: False
 
 
 #
-# desktop default generic user
+# desktop default generic user like guest
 #
-# if abcdesktop can't get uid number or gid number
-# we MUST create a posix account 
-# user when anonymous is selected or if the OpenID provider does give this information
+# if auth manager can't get uid number or gid number
+# This is a default posix account 
+# when anonymous user is selected or if the OpenID provider doesn't provide this information
 #
 # balloon is the default generic user name.
 desktop.username : 'balloon'
@@ -889,7 +890,10 @@ desktop.userid : 4096
 desktop.groupid : 4096
 # default home directory of desktop.username
 desktop.userhomedirectory : '/home/balloon'
+# default password if provider is implicit or external
+desktop.userpasswd : 'lmdpocpetit'
 # END OF DESKTOP OPTIONS
+
 
 
 # 
