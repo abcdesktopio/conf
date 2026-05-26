@@ -1,0 +1,51 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openapi-od
+  labels:
+    abcdesktop/role: openapi
+spec:
+  selector:
+    matchLabels:
+      run: openapi-od
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: openapi-od
+    spec:
+      containers:
+      - name: openapi
+        resources:
+          limits:
+            cpu: 0.5
+            memory: 128Mi
+          requests:
+            cpu: 0.1
+            memory: 32Mi
+        image: docker.swagger.io/swaggerapi/swagger-ui
+        ports:
+        - containerPort: 80
+        env:
+        - name: PORT
+          value: "80"
+        - name: SWAGGER_JSON_URL
+          value: "/API/openapi"
+        - name: BASE_URL
+          value: "/openapi"
+---       
+kind: Service
+apiVersion: v1
+metadata:
+  name: openapi
+  labels:
+    abcdesktop/role: openapi
+spec:
+  selector:
+    run: openapi-od
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+---
