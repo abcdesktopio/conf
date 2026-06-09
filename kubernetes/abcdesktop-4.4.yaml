@@ -660,7 +660,7 @@ spec:
         netpol/dns: 'true'
     spec:
       terminationGracePeriodSeconds: 10
-
+      automountServiceAccountToken: false
       # --- InitContainer to prepare configuration
       initContainers:
       - name: prepare-config
@@ -872,6 +872,7 @@ spec:
         run: memcached-od
         type: database
     spec:
+      automountServiceAccountToken: false
       containers:
       - name: memcached
         # like image: memcached:alpine 
@@ -912,6 +913,7 @@ spec:
         netpol/nginx: 'true'
         netpol/console: 'true'
     spec:
+      automountServiceAccountToken: false
       dnsPolicy: ClusterFirst
       containers:
       - name: nginx-router
@@ -1054,6 +1056,7 @@ spec:
         run: nginx-od
         type: frontend
     spec:
+      automountServiceAccountToken: false
       containers:
       - name: nginx
         imagePullPolicy: Always
@@ -1118,6 +1121,7 @@ spec:
       labels:
         run: speedtest-od 
     spec:
+      automountServiceAccountToken: false
       containers:
       - name: speedtest
         resources:
@@ -1302,6 +1306,7 @@ spec:
         run: console-od
         type: admin-console
     spec:
+      automountServiceAccountToken: false
       containers:
       - name: console
         imagePullPolicy: Always
@@ -1366,6 +1371,7 @@ spec:
         run: openldap-od
         netpol/dns: 'true'
     spec:
+      automountServiceAccountToken: false
       containers:
       - name: openldap
         # abcdesktopio/docker-test-openldap:master
