@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-abcdesktop
+  namespace: abcdesktop
+  annotations:
+    kubernetes.io/ingress.class: "gce"
+    networking.gke.io/managed-certificates: "abcdesktop-cert"
+spec:
+  rules:
+    - host: demo.gcp.abcdesktop.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: http-router
+                port:
+                  number: 80
