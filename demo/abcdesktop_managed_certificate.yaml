@@ -1,8 +1,0 @@
-apiVersion: networking.gke.io/v1
-kind: ManagedCertificate
-metadata:
-  name: abcdesktop-cert
-  namespace: abcdesktop
-spec:
-  domains:
-    - demo.gcp.abcdesktop.com
