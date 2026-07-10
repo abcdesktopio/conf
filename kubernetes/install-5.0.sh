@@ -358,7 +358,7 @@ do
         display_message_result "$wait_message"	
 done
 
-pods=$(kubectl -n "$NAMESPACE" get pods --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+pods=$(kubectl -n "$NAMESPACE" get pods --template '{{range .items}}{{if ne .status.phase "Succeeded"}}{{.metadata.name}}{{"\n"}}{{end}}{{end}}')
 for p in $pods; 
 do
  	display_message "waiting for pod/$p Ready" "INFO" 

@@ -308,8 +308,8 @@ data:
     SERVICE="${SERVICE:-mongodb}"
     STATEFULSET_NAME="${STATEFULSET_NAME:-mongodb-od}"
     REPLICAS="${REPLICAS:-1}"
-    MONGO_USER="${MONGO_INITDB_ROOT_USERNAME:-admin}"
-    MONGO_PASSWORD="${MONGO_INITDB_ROOT_PASSWORD:-veryStrongPassword}"
+    MONGO_USER="$(cat "${MONGO_INITDB_ROOT_USERNAME_FILE}")" || { echo "Error: username file not found"; exit 1; }
+    MONGO_PASSWORD="$(cat "${MONGO_INITDB_ROOT_PASSWORD_FILE}")" || { echo "Error: password file not found"; exit 1; }
     MONGO_AUTH_DB="${MONGO_AUTH_DB:-admin}"
     SLEEP_TIME=5
     MAX_WAIT_ATTEMPTS=60
@@ -647,7 +647,7 @@ metadata:
     abcdesktop/role: mongodb
 spec:
   serviceName: mongodb
-  replicas: 1
+  replicas: 1 # MONGO_REPLICAS
   selector:
     matchLabels:
       run: mongodb-od
@@ -659,6 +659,8 @@ spec:
         netpol/mongodb: 'true'
         netpol/dns: 'true'
     spec:
+      securityContext:
+        fsGroup: 999
       terminationGracePeriodSeconds: 10
       automountServiceAccountToken: false
       # --- InitContainer to prepare configuration
@@ -728,6 +730,23 @@ spec:
           initialDelaySeconds: 10
           periodSeconds: 10
           failureThreshold: 6
+        livenessProbe:
+          exec:
+            command:
+              - sh
+              - -c
+              - |
+                mongosh \
+                  --quiet \
+                  --username "$(cat /etc/abcdesktop/admin/MONGO_ROOT_USERNAME)" \
+                  --password "$(cat /etc/abcdesktop/admin/MONGO_ROOT_PASSWORD)" \
+                  --authenticationDatabase admin \
+                  --eval "try { db.adminCommand('ping').ok === 1 ? quit(0) : quit(1) } catch(e) { quit(1) }"
+          initialDelaySeconds: 60
+          periodSeconds: 20
+          timeoutSeconds: 10
+          failureThreshold: 3
+          successThreshold: 1          
         resources:
           limits:
             cpu: 500m
@@ -735,64 +754,6 @@ spec:
           requests:
             cpu: 100m
             memory: 128Mi
-
-      # --- Sidecar: replica set manager ---
-      - name: replica-manager
-        image: ghcr.io/abcdesktopio/mongo:safe8.0
-        imagePullPolicy: Always
-        command:
-          - sh
-          - -c
-          - |
-            # Execute init-replica.sh only on pod 0
-            if [ "$(hostname)" = "mongodb-od-0" ]; then
-              echo "Running replica set initialization on $(hostname)...";
-              /bin/bash /scripts/init-replica.sh;
-            else
-              echo "Not primary pod, keeping sidecar alive...";
-            fi
-            sleep infinity;
-        env:
-          - name: NAMESPACE
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.namespace
-          - name: SERVICE
-            value: mongodb
-          - name: STATEFULSET_NAME
-            value: mongodb-od
-          - name: REPLICAS
-            value: "1"
-          - name: MONGO_INITDB_ROOT_USERNAME
-            valueFrom:
-              secretKeyRef:
-                name: secret-mongodb
-                key: MONGO_ROOT_USERNAME
-          - name: MONGO_INITDB_ROOT_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: secret-mongodb
-                key: MONGO_ROOT_PASSWORD
-          - name: MONGO_AUTH_DB
-            value: admin
-        volumeMounts:
-          - name: init-replica-script
-            mountPath: /scripts/init-replica.sh
-            subPath: init-replica.sh
-            readOnly: true
-        resources:
-          limits:
-            cpu: 500m
-            memory: 512Mi
-          requests:
-            cpu: 100m
-            memory: 128Mi
-          # limits:
-          #   cpu: 100m
-          #   memory: 128Mi
-          # requests:
-          #   cpu: 50m
-          #   memory: 64Mi
 
       # --- Non-persistent volumes
       volumes:
@@ -815,35 +776,28 @@ spec:
             items:
             - key: MONGO_ROOT_USERNAME
               path: admin/MONGO_ROOT_USERNAME
-              mode: 0444
+              mode: 0400
             - key: MONGO_ROOT_PASSWORD
               path: admin/MONGO_ROOT_PASSWORD
-              mode: 0444
+              mode: 0400
             - key: MONGO_USERNAME
               path: MONGO_USERNAME
-              mode: 0444
+              mode: 0400
             - key: MONGO_PASSWORD
               path: MONGO_PASSWORD
-              mode: 0444
+              mode: 0400
             - key: MONGO_USERS_LIST
               path: MONGO_USERS_LIST
-              mode: 0444
+              mode: 0400
             - key: MONGO_DBS_LIST
               path: MONGO_DBS_LIST
-              mode: 0444
+              mode: 0400
         - name: init-script
           configMap:
             name: configmap-mongodb-scripts
             items:
               - key: init.js
                 path: init.js
-        - name: init-replica-script
-          configMap:
-            name: configmap-mongodb-scripts
-            items:
-              - key: init-replica.sh
-                path: init-replica.sh
-            defaultMode: 0755
         - name: keyfile
           secret:
             secretName: abcdesktop-mongod-keyfile
@@ -854,6 +808,79 @@ spec:
         # --- Non-persistent volume for MongoDB data
         - name: data
           emptyDir: {}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mongodb-init-replica
+  labels:
+    abcdesktop/role: mongodb
+spec:
+  backoffLimit: 5
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: init-replica
+        image: ghcr.io/abcdesktopio/mongo:safe8.0
+        imagePullPolicy: Always
+        command:
+          - bash
+          - -c
+          - |
+            /scripts/init-replica.sh
+        env:
+          - name: NAMESPACE
+            value: metadata.namespace
+          - name: SERVICE
+            value: mongodb
+          - name: STATEFULSET_NAME
+            value: mongodb-od
+          - name: REPLICAS
+            value: "1" # MONGO_REPLICAS
+          - name: MONGO_INITDB_ROOT_USERNAME_FILE
+            value: /etc/abcdesktop/admin/MONGO_ROOT_USERNAME
+          - name: MONGO_INITDB_ROOT_PASSWORD_FILE
+            value: /etc/abcdesktop/admin/MONGO_ROOT_PASSWORD
+          - name: MONGO_AUTH_DB
+            value: admin
+        volumeMounts:
+          - name: scripts
+            mountPath: /scripts/init-replica.sh
+            subPath: init-replica.sh
+          - name: abcdesktop
+            mountPath: /etc/abcdesktop
+            readOnly: true
+      volumes:
+        - name: scripts
+          configMap:
+            name: configmap-mongodb-scripts
+            defaultMode: 0755
+            items:
+              - key: init-replica.sh
+                path: init-replica.sh  
+        - name: abcdesktop
+          secret:
+            secretName: secret-mongodb
+            items:
+            - key: MONGO_ROOT_USERNAME
+              path: admin/MONGO_ROOT_USERNAME
+              mode: 0400
+            - key: MONGO_ROOT_PASSWORD
+              path: admin/MONGO_ROOT_PASSWORD
+              mode: 0400
+            - key: MONGO_USERNAME
+              path: MONGO_USERNAME
+              mode: 0400
+            - key: MONGO_PASSWORD
+              path: MONGO_PASSWORD
+              mode: 0400
+            - key: MONGO_USERS_LIST
+              path: MONGO_USERS_LIST
+              mode: 0400
+            - key: MONGO_DBS_LIST
+              path: MONGO_DBS_LIST
+              mode: 0400                
 ---
 apiVersion: apps/v1
 kind: Deployment
