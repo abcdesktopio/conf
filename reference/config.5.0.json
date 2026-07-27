@@ -1,0 +1,834 @@
+{
+  "default_host_url": "http://localhost",
+  "websocketrouting": "http_origin",
+  "server.socket_host": "0.0.0.0",
+  "server.socket_port": 8000,
+  "server.geolocation_ipaddr": "127.0.0.1",
+  "jwt_token_user": {
+    "exp": 360,
+    "jwtuserprivatekeyfile": "/config.usersigning/abcdesktop_jwt_user_signing_private_key.pem",
+    "jwtuserpublickeyfile": "/config.usersigning/abcdesktop_jwt_user_signing_public_key.pem"
+  },
+  "jwt_token_desktop": {
+    "exp": 420,
+    "jwtdesktopprivatekeyfile": "/config.signing/abcdesktop_jwt_desktop_signing_private_key.pem",
+    "jwtdesktoppublickeyfile": "/config.signing/abcdesktop_jwt_desktop_signing_public_key.pem",
+    "payloaddesktoppublickeyfile": "/config.payload/abcdesktop_jwt_desktop_payload_public_key.pem"
+  },
+  "controllers": {
+    "ManagerController": {
+      "permitip": [
+        "10.0.0.0/8",
+        "172.16.0.0/12",
+        "192.168.0.0/16",
+        "fd00::/8",
+        "169.254.0.0/16",
+        "127.0.0.0/8"
+      ]
+    },
+    "AccountingController": {
+      "apikey": [
+        "demo"
+      ],
+      "permitip": [
+        "10.0.0.0/8",
+        "172.16.0.0/12",
+        "192.168.0.0/16",
+        "fd00::/8",
+        "169.254.0.0/16",
+        "127.0.0.0/8"
+      ]
+    },
+    "StoreController": {
+      "wrapped_key": {}
+    },
+    "ComposerController": {
+      "requestsallowed": {
+        "getdesktopdescription": false
+      }
+    },
+    "DesktopController": {
+      "requestsallowed": {
+        "dns": false
+      },
+      "permitip": [
+        "10.0.0.0/8",
+        "172.16.0.0/12",
+        "192.168.0.0/16",
+        "fd00::/8",
+        "169.254.0.0/16",
+        "127.0.0.0/8"
+      ]
+    }
+  },
+  "authmanagers": {
+    "external": {
+      "providers": {}
+    },
+    "metaexplicit": {},
+    "explicit": {
+      "show_domains": true,
+      "providers": {
+        "planet": {
+          "config_ref": "ldapconfig",
+          "enabled": true
+        }
+      }
+    },
+    "implicit": {
+      "providers": {
+        "anonymous": {
+          "displayname": "Anonymous",
+          "textcolor": "black",
+          "backgroundcolor": "#FFFFFF",
+          "icon": "img/auth/anonymous_icon.svg",
+          "caption": "Have a look !",
+          "userid": "anonymous",
+          "username": "Anonymous",
+          "policies": {
+            "acl": {
+              "permit": [
+                "all"
+              ]
+            },
+            "rules": {
+              "rule-net-home": {
+                "conditions": [
+                  {
+                    "network": "10.0.0.0/8",
+                    "expected": true
+                  }
+                ],
+                "expected": true,
+                "label": "tennetwork"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "ldapconfig": {
+    "planet": {
+      "default": true,
+      "ldap_timeout": 15,
+      "ldap_protocol": "ldap",
+      "ldap_basedn": "ou=people,dc=planetexpress,dc=com",
+      "servers": [
+        "openldap"
+      ],
+      "secure": false,
+      "serviceaccount": {
+        "login": "cn=admin,dc=planetexpress,dc=com",
+        "password": "GoodNewsEveryone"
+      },
+      "policies": {
+        "acls": null,
+        "rules": {
+          "rule-dummy": {
+            "conditions": [
+              {
+                "boolean": true,
+                "expected": true
+              }
+            ],
+            "expected": true,
+            "label": "labeltrue"
+          },
+          "rule-ship": {
+            "conditions": [
+              {
+                "memberOf": "cn=ship_crew,ou=people,dc=planetexpress,dc=com",
+                "expected": true
+              }
+            ],
+            "expected": true,
+            "label": "shipcrew"
+          },
+          "rule-test": {
+            "conditions": [
+              {
+                "memberOf": "cn=admin_staff,ou=people,dc=planetexpress,dc=com",
+                "expected": true
+              }
+            ],
+            "expected": true,
+            "label": "adminstaff"
+          }
+        }
+      }
+    }
+  },
+  "OAUTHLIB_INSECURE_TRANSPORT": true,
+  "OAUTHLIB_RELAX_TOKEN_SCOPE": true,
+  "fail2ban": {
+    "enable": false,
+    "banexpireafterseconds": 600,
+    "failsbeforeban": 5,
+    "protectednetworks": [
+      "192.168.1.0/24"
+    ]
+  },
+  "auth.logmein": {
+    "enable": false,
+    "network_list": [
+      "0.0.0.0/0"
+    ],
+    "permit_querystring": true,
+    "http_attribut": "ABCDESKTOPUSERCERT"
+  },
+  "auth.prelogin": {
+    "enable": false,
+    "url": "https://FQHN/index.session.mustache.html",
+    "network_list": [
+      "0.0.0.0/0"
+    ],
+    "http_attribut ": "abcuserid",
+    "http_attribut_to_force_auth_prelogin": "MUST_USE_PRELOGIN"
+  },
+  "language": [
+    "de_AT",
+    "de_BE",
+    "de_CH",
+    "de_DE",
+    "de_LI",
+    "de_LU",
+    "en_AG",
+    "en_AU",
+    "en_BW",
+    "en_CA",
+    "en_DK",
+    "en_GB",
+    "en_HK",
+    "en_IE",
+    "en_IN",
+    "en_NG",
+    "en_NZ",
+    "en_PH",
+    "en_SG",
+    "en_US",
+    "en_ZA",
+    "en_ZM",
+    "en_ZW",
+    "fr_BE",
+    "fr_CA",
+    "fr_CH",
+    "fr_FR",
+    "fr_LU"
+  ],
+  "webrtc.rtc_constraints": {
+    "video": false,
+    "audio": true
+  },
+  "K8S_BOUND_PVC_TIMEOUT_SECONDS": 60,
+  "K8S_BOUND_PVC_MAX_EVENT": 5,
+  "K8S_CREATE_POD_TIMEOUT_SECONDS": 300,
+  "K8S_CREATE_EPHEMERALCONTAINER_TIMEOUT_SECONDS": 120,
+  "executeclasses": {
+    "default": {
+      "nodeSelector": null,
+      "description": "default: up to 4 CPU cores and 8Gi",
+      "runtimeClassName": null,
+      "resources": {
+        "requests": {
+          "memory": "576Mi",
+          "cpu": "220m"
+        },
+        "limits": {
+          "memory": "8Gi",
+          "cpu": "4000m"
+        }
+      }
+    },
+    "bronze": {
+      "nodeSelector": null,
+      "runtimeClassName": null,
+      "description": "bronze: up to 2 CPU cores and 8Gi",
+      "resources": {
+        "requests": {
+          "memory": "576Mi",
+          "cpu": "220m"
+        },
+        "limits": {
+          "memory": "8Gi",
+          "cpu": "2000m"
+        }
+      }
+    },
+    "silver": {
+      "nodeSelector": null,
+      "description": "silver: 4 CPU cores and 32Gi RAM",
+      "runtimeClassName": null,
+      "resources": {
+        "requests": {
+          "memory": "2Gi",
+          "cpu": "2000m"
+        },
+        "limits": {
+          "memory": "32Gi",
+          "cpu": "4000m"
+        }
+      }
+    },
+    "gold": {
+      "containers": {
+        "graphical": {
+          "resources": {
+            "limits": {
+              "nvidia.com/gpu": "1"
+            }
+          }
+        }
+      },
+      "nodeSelector": {
+        "nvidia.com/gpu.present": "true"
+      },
+      "description": "gold: 4 CPU cores, 32Gi RAM and 1 GPU",
+      "runtimeClassName": "nvidia",
+      "resources": {
+        "requests": {
+          "memory": "2Gi",
+          "cpu": "4000m"
+        },
+        "limits": {
+          "memory": "32Gi",
+          "cpu": "4000m"
+        }
+      }
+    },
+    "platinum": {
+      "containers": {
+        "graphical": {
+          "resources": {
+            "limits": {
+              "nvidia.com/gpu": "1"
+            }
+          }
+        }
+      },
+      "nodeSelector": {
+        "nvidia.com/gpu.present": "true"
+      },
+      "description": "platinum: 8 CPU cores, 128G RAM and 1 GPU",
+      "runtimeClassName": "nvidia",
+      "resources": {
+        "requests": {
+          "memory": "4Gi",
+          "cpu": "4000m"
+        },
+        "limits": {
+          "memory": "128Gi",
+          "cpu": "8000m"
+        }
+      }
+    }
+  },
+  "desktop.theme": "auto",
+  "desktop.pulseaudiosocketpath": "/tmp/.pulse.sock",
+  "desktop.pod": {
+    "spec": {
+      "shareProcessNamespace": false,
+      "shareProcessMemory": true,
+      "securityContext": {
+        "supplementalGroups": [
+          "{{ supplementalGroups }}"
+        ],
+        "runAsUser": "{{ uidNumber }}",
+        "runAsGroup": "{{ gidNumber }}"
+      },
+      "tolerations": []
+    },
+    "default_volumes": {
+      "shm": {
+        "name": "shm",
+        "emptyDir": {
+          "medium": "Memory",
+          "sizeLimit": "2Gi"
+        }
+      },
+      "run": {
+        "name": "run",
+        "emptyDir": {
+          "medium": "Memory",
+          "sizeLimit": "1Mi"
+        }
+      },
+      "tmp": {
+        "name": "tmp",
+        "emptyDir": {
+          "medium": "Memory",
+          "sizeLimit": "8Gi"
+        }
+      },
+      "log": {
+        "name": "log",
+        "emptyDir": {
+          "medium": "Memory",
+          "sizeLimit": "8Gi"
+        }
+      },
+      "rundbus": {
+        "name": "rundbus",
+        "emptyDir": {
+          "medium": "Memory",
+          "sizeLimit": "8Mi"
+        }
+      },
+      "runuser": {
+        "name": "runuser",
+        "emptyDir": {
+          "medium": "Memory",
+          "sizeLimit": "8Mi"
+        }
+      },
+      "x11socket": {
+        "name": "x11socket",
+        "emptyDir": {
+          "medium": "Memory",
+          "sizeLimit": "1Ki"
+        }
+      },
+      "sudoers": {
+        "name": "sudoers",
+        "emptyDir": {
+          "medium": "Memory",
+          "sizeLimit": "1Mi"
+        }
+      }
+    },
+    "default_volumes_mount": {
+      "shm": {
+        "name": "shm",
+        "mountPath": "/dev/shm"
+      },
+      "run": {
+        "name": "run",
+        "mountPath": "/var/run/desktop"
+      },
+      "tmp": {
+        "name": "tmp",
+        "mountPath": "/tmp"
+      },
+      "log": {
+        "name": "log",
+        "mountPath": "/var/log/desktop"
+      },
+      "rundbus": {
+        "name": "rundbus",
+        "mountPath": "/var/run/dbus"
+      },
+      "runuser": {
+        "name": "runuser",
+        "mountPath": "/run/user/"
+      },
+      "x11socket": {
+        "name": "x11socket",
+        "mountPath": "/tmp/.X11-unix"
+      },
+      "sudoers": {
+        "name": "sudoers",
+        "mountPath": "/etc/sudoers.d"
+      }
+    },
+    "graphical": {
+      "image": {
+        "default": "ghcr.io/abcdesktopio/oc.user.ubuntu.sudo.24.04:4.4"
+      },
+      "volumes": [
+        "sudoers",
+        "x11socket",
+        "tmp",
+        "run",
+        "log",
+        "rundbus",
+        "runuser",
+        "shm"
+      ],
+      "imagePullPolicy": "Always",
+      "enable": true,
+      "acl": {
+        "permit": [
+          "all"
+        ]
+      },
+      "waitportbin": "/composer/node/wait-port/node_modules/.bin/wait-port",
+      "securityContext": {
+        "readOnlyRootFilesystem": false,
+        "allowPrivilegeEscalation": true,
+        "supplementalGroups": [
+          "{{ supplementalGroups }}"
+        ],
+        "runAsUser": "{{ uidNumber }}",
+        "runAsGroup": "{{ gidNumber }}",
+        "runAsNonRoot": true
+      },
+      "tcpport": 6081,
+      "secrets_requirement": [
+        "abcdesktop/vnc",
+        "abcdesktop/kerberos"
+      ],
+      "waitfor_services": [
+        "xserver",
+        "novnc",
+        "spawner-service",
+        "plasmashell"
+      ],
+      "waitfor_processes": [
+        "kwin_x11",
+        "plasmashell"
+      ],
+      "waitfor_listeningservices": [
+        "graphical",
+        "spawner"
+      ]
+    },
+    "spawner": {
+      "enable": true,
+      "tcpport": 29786,
+      "waitportbin": "/composer/node/wait-port/node_modules/.bin/wait-port",
+      "acl": {
+        "permit": [
+          "all"
+        ]
+      }
+    },
+    "broadcast": {
+      "enable": true,
+      "tcpport": 29784,
+      "acl": {
+        "permit": [
+          "all"
+        ]
+      }
+    },
+    "webshell": {
+      "enable": true,
+      "tcpport": 29781,
+      "acl": {
+        "permit": [
+          "all"
+        ]
+      }
+    },
+    "printer": {
+      "volumes": [
+        "tmp"
+      ],
+      "image": "ghcr.io/abcdesktopio/oc.cupsd:4.4",
+      "imagePullPolicy": "IfNotPresent",
+      "enable": false,
+      "tcpport": 681,
+      "securityContext": {
+        "runAsUser": 0,
+        "runAsGroup": 0
+      },
+      "acl": {
+        "permit": [
+          "all"
+        ]
+      }
+    },
+    "printerfile": {
+      "enable": true,
+      "tcpport": 29782,
+      "acl": {
+        "permit": [
+          "all"
+        ]
+      }
+    },
+    "filer": {
+      "volumes": [
+        "tmp",
+        "home",
+        "log"
+      ],
+      "image": "ghcr.io/abcdesktopio/oc.filer:4.4",
+      "imagePullPolicy": "IfNotPresent",
+      "enable": true,
+      "tcpport": 29783,
+      "acl": {
+        "permit": [
+          "all"
+        ]
+      }
+    },
+    "sound": {
+      "volumes": [
+        "tmp",
+        "home",
+        "log",
+        "shm"
+      ],
+      "image": "ghcr.io/abcdesktopio/oc.pulseaudio:4.4",
+      "imagePullPolicy": "Always",
+      "enable": true,
+      "tcpport": 29788,
+      "acl": {
+        "permit": [
+          "all"
+        ]
+      }
+    },
+    "init": {
+      "volumes": [
+        "sudoers",
+        "tmp",
+        "home"
+      ],
+      "image": "busybox",
+      "enable": true,
+      "imagePullPolicy": "IfNotPresent",
+      "securityContext": {
+        "runAsUser": 0
+      },
+      "acl": {
+        "permit": [
+          "all"
+        ]
+      },
+      "command": [
+        "sh",
+        "-c",
+        "echo \"$LOGNAME ALL=(ALL:ALL) ALL\" > /etc/sudoers.d/$LOGNAME && chmod 440 /etc/sudoers.d/* && chown 0:0 /etc/sudoers.d/* && chmod 755 /etc/sudoers.d && chown 0:0 /etc/sudoers.d && chmod 750 ~ && chown {{ uidNumber }}:{{ gidNumber }} ~"
+      ]
+    },
+    "ephemeral_container": {
+      "enable": true,
+      "imagePullPolicy": "IfNotPresent",
+      "volumes": [
+        "sudoers",
+        "x11socket",
+        "tmp",
+        "run",
+        "log",
+        "rundbus",
+        "runuser",
+        "shm"
+      ],
+      "acl": {
+        "permit": [
+          "all"
+        ]
+      },
+      "securityContext": {
+        "supplementalGroups": [
+          "{{ supplementalGroups }}"
+        ],
+        "readOnlyRootFilesystem": false,
+        "allowPrivilegeEscalation": true,
+        "runAsUser": "{{ uidNumber }}",
+        "runAsGroup": "{{ gidNumber }}"
+      }
+    },
+    "pod_application": {
+      "enable": true,
+      "imagePullPolicy": "IfNotPresent",
+      "volumes": [
+        "sudoers",
+        "tmp",
+        "run",
+        "log",
+        "rundbus",
+        "runuser"
+      ],
+      "securityContext": {
+        "supplementalGroups": [
+          "{{ supplementalGroups }}"
+        ],
+        "readOnlyRootFilesystem": false,
+        "allowPrivilegeEscalation": true,
+        "runAsUser": "{{ uidNumber }}",
+        "runAsGroup": "{{ gidNumber }}"
+      },
+      "tolerations": [],
+      "acl": {
+        "permit": [
+          "all"
+        ]
+      }
+    }
+  },
+  "desktop.policies": {
+    "rules": {}
+  },
+  "desktop.homedirectorytype": null,
+  "desktop.appendpathtomounthomevolume": "",
+  "desktop.nodeselector": {},
+  "desktop.envlocal": {
+    "WEBSOCKIFY_HEARTBEAT": "30",
+    "LIBOVERLAY_SCROLLBAR": "0",
+    "X11LISTEN": "tcp",
+    "XDG_RUNTIME_DIR": "/tmp/runtime",
+    "DISABLE_RTKIT": "y",
+    "ABCDESKTOP_FORCE_OVERWRITE_PLASMA_CONFIG": "true"
+  },
+  "desktop.removehomedirectory": false,
+  "desktop.removepersistentvolume": false,
+  "desktop.removepersistentvolumeclaim": false,
+  "desktop.username": "balloon",
+  "desktop.userid": 4096,
+  "desktop.groupid": 4096,
+  "desktop.userhomedirectory": "/home/balloon",
+  "desktop.userpasswd": "lmdpocpetit",
+  "dock": {
+    "webshell": {
+      "name": "WebShell",
+      "acl": {
+        "permit": [
+          "all"
+        ]
+      },
+      "keyword": "terminal,shell,webshell,bash,cmd",
+      "showinview": "dock",
+      "launch": "frontendjs.webshell",
+      "displayname": "Web Shell",
+      "execmode": "frontendjs",
+      "cat": "utilities,development",
+      "id": "webshell.d",
+      "icon": "webshell.svg"
+    }
+  },
+  "desktop.zoom": 1,
+  "front.menuconfig": {
+    "settings": true,
+    "appstore": true,
+    "screenshot": true,
+    "download": true,
+    "logout": true,
+    "disconnect": true
+  },
+  "front.imagenotification": {
+    "ephemeral_container": false,
+    "pod_application": false
+  },
+  "desktop.defaultbackgroundcolors": [
+    "#6EC6F0",
+    "#333333",
+    "#666666",
+    "#CD3C14",
+    "#4BB4E6",
+    "#50BE87",
+    "#A885D8",
+    "#FFB4E6"
+  ],
+  "tipsinfo": {
+    "networkmap": false
+  },
+  "logging": {
+    "version": 1,
+    "disable_existing_loggers": false,
+    "formatters": {
+      "access": {
+        "format": "%(message)s - user: %(userid)s",
+        "datefmt": "%Y-%m-%d %H:%M:%S"
+      },
+      "standard": {
+        "format": "%(asctime)s %(nodename)s %(thread)d %(module)s [%(levelname)-7s] %(name)s.%(funcName)s:%(userid)s %(message)s",
+        "datefmt": "%Y-%m-%d %H:%M:%S"
+      },
+      "syslog": {
+        "format": "%(asctime)s %(nodename)s %(thread)s %(levelname)s %(module)s %(process)d %(name)s.%(funcName)s:%(userid)s %(message)s",
+        "datefmt": "%Y-%m-%d %H:%M:%S"
+      },
+      "graylog": {
+        "format": "%(levelname)s %(nodename)s %(thread)s %(module)s %(process)d %(name)s.%(funcName)s:%(userid)s %(message)s"
+      }
+    },
+    "filters": {
+      "odcontext": {
+        "()": "oc.logging.OdContextFilter"
+      }
+    },
+    "handlers": {
+      "stdout": {
+        "class": "logging.StreamHandler",
+        "filters": [
+          "odcontext"
+        ],
+        "level": "DEBUG",
+        "formatter": "standard",
+        "stream": "ext://sys.stdout"
+      },
+      "stderr": {
+        "class": "logging.StreamHandler",
+        "filters": [
+          "odcontext"
+        ],
+        "level": "ERROR",
+        "formatter": "standard",
+        "stream": "ext://sys.stderr"
+      },
+      "trace": {
+        "class": "logging.handlers.RotatingFileHandler",
+        "level": "DEBUG",
+        "filters": [
+          "odcontext"
+        ],
+        "formatter": "standard",
+        "filename": "logs/trace.log",
+        "maxBytes": 10485760,
+        "backupCount": 20,
+        "encoding": "utf8",
+        "mode": "w"
+      },
+      "cherrypy_access": {
+        "class": "logging.handlers.RotatingFileHandler",
+        "filters": [
+          "odcontext"
+        ],
+        "formatter": "access",
+        "filename": "logs/access.log",
+        "maxBytes": 10485760,
+        "backupCount": 20,
+        "encoding": "utf8"
+      }
+    },
+    "loggers": {
+      "urllib3.connectionpool": {
+        "level": "ERROR"
+      },
+      "kubernetes": {
+        "handlers": [
+          "stderr",
+          "stdout",
+          "trace"
+        ],
+        "level": "ERROR",
+        "propagate": false
+      },
+      "cherrypy.access": {
+        "handlers": [
+          "cherrypy_access"
+        ],
+        "level": "INFO",
+        "propagate": false
+      },
+      "requests_oauthlib": {
+        "handlers": [
+          "stderr",
+          "stdout",
+          "trace"
+        ],
+        "level": "ERROR",
+        "propagate": false
+      },
+      "cherrypy": {
+        "handlers": [
+          "stderr",
+          "stdout",
+          "trace"
+        ],
+        "level": "ERROR"
+      }
+    },
+    "root": {
+      "level": "DEBUG",
+      "handlers": [
+        "stderr",
+        "stdout",
+        "trace"
+      ]
+    }
+  }
+}
