@@ -1226,8 +1226,8 @@ spec:
             mountPath: "/config.payload"
             readOnly: true
           - name: volume-abcdesktop-config
-            mountPath: /var/pyos/od.config
-            subPath: od.config
+            mountPath: /var/pyos/config.json
+            subPath: config.json
             readOnly: true
           - name: volume-abcdesktop-passwd-templatefile
             mountPath: /var/pyos/passwd
