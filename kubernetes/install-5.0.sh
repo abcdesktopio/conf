@@ -127,7 +127,7 @@ Usage: abcdesktop-install [OPTION] [--namespace abcdesktop]...
 Options (exclusives):
  --help                     Display this help and exit
  --version                  Display version information and exit
- --clean 		    Remove *.pem od.config abcdesktop.yaml files only
+ --clean 		    		Remove *.pem config.json abcdesktop.yaml files only
  --force                    Continue if an error occurs
 
 Parameters:
@@ -156,7 +156,7 @@ EOF
 
 
 function clean() {
-  rm -f od.config abcdesktop.yaml ./*.pem
+  rm -f config.json abcdesktop.yaml ./*.pem
   display_message_result "remove files"
 }
 
@@ -306,9 +306,9 @@ else
    fi
 fi
 
-# create od.config file
-if [ -f od.config ]; then
-   display_message "use local file od.config" "OK"
+# create config.json file
+if [ -f oconfig.json ]; then
+   display_message "use local file config.json" "OK"
 else
    curl --progress-bar "$CONFIG_SOURCE" --output config.json
    display_message_result "downloaded source $CONFIG_SOURCE"
@@ -320,7 +320,7 @@ else
 fi
 
 #
-# create configmap from od.config file
+# create configmap from config.json file
 kubectl create configmap abcdesktop-config --from-file=config.json -n "$NAMESPACE" > /dev/null
 display_message_result "kubectl create configmap abcdesktop-config --from-file=config.json -n $NAMESPACE"
 # tag abcdesktop-config cm
