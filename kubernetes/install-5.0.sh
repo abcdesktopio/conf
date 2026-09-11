@@ -25,7 +25,7 @@
 VERSION="5.0"
 
 ABCDESKTOP_YAML_SOURCE="https://raw.githubusercontent.com/abcdesktopio/conf/main/kubernetes/abcdesktop-$VERSION.yaml"
-CONFIG_SOURCE="https://raw.githubusercontent.com/abcdesktopio/conf/main/reference/config.$VERSION.json"
+CONFIG_SOURCE="https://raw.githubusercontent.com/abcdesktopio/conf/main/reference/config.$VERSION.jsonc"
 
 # define YAML path
 ABCDESKTOP_YAML=abcdesktop.yaml
@@ -307,22 +307,22 @@ else
 fi
 
 # create od.config file
-if [ -f od.config ]; then
-   display_message "use local file od.config" "OK"
+if [ -f config.jsonc ]; then
+   display_message "use local file config.jsonc" "OK"
 else
-   curl --progress-bar "$CONFIG_SOURCE" --output config.json
+   curl --progress-bar "$CONFIG_SOURCE" --output config.jsonc
    display_message_result "downloaded source $CONFIG_SOURCE"
    if [ -n "$IMAGEPULLPOLICY" ];
    then
-     sed -i "s/IfNotPresent/$IMAGEPULLPOLICY/g" config.json
+     sed -i "s/IfNotPresent/$IMAGEPULLPOLICY/g" config.jsonc
      display_message_result "update imagePullPolcy to $IMAGEPULLPOLICY"
    fi
 fi
 
 #
-# create configmap from od.config file
-kubectl create configmap abcdesktop-config --from-file=config.json -n "$NAMESPACE" > /dev/null
-display_message_result "kubectl create configmap abcdesktop-config --from-file=config.json -n $NAMESPACE"
+# create configmap from config.jsonc file
+kubectl create configmap abcdesktop-config --from-file=config.jsonc -n "$NAMESPACE" > /dev/null
+display_message_result "kubectl create configmap abcdesktop-config --from-file=config.jsonc -n $NAMESPACE"
 # tag abcdesktop-config cm
 kubectl label configmap abcdesktop-config abcdesktop/role=pyos.config -n "$NAMESPACE" > /dev/null
 display_message_result "label configmap abcdesktop-config abcdesktop/role=pyos.config"
