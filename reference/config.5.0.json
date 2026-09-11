@@ -328,7 +328,6 @@
   "desktop.pod": {
     "spec": {
       "shareProcessNamespace": false,
-      "shareProcessMemory": true,
       "securityContext": {
         "supplementalGroups": [
           "{{ supplementalGroups }}"

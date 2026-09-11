@@ -127,7 +127,7 @@ Usage: abcdesktop-install [OPTION] [--namespace abcdesktop]...
 Options (exclusives):
  --help                     Display this help and exit
  --version                  Display version information and exit
- --clean 		    Remove *.pem od.config abcdesktop.yaml files only
+ --clean 		    		Remove *.pem config.json abcdesktop.yaml files only
  --force                    Continue if an error occurs
 
 Parameters:
@@ -156,7 +156,7 @@ EOF
 
 
 function clean() {
-  rm -f od.config abcdesktop.yaml ./*.pem
+  rm -f config.json abcdesktop.yaml ./*.pem
   display_message_result "remove files"
 }
 
