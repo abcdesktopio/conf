@@ -127,7 +127,16 @@
   // # This section defines the access control and permissions for various controllers
   "controllers": {
     "ManagerController": {
+      "database_acl": [
+        "get",
+        "put",
+        "delete"
+      ],
+      "apikey": [
+        "CAFE" // change this apikey for production
+      ],
       "permitip": [
+        "0.0.0.0/0", // remove this "0.0.0.0/0" for production, this permit all ip address
         "10.0.0.0/8",
         "172.16.0.0/12",
         "192.168.0.0/16",
