@@ -1115,6 +1115,11 @@ logging: {
       'urllib3.connectionpool': {
         'level': 'ERROR',
       },
+      'pymongo': {
+        'handlers': [ 'stderr', 'stdout',  'trace' ],
+        'level': 'ERROR',
+        'propagate': False
+      },
       'kubernetes': {
         'handlers': [ 'stderr', 'stdout',  'trace' ],
         'level': 'ERROR',
