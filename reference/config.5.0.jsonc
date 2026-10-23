@@ -133,7 +133,7 @@
         "delete"
       ],
       "apikey": [
-        "CAFE" // change this apikey for production
+        null, "CAFE" // change this apikey for production,  this permit full access to console
       ],
       "permitip": [
         "0.0.0.0/0", // remove this "0.0.0.0/0" for production, this permit all ip address
