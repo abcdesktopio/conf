@@ -815,7 +815,6 @@ metadata:
   labels:
     abcdesktop/role: mongodb
 spec:
-  clusterIP: None
   selector:
     run: mongodb-od
   ports:
