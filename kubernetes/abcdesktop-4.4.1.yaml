@@ -75,13 +75,46 @@ kind: ConfigMap
 metadata:
   name: configmap-mongodb-scripts
   labels:
-    abcdesktop/role: mongodb-config
+    abcdesktop/role: mongodb
 data:
-  ensure-users.js: |
-    const targetDbList = cat('/etc/abcdesktop/MONGO_DBS_LIST');
-    const rootUser = cat('/etc/abcdesktop/admin/MONGO_ROOT_USERNAME');
-    const rootPass = cat('/etc/abcdesktop/admin/MONGO_ROOT_PASSWORD');
-    const usersStr = cat('/etc/abcdesktop/MONGO_USERS_LIST');
+  init-container.sh: |
+    #!/bin/bash
+    set -euo pipefail
+
+    echo "🧩 Preparing MongoDB configuration..."
+    mkdir -p /work/config
+    cp /input/mongod.conf /work/config/mongod.conf
+    chown -R mongodb:mongodb /work/config
+    chmod 700 /work/config
+    mkdir -p /data/db
+    chown -R mongodb:mongodb /data/db
+    mkdir -p /var/log/mongodb
+    touch /var/log/mongodb/mongod.log
+    chown -R mongodb:mongodb /var/log/mongodb
+    chmod 666 /var/log/mongodb/mongod.log
+    echo "🧩 Preparing MongoDB done..."
+  mongod.conf: |
+    net:
+      bindIp: 0.0.0.0
+      port: 27017
+    security:
+      authorization: enabled
+    storage:
+      dbPath: /data/db
+    # systemLog:
+    #   destination: file
+    #   path: /var/log/mongodb/mongod.log
+    #   logAppend: true
+  init.js: |
+    // init.js - executed automatically by MongoDB at first startup
+    print("🏁 Running init.js ...");
+
+    const fs = require('fs');
+
+    const targetDbList = fs.readFileSync('/etc/abcdesktop/MONGO_DBS_LIST', 'utf8').trim();
+    const rootUser = fs.readFileSync('/etc/abcdesktop/admin/MONGO_ROOT_USERNAME', 'utf8').trim();
+    const rootPass = fs.readFileSync('/etc/abcdesktop/admin/MONGO_ROOT_PASSWORD', 'utf8').trim();
+    const usersStr = fs.readFileSync('/etc/abcdesktop/MONGO_USERS_LIST', 'utf8').trim();
 
     // auth against admin
     const adminDb = db.getSiblingDB('admin');
@@ -96,13 +129,29 @@ data:
       print ( 'use ' + targetDbStr );
       // we'll create the users here
       const targetDb = db.getSiblingDB(targetDbStr);
+        
       // user-defined roles should be stored in the admin db
-      const customRoles = adminDb
-        .getRoles({rolesInfo: 1, showBuiltinRoles: false})
+        let customRoles = [];
+        try {
+        const rolesResult = adminDb.getRoles({rolesInfo: 1, showBuiltinRoles: false});
+        // Check if rolesResult is an array or an object with a roles property
+        if (Array.isArray(rolesResult)) {
+            customRoles = rolesResult
         .map(role => role.role)
         .filter(Boolean);
+        } else if (rolesResult && rolesResult.roles && Array.isArray(rolesResult.roles)) {
+            customRoles = rolesResult.roles
+            .map(role => role.role)
+            .filter(Boolean);
+        }
+        print('Custom roles found: ' + JSON.stringify(customRoles));
+        } catch (err) {
+        print('Warning: Could not retrieve custom roles: ' + err.message);
+        customRoles = [];
+        }
 
       // parse the list of users, and create each user as needed
+        if (usersStr && usersStr.trim()) {
       usersStr
         .trim()
         .split(';')
@@ -112,7 +161,8 @@ data:
           const rolesStr = user[1];
           const password = user[2];
 
-          if (!rolesStr || !password) {
+            if (!username || !rolesStr || !password) {
+                print('Skipping invalid user entry: ' + JSON.stringify(user));
             return;
           }
 
@@ -123,25 +173,33 @@ data:
           };
 
           userDoc.roles = roles.map(role => {
-            if (!~customRoles.indexOf(role)) {
-              // is this a user defined role?
-              return role; // no, it is built-in, just use the role name
+                if (customRoles.indexOf(role) === -1) {
+                // is this a built-in role?
+                return role; // yes, just use the role name
             }
-            return {role: role, db: 'admin'}; // yes, user-defined, specify the long format
+                return {role: role, db: 'admin'}; // no, user-defined, specify the long format
           });
 
           try {
+                print('Creating user: ' + username + ' in database: ' + targetDbStr);
             targetDb.createUser(userDoc);
+                print('Successfully created user: ' + username);
           } catch (err) {
-            print( err );
-            if (!~err.message.toLowerCase().indexOf('duplicate')) {
+                print('Error creating user ' + username + ': ' + err.message);
+                if (err.message.toLowerCase().indexOf('duplicate') === -1) {
               // if not a duplicate user
               throw err; // rethrow
+                } else {
+                print('User ' + username + ' already exists, skipping...');
             }
           }
+            });
+        } else {
+        print('No users to create for database: ' + targetDbStr);
         }
-      );
     }
+
+    print("🏁 init.js completed successfully ✅");
 ---
 apiVersion: v1
 kind: Secret
@@ -196,6 +254,163 @@ data:
     {{ gid }}:!::{{ uid }}              
 ---
 apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongodb-od
+  labels:
+    run: mongodb-od
+    type: database
+    abcdesktop/role: mongodb
+spec:
+  serviceName: mongodb
+  replicas: 1 # MONGO_REPLICAS
+  selector:
+    matchLabels:
+      run: mongodb-od
+  template:
+    metadata:
+      labels:
+        run: mongodb-od
+        type: database
+        netpol/mongodb: 'true'
+        netpol/dns: 'true'
+    spec:
+      securityContext:
+        fsGroup: 999
+      terminationGracePeriodSeconds: 10
+      automountServiceAccountToken: false
+      # --- InitContainer to prepare configuration
+      initContainers:
+      - name: prepare-config
+        image: ghcr.io/abcdesktopio/mongo:safe8.0
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        command:
+          - sh
+          - -c
+          - /scripts/init-container.sh
+        volumeMounts:
+          - name: init-container-script
+            mountPath: /scripts/init-container.sh
+            subPath: init-container.sh
+            readOnly: true
+          - name: config
+            mountPath: /input/mongod.conf
+            subPath: mongod.conf
+          - name: prepared-config
+            mountPath: /work/config
+          - name: logs
+            mountPath: /var/log/mongodb
+
+      # --- Main MongoDB container
+      containers:
+      - name: mongodb
+        image: ghcr.io/abcdesktopio/mongo:safe8.0
+        imagePullPolicy: Always
+        # DO NOT use `command`, keep docker-entrypoint.sh
+        args: ["--config=/etc/mongodb/mongod.conf"]
+        ports:
+        - containerPort: 27017
+          name: mongodb
+        volumeMounts:
+          - name: prepared-config
+            mountPath: /etc/mongodb
+          - name: abcdesktop
+            mountPath: /etc/abcdesktop
+            readOnly: true
+          - name: init-script
+            mountPath: /docker-entrypoint-initdb.d/init.js
+            subPath: init.js
+            readOnly: true
+          - name: logs
+            mountPath: /var/log/mongodb
+          - name: data
+            mountPath: /data/db
+        env:
+          - name: MONGO_INITDB_ROOT_USERNAME_FILE
+            value: /etc/abcdesktop/admin/MONGO_ROOT_USERNAME
+          - name: MONGO_INITDB_ROOT_PASSWORD_FILE
+            value: /etc/abcdesktop/admin/MONGO_ROOT_PASSWORD
+        readinessProbe:
+          tcpSocket:
+            port: 27017
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          failureThreshold: 6
+        livenessProbe:
+          tcpSocket:
+            port: 27017
+          initialDelaySeconds: 60
+          periodSeconds: 20
+          timeoutSeconds: 10
+          failureThreshold: 3
+          successThreshold: 1          
+        resources:
+          limits:
+            cpu: 2
+            memory: 4Gi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+
+      # --- Non-persistent volumes
+      volumes:
+        - name: init-container-script
+          configMap:
+            name: configmap-mongodb-scripts
+            items:
+              - key: init-container.sh
+                path: init-container.sh
+            defaultMode: 0755
+        - name: config
+          configMap:
+            name: configmap-mongodb-scripts
+            items:
+              - key: mongod.conf
+                path: mongod.conf
+        - name: abcdesktop
+          secret:
+            secretName: secret-mongodb
+            items:
+            - key: MONGO_ROOT_USERNAME
+              path: admin/MONGO_ROOT_USERNAME
+              mode: 0400
+            - key: MONGO_ROOT_PASSWORD
+              path: admin/MONGO_ROOT_PASSWORD
+              mode: 0400
+            - key: MONGO_USERNAME
+              path: MONGO_USERNAME
+              mode: 0400
+            - key: MONGO_PASSWORD
+              path: MONGO_PASSWORD
+              mode: 0400
+            - key: MONGO_USERS_LIST
+              path: MONGO_USERS_LIST
+              mode: 0400
+            - key: MONGO_DBS_LIST
+              path: MONGO_DBS_LIST
+              mode: 0400
+        - name: init-script
+          configMap:
+            name: configmap-mongodb-scripts
+            items:
+              - key: init.js
+                path: init.js
+        - name: prepared-config
+          emptyDir: {}
+        - name: logs
+          emptyDir: {}
+        # --- Non-persistent volume for MongoDB data
+        - name: data
+          emptyDir: {}
+---
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: memcached-od 
@@ -227,77 +442,6 @@ spec:
             memory: 16Mi
         ports:
           - containerPort: 11211
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: mongodb-od
-  labels:
-    run: mongodb-od
-    type: database
-    abcdesktop/role: mongodb
-spec:
-  selector:
-    matchLabels:
-      run: mongodb-od
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        run: mongodb-od
-        type: database
-    spec:
-      containers:
-      - name: mongodb
-        image: ghcr.io/abcdesktopio/mongo:safemain
-        resources:
-          limits:
-            cpu: 0.5
-            memory: 512Mi
-          requests:
-            cpu: 0.1
-            memory: 128Mi
-        env:
-        - name: MONGO_INITDB_ROOT_USERNAME_FILE
-          value: /etc/abcdesktop/admin/MONGO_ROOT_USERNAME
-        - name: MONGO_INITDB_ROOT_PASSWORD_FILE
-          value: /etc/abcdesktop/admin/MONGO_ROOT_PASSWORD
-        volumeMounts:
-        - name: abcdesktop
-          mountPath: /etc/abcdesktop
-          readOnly: true
-        - name: mongodb-scripts
-          mountPath: /docker-entrypoint-initdb.d
-          readOnly: true
-      volumes:
-         - name: abcdesktop
-           secret:
-             secretName: secret-mongodb
-             items:
-             - key: MONGO_ROOT_USERNAME
-               path: admin/MONGO_ROOT_USERNAME
-               mode: 0444
-             - key: MONGO_ROOT_PASSWORD
-               path: admin/MONGO_ROOT_PASSWORD
-               mode: 0444
-             - key: MONGO_USERNAME
-               path: MONGO_USERNAME
-               mode: 0444
-             - key: MONGO_PASSWORD
-               path: MONGO_PASSWORD
-               mode: 0444
-             - key: MONGO_USERS_LIST
-               path: MONGO_USERS_LIST
-               mode: 0444
-             - key: MONGO_DBS_LIST
-               path: MONGO_DBS_LIST
-               mode: 0444
-         - name: mongodb-scripts
-           configMap:
-             name: configmap-mongodb-scripts 
-             items:
-             - key: ensure-users.js
-               path: ensure-users.js
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -617,14 +761,17 @@ spec:
           httpGet:
             path: /API/healthz
             port: 8000
-          failureThreshold: 1
+          timeoutSeconds: 5
           periodSeconds: 10
+          failureThreshold: 3
         startupProbe:
           httpGet:
             path: /API/healthz
             port: 8000
-          failureThreshold: 5
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
           periodSeconds: 10
+          failureThreshold: 30
         resources:
           limits:
             cpu: 1
@@ -815,7 +962,6 @@ metadata:
   labels:
     abcdesktop/role: mongodb
 spec:
-  clusterIP: None
   selector:
     run: mongodb-od
   ports:
