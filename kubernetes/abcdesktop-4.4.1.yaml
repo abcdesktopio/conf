@@ -433,6 +433,8 @@ spec:
         # like image: memcached:alpine 
         imagePullPolicy: Always
         image: ghcr.io/abcdesktopio/oc.memcached:4.4
+        securityContext:
+          allowPrivilegeEscalation: false
         resources:
           limits:
             cpu: 0.2
@@ -474,8 +476,8 @@ spec:
       - name: nginx-router
         imagePullPolicy: Always
         image: ghcr.io/abcdesktopio/route:4.4
-        # securityContext:
-        #  readOnlyRootFilesystem: true
+        securityContext:
+          allowPrivilegeEscalation: false
         ports:
           - containerPort: 80
             name: http
@@ -618,6 +620,7 @@ spec:
         image: ghcr.io/abcdesktopio/oc.nginx:4.4.1
         securityContext:
           readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
         ports:
           - containerPort: 80
             name: http
