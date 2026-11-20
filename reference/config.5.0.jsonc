@@ -122,6 +122,10 @@
   },
   // # END OF JWT SECTION
 
+  // # MONGODB single instance
+  "mongodbparam": "directConnection=true",
+  // # END OF MONGODB
+
   // # CONTROLLERS SECTION
   // #
   // # This section defines the access control and permissions for various controllers
