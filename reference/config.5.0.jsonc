@@ -1423,14 +1423,6 @@
         "level": "ERROR",
         "propagate": false
       },
-      "cherrypy": {
-        "handlers": [
-          "stderr",
-          "stdout",
-          "trace"
-        ],
-        "level": "ERROR"
-      },
       "pymongo": {
         "handlers": [ 
           "stderr", 
