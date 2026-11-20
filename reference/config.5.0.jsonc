@@ -1430,7 +1430,15 @@
           "trace"
         ],
         "level": "ERROR"
-      }
+      },
+      "pymongo": {
+        "handlers": [ 
+          "stderr", 
+          "stdout",  
+          "trace" 
+        ],
+        "level": "ERROR",
+      } 
     },
     "root": {
       // # put the level to 'DEBUG', each handler fix the level value
