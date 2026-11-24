@@ -1016,7 +1016,7 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: router
+  name: http-router
   labels:
     abcdesktop/role: router
 spec:
