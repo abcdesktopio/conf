@@ -623,18 +623,18 @@ spec:
         securityContext:
           readOnlyRootFilesystem: true
         ports:
-          - containerPort: 80
+          - containerPort: 8000
             name: http
         livenessProbe:
           httpGet:
             path: /
-            port: 80
+            port: 8000
           failureThreshold: 1
           periodSeconds: 10
         startupProbe:
           httpGet:
             path: /
-            port: 80
+            port: 8000
           failureThreshold: 5
           periodSeconds: 5
         resources:
@@ -855,7 +855,7 @@ spec:
         securityContext:
           readOnlyRootFilesystem: true
         ports:
-          - containerPort: 80
+          - containerPort: 8000
         env:
           - name: POD_NAMESPACE
             valueFrom:
@@ -1011,7 +1011,7 @@ spec:
   ports:
   - port: 80
     protocol: TCP
-    targetPort: 80
+    targetPort: 8000
 ---
 kind: Service
 apiVersion: v1
@@ -1040,6 +1040,7 @@ spec:
   ports:
   - protocol: TCP
     port: 80
+    targetPort: 8000
     name: http
 ---
 kind: Service
