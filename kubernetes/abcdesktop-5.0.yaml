@@ -434,7 +434,7 @@ spec:
       - name: memcached
         # like image: memcached:alpine 
         imagePullPolicy: Always
-        image: ghcr.io/abcdesktopio/oc.memcached:4.4
+        image: ghcr.io/abcdesktopio/oc.memcached:5.0
         resources:
           limits:
             cpu: 0.2
