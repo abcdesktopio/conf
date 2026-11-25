@@ -418,8 +418,10 @@ echo -e
 
 display_message "If you're using a cloud provider" "INFO"
 display_message "Forwarding abcdesktop service for you on port=$port" "INFO"
-display_message "Setup is running the command 'kubectl port-forward service/http-router --address 0.0.0.0 $port:80 -n $NAMESPACE'" "INFO"
-kubectl port-forward service/http-router --address 0.0.0.0 "$port:8000" -n "$NAMESPACE" &
+ROUTER_POD_NAME=$(kubectl get pods -l run=router-od -o jsonpath={.items..metadata.name} -n "$NAMESPACE")
+display_message "For you setup is running the command 'kubectl port-forward $ROUTER_POD_NAME --address 0.0.0.0 $port:80 -n $NAMESPACE'" "INFO"
+# we use a port-forward to the pod router 
+kubectl port-forward "$ROUTER_POD_NAME" --address 0.0.0.0 "$port:8000" -n "$NAMESPACE" &
 
 MY_IP='localhost'
 HOST=$(hostname -I 2>/dev/null)
