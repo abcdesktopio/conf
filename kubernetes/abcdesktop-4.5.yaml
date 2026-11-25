@@ -1043,8 +1043,9 @@ spec:
     run: nginx-od
   ports:
   - protocol: TCP
-    port: 8000
+    port: 80
     name: http
+    targetPort: 8000
 ---
 kind: Service
 apiVersion: v1
