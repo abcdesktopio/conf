@@ -622,7 +622,7 @@ spec:
           readOnlyRootFilesystem: true
           allowPrivilegeEscalation: false
         ports:
-          - containerPort: 80
+          - containerPort: 8000
             name: http
         livenessProbe:
           httpGet:
