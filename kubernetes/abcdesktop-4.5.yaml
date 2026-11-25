@@ -284,6 +284,8 @@ spec:
       - name: prepare-config
         image: ghcr.io/abcdesktopio/mongo:safe8.0
         imagePullPolicy: Always
+        securityContext:
+          runAsUser: 0
         resources:
           limits:
             cpu: 500m
