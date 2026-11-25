@@ -420,7 +420,8 @@ display_message "If you're using a cloud provider" "INFO"
 display_message "Forwarding abcdesktop service for you on port=$port" "INFO"
 ROUTER_POD_NAME=$(kubectl get pods -l run=router-od -o jsonpath={.items..metadata.name} -n "$NAMESPACE")
 display_message "For you setup is running the command 'kubectl port-forward $ROUTER_POD_NAME --address 0.0.0.0 $port:80 -n $NAMESPACE'" "INFO"
-# we use a port-forward to the pod router 
+# we use a port-forward to the pod router, you can also use a port-forward to the service http-router
+# on github action, only port-foward to a pod works fine.  
 kubectl port-forward "$ROUTER_POD_NAME" --address 0.0.0.0 "$port:8000" -n "$NAMESPACE" &
 
 MY_IP='localhost'
