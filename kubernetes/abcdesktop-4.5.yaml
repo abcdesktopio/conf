@@ -66,8 +66,8 @@ metadata:
 data:
   versionConfig.json: |-
     {
-      "ABCDESKTOP_VERSION": "4.4",
-      "ABCDESKTOP_APPLICATIONS_LIST_URL": "https://raw.githubusercontent.com/abcdesktopio/images/refs/heads/main/appLists/appList.4.4.json"
+      "ABCDESKTOP_VERSION": "4.5",
+      "ABCDESKTOP_APPLICATIONS_LIST_URL": "https://raw.githubusercontent.com/abcdesktopio/images/refs/heads/main/appLists/appList.4.5.json"
     }
 ---
 apiVersion: v1
@@ -432,7 +432,7 @@ spec:
       - name: memcached
         # like image: memcached:alpine 
         imagePullPolicy: Always
-        image: ghcr.io/abcdesktopio/oc.memcached:4.4
+        image: ghcr.io/abcdesktopio/oc.memcached:4.5
         securityContext:
           allowPrivilegeEscalation: false
         resources:
@@ -682,6 +682,7 @@ spec:
       automountServiceAccountToken: false
       containers:
       - name: speedtest
+        imagePullPolicy: Always
         resources:
           limits:
             cpu: 0.5
