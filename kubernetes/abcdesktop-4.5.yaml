@@ -282,7 +282,7 @@ spec:
       # --- InitContainer to prepare configuration
       initContainers:
       - name: prepare-config
-        image: ghcr.io/abcdesktopio/mongo:safe8.2
+        image: ghcr.io/abcdesktopio/mongo:safe8.0
         imagePullPolicy: Always
         resources:
           limits:
