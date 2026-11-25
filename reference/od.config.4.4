@@ -448,10 +448,12 @@ executeclasses : {
     'description': 'default: up to 4 CPU cores and 8Gi',
     'runtimeClassName': None,
     'resources':{
-      'requests':{'memory':"576Mi",'cpu':"220m"},
+      'requests':{'memory':"615Mi",'cpu':"600m"},
       'limits':  {'memory':"8Gi",'cpu':"4000m"}
     },
+   # uncomment this, to set resources for each desktop container
    # 'containers': {
+   #  'init':      { 'resources': { 'requests':{'memory':"64Mi",'cpu':"200m"},  'limits':  {'memory':"256Mi", 'cpu':"300m"  }} },
    #  'graphical': { 'resources': { 'requests':{'memory':"256Mi",'cpu':"200m"}, 'limits':  {'memory':"4Gi",   'cpu':"1000m" }} },
    #  'sound':     { 'resources': { 'requests':{'memory':"64Mi",'cpu':"200m"},  'limits':  {'memory':"256Mi", 'cpu':"400m"  }} },
    #  'filer':     { 'resources': { 'requests':{'memory':"64Mi",'cpu':"200m"},  'limits':  {'memory':"256Mi", 'cpu':"300m"  }} },
