@@ -623,7 +623,6 @@ spec:
         imagePullPolicy: Always
         image: ghcr.io/abcdesktopio/oc.nginx:4.5
         securityContext:
-          readOnlyRootFilesystem: true
           allowPrivilegeEscalation: false
         ports:
           - containerPort: 8000
@@ -647,25 +646,6 @@ spec:
           requests:
             cpu: 0.1
             memory: 8Mi
-        volumeMounts:
-          # read-write volumes for nginx
-          - name: var-log-volume
-            mountPath: /var/log/nginx
-            readOnly: false
-          - name: var-cache-volume
-            mountPath: /var/cache/nginx
-            readOnly: false
-          - name: var-run-volume
-            mountPath: /var/run
-            readOnly: false
-      volumes:
-        # read-write volumes for nginx
-        - name: var-log-volume
-          emptyDir: {}
-        - name: var-cache-volume
-          emptyDir: {}
-        - name: var-run-volume
-          emptyDir: {}
 ---
 apiVersion: apps/v1
 kind: Deployment
