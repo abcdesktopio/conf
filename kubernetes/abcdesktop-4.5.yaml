@@ -251,7 +251,7 @@ data:
   gshadow: |
     sudo:*::{{ uid }}
     lpadmin:!::root,{{ uid }}
-    {{ gid }}:!::{{ uid }}              
+    {{ gid }}:!::{{ uid }}
 ---
 apiVersion: apps/v1
 kind: StatefulSet
