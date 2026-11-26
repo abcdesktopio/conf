@@ -432,6 +432,11 @@ spec:
         type: database
     spec:
       automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 11211
+        runAsGroup: 11211
+        fsGroup: 11211
       containers:
       - name: memcached
         # like image: memcached:alpine 
@@ -849,6 +854,11 @@ spec:
         type: admin-console
     spec:
       automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 101
+        runAsGroup: 101
+        fsGroup: 101
       containers:
       - name: console
         imagePullPolicy: Always
