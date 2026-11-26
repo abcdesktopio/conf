@@ -62,7 +62,7 @@ metadata:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: version-config
+  name: abcdesktop-version-config
 data:
   versionConfig.json: |-
     {
@@ -887,7 +887,7 @@ spec:
       volumes:
         - name: version-config-volume
           configMap:
-            name: version-config
+            name: abcdesktop-version-config
 ---
 apiVersion: apps/v1
 kind: Deployment
