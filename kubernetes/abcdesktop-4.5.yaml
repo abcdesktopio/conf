@@ -64,10 +64,10 @@ kind: ConfigMap
 metadata:
   name: abcdesktop-version-config
 data:
-  versionConfig.json: |-
+  versionConfig.json: |
     {
-      "ABCDESKTOP_VERSION": "4.5",
-      "ABCDESKTOP_APPLICATIONS_LIST_URL": "https://raw.githubusercontent.com/abcdesktopio/images/refs/heads/main/appLists/appList.4.5.json"
+        "ABCDESKTOP_VERSION": "4.5",
+        "ABCDESKTOP_APPLICATIONS_LIST_URL": "https://raw.githubusercontent.com/abcdesktopio/images/refs/heads/main/appLists/appList.4.5.json"
     }
 ---
 apiVersion: v1
