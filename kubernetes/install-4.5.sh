@@ -287,10 +287,6 @@ if [ ! -f mongod.keyfile ]; then
 	openssl rand -base64 -out mongod.keyfile ${LENGTH}
 	display_message_result "mongod key file create"
 fi
-# import mongo key file as kubernetes secret
-kubectl create secret generic abcdesktop-mongod-keyfile \
-  --from-file=mongod.keyfile \
-  --namespace="$NAMESPACE" > /dev/null
 
 # create abcdesktop.yaml file
 if [ -f abcdesktop.yaml ]; then
