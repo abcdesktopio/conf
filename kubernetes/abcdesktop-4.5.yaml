@@ -80,19 +80,13 @@ data:
   init-container.sh: |
     #!/bin/bash
     set -euo pipefail
-
     echo "🧩 Preparing MongoDB configuration..."
     mkdir -p /work/config
     cp /input/mongod.conf /work/config/mongod.conf
-    chown -R mongodb:mongodb /work/config
-    chmod 700 /work/config
-    mkdir -p /data/db
-    chown -R mongodb:mongodb /data/db
     mkdir -p /var/log/mongodb
     touch /var/log/mongodb/mongod.log
-    chown -R mongodb:mongodb /var/log/mongodb
-    chmod 666 /var/log/mongodb/mongod.log
     echo "🧩 Preparing MongoDB done..."
+
   mongod.conf: |
     net:
       bindIp: 0.0.0.0
@@ -287,8 +281,8 @@ spec:
         image: ghcr.io/abcdesktopio/mongo:safe8.2
         imagePullPolicy: Always
         securityContext:
-          runAsUser: 0
-          runAsGroup: 0
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
         resources:
           limits:
             cpu: 500m
