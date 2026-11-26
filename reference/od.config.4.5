@@ -266,31 +266,34 @@ authmanagers: {
 
 # Note serviceaccount is optional
 ldapconfig : {
-        'planet': {
-                'default'       : True,
-                'ldap_timeout'  : 15,
-                'ldap_protocol' : 'ldap',
-                'ldap_basedn'   : 'ou=people,dc=planetexpress,dc=com',
-                'servers'       : [ 'openldap' ],
-                'secure'        : False,
-                'serviceaccount': { 'login': 'cn=admin,dc=planetexpress,dc=com', 'password': 'GoodNewsEveryone' },
-                'policies': {
-                  'acls': None,
-                  'rules' : {
-                    'rule-dummy' : {
-                      'conditions' : [ {'boolean':True, 'expected':True } ],
-                      'expected' : True,
-                      'label':'labeltrue'
-                  },
-                  'rule-ship': {
-                    'conditions' : [ { 'memberOf': 'cn=ship_crew,ou=people,dc=planetexpress,dc=com',   'expected' : True  } ],
-                    'expected' : True,
-                    'label':'shipcrew'
-                  },
-                  'rule-test': {
-                    'conditions' : [ { 'memberOf': 'cn=admin_staff,ou=people,dc=planetexpress,dc=com', 'expected' : True  } ],
-                    'expected' : True,
-                    'label': 'adminstaff' } } } } }
+  'planet': {
+    'default': True,
+    'ldap_timeout': 15,
+    'ldap_protocol': 'ldap',
+    'ldap_basedn': 'ou=people,dc=planetexpress,dc=com',
+    'servers': [ 'openldap' ],
+    'secure': False,
+    'serviceaccount': { 'login': 'cn=admin,dc=planetexpress,dc=com', 'password': 'GoodNewsEveryone' },
+    'policies': {
+      'acls': None,
+      'rules' : {
+        'rule-dummy' : {
+          'conditions' : [ {'boolean':True, 'expected':True } ],
+          'expected' : True,
+          'label':'labeltrue'
+        },
+        'rule-ship': {
+          'conditions' : [ { 'memberOf': 'cn=ship_crew,ou=people,dc=planetexpress,dc=com',   'expected' : True  } ],
+          'expected' : True,
+          'label':'shipcrew'
+        },
+       'rule-test': {
+          'conditions' : [ { 'memberOf': 'cn=admin_staff,ou=people,dc=planetexpress,dc=com', 'expected' : True  } ],
+          'expected' : True,
+          'label': 'adminstaff' 
+       }
+     } 
+} } }
 
 # For external provider only 
 # OAuthLib params
