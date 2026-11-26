@@ -271,8 +271,6 @@ spec:
     spec:
       securityContext:
         fsGroup: 999
-        runAsUser: 999
-        runAsGroup: 999
       terminationGracePeriodSeconds: 10
       automountServiceAccountToken: false
       # --- InitContainer to prepare configuration
@@ -283,6 +281,8 @@ spec:
         securityContext:
           allowPrivilegeEscalation: false
           runAsNonRoot: true
+          runAsUser: 999
+          runAsGroup: 999
         resources:
           limits:
             cpu: 500m
@@ -315,6 +315,8 @@ spec:
         securityContext:
           allowPrivilegeEscalation: false
           runAsNonRoot: true
+          runAsUser: 999
+          runAsGroup: 999
         # DO NOT use `command`, keep docker-entrypoint.sh
         args: ["--config=/etc/mongodb/mongod.conf"]
         ports:
@@ -431,9 +433,6 @@ spec:
     spec:
       automountServiceAccountToken: false
       securityContext:
-        runAsNonRoot: true
-        runAsUser: 11211
-        runAsGroup: 11211
         fsGroup: 11211
       containers:
       - name: memcached
@@ -441,6 +440,9 @@ spec:
         imagePullPolicy: Always
         image: ghcr.io/abcdesktopio/oc.memcached:4.5
         securityContext:
+          runAsNonRoot: true
+          runAsUser: 11211
+          runAsGroup: 11211
           allowPrivilegeEscalation: false
         resources:
           limits:
@@ -480,15 +482,15 @@ spec:
       automountServiceAccountToken: false
       dnsPolicy: ClusterFirst
       securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
         fsGroup: 1000
       containers:
       - name: nginx-router
         imagePullPolicy: Always
         image: ghcr.io/abcdesktopio/route:4.5
         securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          runAsGroup: 1000
           allowPrivilegeEscalation: false
         ports:
           - containerPort: 8000
@@ -627,15 +629,15 @@ spec:
     spec:
       automountServiceAccountToken: false
       securityContext:
-        runAsNonRoot: true
-        runAsUser: 101
-        runAsGroup: 101
         fsGroup: 101
       containers:
       - name: nginx
         imagePullPolicy: Always
         image: ghcr.io/abcdesktopio/oc.nginx:4.5
         securityContext:
+          runAsNonRoot: true
+          runAsUser: 101
+          runAsGroup: 101
           allowPrivilegeEscalation: false
         ports:
           - containerPort: 8000
@@ -679,12 +681,11 @@ spec:
       automountServiceAccountToken: false
       securityContext:
         fsGroup: 1000
-        runAsUser: 1000
-        runAsGroup: 1000
-        runAsNonRoot: true
       containers:
       - name: speedtest
         securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000
           allowPrivilegeEscalation: false
           runAsNonRoot: true
         imagePullPolicy: Always
@@ -732,14 +733,13 @@ spec:
       dnsPolicy: ClusterFirst
       securityContext:
         fsGroup: 2048
-        runAsUser: 2048
-        runAsGroup: 2048
-        runAsNonRoot: true
       containers:
       - name : pyos
         imagePullPolicy: Always
         image: ghcr.io/abcdesktopio/pyos:4.5.alpine_latest
         securityContext:
+          runAsUser: 2048
+          runAsGroup: 2048
           runAsNonRoot: true
           allowPrivilegeEscalation: false
         volumeMounts:
@@ -865,15 +865,15 @@ spec:
     spec:
       automountServiceAccountToken: false
       securityContext:
-        runAsNonRoot: true
-        runAsUser: 101
-        runAsGroup: 101
         fsGroup: 101
       containers:
       - name: console
         imagePullPolicy: Always
         image: ghcr.io/abcdesktopio/console:4.5
         securityContext:
+          runAsNonRoot: true
+          runAsUser: 101
+          runAsGroup: 101
           allowPrivilegeEscalation: false
         ports:
           - containerPort: 8000
