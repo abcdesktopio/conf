@@ -277,6 +277,8 @@ spec:
     spec:
       securityContext:
         fsGroup: 999
+        runAsUser: 999
+        runAsGroup: 999
       terminationGracePeriodSeconds: 10
       automountServiceAccountToken: false
       # --- InitContainer to prepare configuration
@@ -286,6 +288,7 @@ spec:
         imagePullPolicy: Always
         securityContext:
           runAsUser: 0
+          runAsGroup: 0
         resources:
           limits:
             cpu: 500m
