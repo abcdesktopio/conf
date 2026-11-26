@@ -864,7 +864,6 @@ spec:
         imagePullPolicy: Always
         image: ghcr.io/abcdesktopio/console:4.5
         securityContext:
-          readOnlyRootFilesystem: true
           allowPrivilegeEscalation: false
         ports:
           - containerPort: 8000
@@ -885,24 +884,7 @@ spec:
             mountPath: /usr/share/nginx/html/config/versionConfig.json
             subPath: versionConfig.json
             readOnly: true
-          # read-write volumes for nginx
-          - name: var-log-volume
-            mountPath: /var/log/nginx
-            readOnly: false
-          - name: var-cache-volume
-            mountPath: /var/cache/nginx
-            readOnly: false
-          - name: var-run-volume
-            mountPath: /var/run
-            readOnly: false
       volumes:
-        # read-write volumes for nginx
-        - name: var-log-volume
-          emptyDir: {}
-        - name: var-cache-volume
-          emptyDir: {}
-        - name: var-run-volume
-          emptyDir: {}
         - name: version-config-volume
           configMap:
             name: version-config
