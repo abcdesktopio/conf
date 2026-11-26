@@ -686,6 +686,8 @@ spec:
       automountServiceAccountToken: false
       containers:
       - name: speedtest
+        securityContext:
+          allowPrivilegeEscalation: false
         imagePullPolicy: Always
         resources:
           limits:
@@ -733,6 +735,8 @@ spec:
       - name : pyos
         imagePullPolicy: Always
         image: ghcr.io/abcdesktopio/pyos:4.5.alpine_latest
+        securityContext:
+          allowPrivilegeEscalation: false
         volumeMounts:
           - name: jwtsigningkeys
             mountPath: "/config.signing"
