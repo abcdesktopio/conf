@@ -686,6 +686,7 @@ spec:
       - name: speedtest
         securityContext:
           allowPrivilegeEscalation: false
+          runAsNonRoot: true
         imagePullPolicy: Always
         resources:
           limits:
@@ -739,6 +740,7 @@ spec:
         imagePullPolicy: Always
         image: ghcr.io/abcdesktopio/pyos:4.5.alpine_latest
         securityContext:
+          runAsNonRoot: true
           allowPrivilegeEscalation: false
         volumeMounts:
           - name: jwtsigningkeys
