@@ -677,6 +677,11 @@ spec:
         run: speedtest-od 
     spec:
       automountServiceAccountToken: false
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
       containers:
       - name: speedtest
         securityContext:
@@ -724,6 +729,11 @@ spec:
     spec:
       serviceAccountName: pyos-serviceaccount
       dnsPolicy: ClusterFirst
+      securityContext:
+        fsGroup: 2048
+        runAsUser: 2048
+        runAsGroup: 2048
+        runAsNonRoot: true
       containers:
       - name : pyos
         imagePullPolicy: Always
