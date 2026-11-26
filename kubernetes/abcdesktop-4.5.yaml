@@ -320,6 +320,7 @@ spec:
         imagePullPolicy: Always
         securityContext:
           allowPrivilegeEscalation: false
+          runAsNonRoot: true
         # DO NOT use `command`, keep docker-entrypoint.sh
         args: ["--config=/etc/mongodb/mongod.conf"]
         ports:
