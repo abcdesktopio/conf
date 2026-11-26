@@ -476,6 +476,11 @@ spec:
     spec:
       automountServiceAccountToken: false
       dnsPolicy: ClusterFirst
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
       containers:
       - name: nginx-router
         imagePullPolicy: Always
