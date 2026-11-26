@@ -618,6 +618,11 @@ spec:
         type: frontend
     spec:
       automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 101
+        runAsGroup: 101
+        fsGroup: 101
       containers:
       - name: nginx
         imagePullPolicy: Always
