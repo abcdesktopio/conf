@@ -313,8 +313,11 @@ spec:
       # --- Main MongoDB container
       containers:
       - name: mongodb
-        image: ghcr.io/abcdesktopio/mongo:safe8.0
+        image: ghcr.io/abcdesktopio/mongo:safe8.2
         imagePullPolicy: Always
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
         # DO NOT use `command`, keep docker-entrypoint.sh
         args: ["--config=/etc/mongodb/mongod.conf"]
         ports:
@@ -436,6 +439,7 @@ spec:
         imagePullPolicy: Always
         image: ghcr.io/abcdesktopio/oc.memcached:4.5
         securityContext:
+          runAsNonRoot: true
           allowPrivilegeEscalation: false
         resources:
           limits:
@@ -859,6 +863,8 @@ spec:
         image: ghcr.io/abcdesktopio/console:4.5
         securityContext:
           readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
         ports:
           - containerPort: 8000
         env:
