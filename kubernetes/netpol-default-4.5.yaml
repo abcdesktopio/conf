@@ -31,7 +31,7 @@ spec:
           netpol/memcached: 'true'
     - namespaceSelector:
         matchLabels:
-          name: kube-monitor
+          kubernetes.io/metadata.name: kube-monitor
       podSelector:
         matchLabels:
           netpol/metrics: 'true'
@@ -77,7 +77,7 @@ spec:
           netpol/mongodb: 'true'
     - namespaceSelector:
         matchLabels:
-          name: kube-monitor
+          kubernetes.io/metadata.name: kube-monitor
       podSelector:
         matchLabels:
           netpol/metrics: 'true'
@@ -163,7 +163,7 @@ spec:
           netpol/speedtest: 'true'
     - namespaceSelector:
         matchLabels:
-          name: kube-monitor
+          kubernetes.io/metadata.name: kube-monitor
       podSelector:
         matchLabels:
           netpol/metrics: 'true'
@@ -210,17 +210,28 @@ spec:
           netpol/pyos: 'true'
     - namespaceSelector:
         matchLabels:
-          name: kube-monitor
+          kubernetes.io/metadata.name: kube-monitor
       podSelector:
         matchLabels:
           netpol/metrics: 'true'
   egress:
-# permit oauth from pyos
-# pyos can connect to all ip address port 443
+  # permit pyos to connect to pyos for self syncing 
+  - ports:
+    - protocol: TCP
+      port: 8000
+    to:
+    - podSelector:
+        matchLabels:
+          netpol/pyos: 'true'
+  # permit oauth from pyos
+  # pyos can connect to all ip address port 443
   - ports:
     - protocol: TCP
       port: 443
-# permit pyos to connect to kubernetes api server
+    to:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+  # permit pyos to connect to kubernetes api server
   - ports:
     - protocol: TCP
       port: 6443
@@ -262,24 +273,24 @@ spec:
       port: 8443
     - protocol: TCP
       port: 8000
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          name: abcdesktop
-      podSelector:
-        matchLabels:
-          netpol/nginx: 'true'
-    - namespaceSelector:
-        matchLabels:
-          name: kube-monitor
-      podSelector:
-        matchLabels:
-          netpol/metrics: 'true'
-    ports:
-    - protocol: TCP
-      port: 8443
-    - protocol: TCP
-      port: 8000
+  # - from:
+  #  - namespaceSelector:
+  #      matchLabels:
+  #        kubernetes.io/metadata.name: abcdesktop
+  #    podSelector:
+  #      matchLabels:
+  #        netpol/nginx: 'true'
+  #  - namespaceSelector:
+  #      matchLabels:
+  #        kubernetes.io/metadata.name: kube-monitor
+  #    podSelector:
+  #      matchLabels:
+  #        netpol/metrics: 'true'
+  #  ports:
+  #  - protocol: TCP
+  #    port: 8443
+  #  - protocol: TCP
+  #    port: 8000
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -318,13 +329,13 @@ spec:
   - from:
     - namespaceSelector:
         matchLabels:
-          name: abcdesktop
+          kubernetes.io/metadata.name: abcdesktop
       podSelector:
         matchLabels:
           netpol/nginx: 'true'
     - namespaceSelector:
         matchLabels:
-          name: kube-monitor
+          kubernetes.io/metadata.name: kube-monitor
       podSelector:
         matchLabels:
           netpol/metrics: 'true'
@@ -345,8 +356,6 @@ spec:
   - Egress
   egress:
   - ports:
-    - protocol: TCP
-      port: 8443
     - protocol: TCP
       port: 8000
     to:
@@ -434,7 +443,7 @@ spec:
     # file_service_tcp_port
     - protocol: TCP
       port: 29783
-    # broadcast_tcp_port 
+    # broadcast_tcp_port
     - protocol: TCP
       port: 29784
     # reserved
@@ -466,7 +475,7 @@ spec:
     - protocol: TCP
       port: 80
   # permit kerberos
-  - ports: 
+  - ports:
     - protocol: UDP
       port: 88
     - protocol: TCP
@@ -507,7 +516,7 @@ spec:
     # file_service_tcp_port
     - protocol: TCP
       port: 29783
-    # broadcast_tcp_port 
+    # broadcast_tcp_port
     - protocol: TCP
       port: 29784
     # reserved
@@ -516,7 +525,7 @@ spec:
     # spawner_service_tcp_port
     - protocol: TCP
       port: 29786
-    # signalling_service_tcp_port 
+    # signalling_service_tcp_port
     - protocol: TCP
       port: 29787
     # sound_service_tcp_port
@@ -596,7 +605,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      run: openldap-od 
+      run: openldap-od
   policyTypes:
   - Ingress
   ingress:
@@ -699,23 +708,24 @@ spec:
   policyTypes:
   - Egress
   egress:
-  - to:
-      - podSelector:
-          matchLabels:
-            k8s-app: kube-dns
-      - namespaceSelector:
-          matchLabels:
-            kubernetes.io/metadata.name: kube-system  
-    ports:
-      - protocol: TCP
-        port: 53
-      - protocol: UDP
-        port: 53   
-#    - podSelector:
-#        matchLabels:
-#          k8s-app: kube-dns
-#    - ipBlock:
-#        cidr: 10.96.0.0/12
+  - ports:
+    - protocol: TCP
+      port: 53
+    - protocol: UDP
+      port: 53 
+  # should be better
+  # - to:
+  #    - podSelector:
+  #        matchLabels:
+  #          k8s-app: kube-dns
+  #    - namespaceSelector:
+  #        matchLabels:
+  #          kubernetes.io/metadata.name: kube-system
+  #  ports:
+  #    - protocol: TCP
+  #      port: 53
+  #    - protocol: UDP
+  #      port: 53   
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -762,7 +772,7 @@ spec:
     to:
     - namespaceSelector:
         matchLabels:
-          name: kube-monitor
+          kubernetes.io/metadata.name: kube-monitor
       podSelector:
         matchLabels:
           k8s-app: graylog
